@@ -125,11 +125,11 @@ Goal: on one real partner workflow, measure how much spend is actually removable
 
 Schema (CONTRACT, `anneal.schema`, pydantic v2, `schema_version: 1`): `Run` (`run_id`, `workflow_id`, `started_at`, `ended_at`, `status`, `input`, `output`, `events`, `source`, `tier`), events `ModelCall` (`provider`, `model`, `system_hash`, `messages` redacted, `output_text`, `tool_calls_requested`, `tokens_in`, `tokens_out`, `tokens_cached`, `cost_usd`), `ToolCall` (`name`, `args`, `result`, `error`, `side_effect`, `severity`, `idempotency_key`), `Deopt` (`step_id`, `guard_id`, `reason`, `resumed_at_event`). Each event keeps `parent_id` and `ts`.
 
-- [ ] Pydantic models and `anneal schema dump`
-- [ ] One importer, the format the first partner actually has (default LangSmith run export JSONL; OpenTelemetry GenAI JSON as the alternative). A second importer is added only when a second partner needs it.
-- [ ] Redactor with typed placeholders (`<EMAIL_7>`, `<KEY_2>`) that preserve type class and within-run equality; regex defaults for email, phone, IBAN, card, JWT, API-key; property test that redaction is idempotent
-- [ ] JSONL store `write(runs)`, `read(workflow_id, since)`; pricing table `pricing.yaml`; `cost_usd` fill
-- [ ] Fixture under `tests/fixtures/traces/<source>/` with nested runs, a tool error, a handoff; round-trip test
+- [x] Pydantic models and `anneal schema dump`
+- [x] One importer, the format the first partner actually has (default LangSmith run export JSONL; OpenTelemetry GenAI JSON as the alternative). A second importer is added only when a second partner needs it. *(Done as LangSmith JSONL against a synthetic, SDK-validated fixture; no partner yet. Re-verify on the first real export.)*
+- [x] Redactor with typed placeholders (`<EMAIL_7>`, `<KEY_2>`) that preserve type class and within-run equality; regex defaults for email, phone, IBAN, card, JWT, API-key; property test that redaction is idempotent
+- [x] JSONL store `write(runs)`, `read(workflow_id, since)`; pricing table `pricing.yaml`; `cost_usd` fill
+- [x] Fixture under `tests/fixtures/traces/<source>/` with nested runs, a tool error, a handoff; round-trip test
 
 **M1.2 Shape, provenance, skeleton (days 3 to 6)**
 
