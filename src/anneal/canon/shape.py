@@ -7,6 +7,7 @@ Coarse shapes drop length buckets, so values of different lengths share a shape
 (used for skeletons).
 """
 
+import ast
 import re
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Iterator
@@ -42,6 +43,25 @@ def _bucket(n: int, buckets: tuple[tuple[int, str], ...], top: str) -> str:
 
 def _key(path: str, key: str) -> str:
     return f"{path}.{key}" if _IDENT.fullmatch(key) else f"{path}[{key!r}]"
+
+
+_SEGMENT = re.compile(
+    r"\.([A-Za-z_][A-Za-z0-9_]*)|\[(\d+|\*)\]|\[('(?:[^'\\]|\\.)*'|\"(?:[^\"\\]|\\.)*\")\]"
+)
+
+
+def split_path(path: str) -> list[str | int]:
+    """Keys of a JSON path from `leaves`: `$.a[0]['b c']` gives `["a", 0, "b c"]`."""
+    keys: list[str | int] = []
+    for m in _SEGMENT.finditer(path[1:]):
+        name, index, quoted = m.groups()
+        if index is not None:
+            keys.append(int(index))
+        elif quoted is not None:
+            keys.append(ast.literal_eval(quoted))
+        else:
+            keys.append(name)
+    return keys
 
 
 def leaves(value: Any, path: str = "$", wildcard: bool = False) -> Iterator[tuple[str, Any]]:

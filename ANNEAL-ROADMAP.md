@@ -156,10 +156,10 @@ Every model call in a cluster is classified by what it would take to reproduce i
 
 `WorkflowPlan` v0 (CONTRACT fields: `plan_id` content hash, `workflow_id`, `skeleton_hash`, `compiled_from`, `steps`, `guards`, `side_effect_policy`, `tier`). Step types in M1: `tool` (`name`, `args_template`, `side_effect`, `severity`, `idempotent`), `llm` (`model`, `system_template`, `user_template`, `output_schema`, `forced_tool` or none), `end` (`output_template`). No `branch` and no `transform` in M1; a cluster that branches is compiled only along its dominant path and other paths fall back. Template syntax: `{{steps.<id>.result.<json-path>}}`, `{{input.<json-path>}}`, named transforms `lower`, `trim`, `fmt_date`, `concat`. Nothing else.
 
-- [ ] Plan models, registry at `.anneal/plans/<workflow_id>/<plan_id>.json`, renderer that errors on unknown paths
-- [ ] Tier 1 compiler for the dominant path: `removable` to `tool`, `constrained` and `judgment` to `llm`, `terminal` to `llm`, `end` from the output template; refuses to write a `tool` step with any unbound argument
-- [ ] Executor with `state` keyed by step id, dependency order, dry-run, structured-output validation with one retry then `DeoptRequested`; every compiled run is traced with `tier=1`
-- [ ] Manual steps allowed and logged: if the compiler cannot bind an argument that a human can see is deterministic, the human writes the template and the case is recorded in `report/m1.md` as automation debt
+- [x] Plan models, registry at `.anneal/plans/<workflow_id>/<plan_id>.json`, renderer that errors on unknown paths
+- [x] Tier 1 compiler for the dominant path: `removable` to `tool`, `constrained` and `judgment` to `llm`, `terminal` to `llm`, `end` from the output template; refuses to write a `tool` step with any unbound argument
+- [x] Executor with `state` keyed by step id, dependency order, dry-run, structured-output validation with one retry then `DeoptRequested`; every compiled run is traced with `tier=1`
+- [x] Manual steps allowed and logged: if the compiler cannot bind an argument that a human can see is deterministic, the human writes the template and the case is recorded in `report/m1.md` as automation debt
 
 **M1.5 Chronological replay with task-level checks (days 12 to 15)**
 

@@ -93,7 +93,9 @@ class _Call:
 
 
 @dataclass
-class _RunView:
+class RunView:
+    """A run reduced to its model and tool events, with steps and provenance."""
+
     run: Run
     events: list[Event]
     steps: list[Step]
@@ -101,7 +103,7 @@ class _RunView:
     prov: dict[str, list[LeafProvenance]] = field(default_factory=dict)
 
 
-def _step(event: Event) -> Step | None:
+def step_of(event: Event) -> Step | None:
     if isinstance(event, ModelCall):
         role = event.scope or (f"sys:{event.system_hash}" if event.system_hash else "model")
         names = sorted({t.name for t in event.tool_calls_requested})
@@ -112,16 +114,16 @@ def _step(event: Event) -> Step | None:
     return None
 
 
-def _view(run: Run) -> _RunView:
-    events = [e for e in run.events if _step(e) is not None]
-    steps = [s for s in map(_step, events) if s is not None]
-    view = _RunView(run, events, steps, {e.event_id: i for i, e in enumerate(events)})
+def run_view(run: Run) -> RunView:
+    events = [e for e in run.events if step_of(e) is not None]
+    steps = [s for s in map(step_of, events) if s is not None]
+    view = RunView(run, events, steps, {e.event_id: i for i, e in enumerate(events)})
     for leaf in provenance(run):
         view.prov.setdefault(leaf.event_id, []).append(leaf)
     return view
 
 
-def _position_id(prefix: Sequence[Step], role: str) -> str:
+def position_id(prefix: Sequence[Step], role: str) -> str:
     payload = json.dumps([list(prefix), role], separators=(",", ":"))
     return blake3.blake3(payload.encode()).hexdigest()[:12]
 
@@ -130,7 +132,7 @@ def classify(
     runs: Sequence[Run], *, min_support: int = MIN_SUPPORT, stable_share: float = STABLE_SHARE
 ) -> Classification:
     """Classify every model call in `runs` (all from one workflow)."""
-    views = {r.run_id: _view(r) for r in runs}
+    views = {r.run_id: run_view(r) for r in runs}
     groups: dict[tuple[tuple[Step, ...], str], list[_Call]] = defaultdict(list)
     for view in views.values():
         top_level = [
@@ -148,7 +150,7 @@ def classify(
     calls: list[CallClassification] = []
     positions: list[Position] = []
     for (prefix, role), members in groups.items():
-        pid = _position_id(prefix, role)
+        pid = position_id(prefix, role)
         outcomes = Counter(c.outcome for c in members)
         dominant, count = outcomes.most_common(1)[0]
         share = count / len(members)
@@ -201,7 +203,7 @@ def _position_class(
     members: list[_Call],
     dominant: str,
     share: float,
-    views: dict[str, _RunView],
+    views: dict[str, RunView],
     min_support: int,
     stable_share: float,
 ) -> tuple[CallClass, str, dict[str, str]]:
@@ -227,10 +229,12 @@ def _position_class(
     for c in chosen:
         view = views[c.run.run_id]
         per_run: dict[str, tuple[Any, ...]] = {}
-        for tool in _requested_tools(view, c):
+        for tool in requested_tools(view, c.index, c.event):
             values = dict(leaves(tool.args))
             for leaf in view.prov.get(tool.event_id, []):
-                per_run[f"{tool.name}:{leaf.path}"] = _signature(leaf, values.get(leaf.path), view)
+                per_run[f"{tool.name}:{leaf.path}"] = leaf_signature(
+                    leaf, values.get(leaf.path), view
+                )
         for key in set(per_run) | set(signatures):
             signatures[key].append(per_run.get(key, ("missing",)))
 
@@ -256,16 +260,16 @@ def _position_class(
     return "removable", "args_bound", bindings
 
 
-def _requested_tools(view: _RunView, call: _Call) -> list[ToolCall]:
+def requested_tools(view: RunView, index: int, call: ModelCall) -> list[ToolCall]:
     """Tool calls answering this model call.
 
     Matched by tool_call_id, else by name until the next model call at the same level.
     """
-    request_ids = {r.id for r in call.event.tool_calls_requested if r.id}
-    names = {r.name for r in call.event.tool_calls_requested}
+    request_ids = {r.id for r in call.tool_calls_requested if r.id}
+    names = {r.name for r in call.tool_calls_requested}
     found: list[ToolCall] = []
-    for event in view.events[call.index + 1 :]:
-        if isinstance(event, ModelCall) and event.parent_id == call.event.parent_id:
+    for event in view.events[index + 1 :]:
+        if isinstance(event, ModelCall) and event.parent_id == call.parent_id:
             break
         if isinstance(event, ToolCall) and (
             event.tool_call_id in request_ids
@@ -275,10 +279,18 @@ def _requested_tools(view: _RunView, call: _Call) -> list[ToolCall]:
     return found
 
 
-def _signature(leaf: LeafProvenance, value: Any, view: _RunView) -> tuple[Any, ...]:
+def leaf_signature(
+    leaf: LeafProvenance, value: Any, view: RunView, allow_model: bool = False
+) -> tuple[Any, ...]:
+    """Comparable description of one leaf's binding in one run.
+
+    `("bind", edges)` with each edge as `(kind, step index | "input", path, transform,
+    detail)`; `("gen", json value)` when unmatched; `("model",)` when it came from
+    model text, unless `allow_model`, which keeps such edges as bindings.
+    """
     if leaf.status != "bound":
         return ("gen", json.dumps(value, sort_keys=True))
-    if any(e.from_kind == "model" for e in leaf.edges):
+    if not allow_model and any(e.from_kind == "model" for e in leaf.edges):
         return ("model",)
     return (
         "bind",
