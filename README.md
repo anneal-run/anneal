@@ -13,6 +13,22 @@ pip install anneal-run
 anneal --version
 ```
 
+## Import traces (M1)
+
+Anneal reads a LangSmith run export: one JSON run per line, from `Client.list_runs()`. The format is described in [docs/vendor-notes/langsmith.md](docs/vendor-notes/langsmith.md).
+
+```python
+from anneal.importers.langsmith import load_runs
+from anneal.schema.pricing import PriceTable, fill_costs
+from anneal.schema.store import Store
+
+prices = PriceTable.load()  # bundled table; pass a path to use your own
+runs = [fill_costs(r, prices) for r in load_runs("export.jsonl")]
+Store(".anneal/store").write(runs)  # redacted before it touches disk
+```
+
+`anneal schema dump` prints the JSON Schema of a run.
+
 ## Develop
 
 ```sh
