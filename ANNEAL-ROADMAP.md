@@ -118,7 +118,7 @@ Goal: on one real partner workflow, measure how much spend is actually removable
 **M1.0 Minimal repo (day 1)**
 
 - [x] Single Python package `anneal`, `uv`, `ruff`, `mypy --strict`, `pytest`, `hypothesis`; GitHub Actions running `make check`; Apache-2.0; `AGENTS.md`, `CLAUDE.md` symlink, `CHANGELOG.md`, `docs/adr/0001-m1-scope.md`
-- [ ] `pyproject.toml` with distribution name `anneal-run`, import package `anneal` under `src/`, console script `anneal = "anneal.cli:main"`, hatchling build; publish `0.0.1` placeholder to PyPI and an empty `anneal-run` package to npm to reserve both names; then a project-scoped PyPI token or trusted publishing from the GitHub repo
+- [x] `pyproject.toml` with distribution name `anneal-run`, import package `anneal` under `src/`, console script `anneal = "anneal.cli:main"`, hatchling build; publish `0.0.1` placeholder to PyPI and an empty `anneal-run` package to npm to reserve both names; then a project-scoped PyPI token or trusted publishing from the GitHub repo
 - [x] No Rust, no Parquet, no SQLite. Store is JSONL on disk, loaded with pandas. Distribution `anneal-run`, import package `anneal`, CLI `anneal`, from the first commit.
 
 **M1.1 Schema and one importer (days 1 to 3)**

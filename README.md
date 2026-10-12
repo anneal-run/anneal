@@ -20,6 +20,10 @@ make setup   # uv sync
 make check   # ruff + mypy --strict + pytest
 ```
 
+## Release
+
+Bump `version` in `pyproject.toml`, merge to `main`, then push a matching tag (`git tag v0.1.0 && git push origin v0.1.0`). The `release` workflow checks, builds and publishes to PyPI through trusted publishing; no token is stored anywhere.
+
 ## License
 
 Apache-2.0
