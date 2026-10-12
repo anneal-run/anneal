@@ -163,11 +163,11 @@ Every model call in a cluster is classified by what it would take to reproduce i
 
 **M1.5 Chronological replay with task-level checks (days 12 to 15)**
 
-- [ ] Split the partner's runs by time: compile on the first 70%, test on the untouched last 30%. Never compile on test runs.
-- [ ] Recording-backed tool server: a tool call is served when `(name, canonical args)` matches the recorded call; mismatch is a divergence at that step and the run fails replay
-- [ ] Task-level success check implemented as a function per workflow, agreed in writing with the partner before compilation (what counts as the job done)
-- [ ] Critical-field extractor and exact matcher (amounts, ids, recipients, dates, negations); embedding similarity only for free text with no critical field; no model judge in M1
-- [ ] Replay report: task success rate (compiled vs recorded), wrong-execution by severity, divergence histogram by step, cost per run vs Tier 0
+- [x] Split the partner's runs by time: compile on the first 70%, test on the untouched last 30%. Never compile on test runs.
+- [x] Recording-backed tool server: a tool call is served when `(name, canonical args)` matches the recorded call; mismatch is a divergence at that step and the run fails replay
+- [ ] Task-level success check implemented as a function per workflow, agreed in writing with the partner before compilation (what counts as the job done) *(Mechanism done: `TaskCheck(run, recorded)`, loaded with `--check module:function`. The written partner agreement is still open, so this stays unticked.)*
+- [x] Critical-field extractor and exact matcher (amounts, ids, recipients, dates, negations); embedding similarity only for free text with no critical field; no model judge in M1
+- [x] Replay report: task success rate (compiled vs recorded), wrong-execution by severity, divergence histogram by step, cost per run vs Tier 0
 
 **M1.6 Fallback that resumes the original agent (days 12 to 16, CONTRACT)**
 

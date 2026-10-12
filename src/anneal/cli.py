@@ -30,18 +30,20 @@ def _import_langsmith(args: argparse.Namespace) -> int:
     return 0
 
 
+def _workflow(args: argparse.Namespace, store: Store) -> str:
+    if args.workflow:
+        return str(args.workflow)
+    found = store.workflows()
+    if len(found) != 1:
+        args.parser.error(f"--workflow is required; the store has: {', '.join(found) or 'none'}")
+    return found[0]
+
+
 def _analyze(args: argparse.Namespace) -> int:
     from anneal.report.analyze import Delta, analyze, render_markdown
 
     store = Store(args.store)
-    workflow = args.workflow
-    if workflow is None:
-        found = store.workflows()
-        if len(found) != 1:
-            args.parser.error(
-                f"--workflow is required; the store has: {', '.join(found) or 'none'}"
-            )
-        workflow = found[0]
+    workflow = _workflow(args, store)
     since = datetime.fromisoformat(args.since) if args.since else None
     prices = PriceTable.load(args.pricing)
     runs = [fill_costs(r, prices) for r in store.read(workflow, since=since)]
@@ -50,6 +52,35 @@ def _analyze(args: argparse.Namespace) -> int:
         raw = json.loads(Path(args.deltas).read_text(encoding="utf-8"))
         deltas = {k: Delta.model_validate(v) for k, v in raw.items()}
     report = analyze(runs, deltas=deltas, min_support=args.min_support)
+    print(report.model_dump_json(indent=2) if args.json else render_markdown(report), end="")
+    return 0
+
+
+def _replay(args: argparse.Namespace) -> int:
+    import yaml
+
+    from anneal.compile.compiler import ToolSpec
+    from anneal.replay.replay import load_check, render_markdown, replay
+
+    store = Store(args.store)
+    workflow = _workflow(args, store)
+    since = datetime.fromisoformat(args.since) if args.since else None
+    prices = PriceTable.load(args.pricing)
+    runs = [fill_costs(r, prices) for r in store.read(workflow, since=since)]
+    tools = {}
+    if args.tools:
+        raw = yaml.safe_load(Path(args.tools).read_text(encoding="utf-8")) or {}
+        tools = {name: ToolSpec.model_validate(spec) for name, spec in raw.items()}
+    check = load_check(args.check) if args.check else None
+    report = replay(
+        runs,
+        compile_share=args.compile_share,
+        tools=tools,
+        task_check=check,
+        min_support=args.min_support,
+    )
+    if args.check:
+        report = report.model_copy(update={"task_check": args.check})
     print(report.model_dump_json(indent=2) if args.json else render_markdown(report), end="")
     return 0
 
@@ -85,6 +116,20 @@ def build_parser() -> argparse.ArgumentParser:
     an.add_argument("--min-support", type=int, default=5, help="runs needed at a position")
     an.add_argument("--json", action="store_true", help="print the report as JSON")
     an.set_defaults(func=_analyze, parser=an)
+
+    rp = commands.add_parser("replay", help="compile on early runs, replay the later ones")
+    rp.add_argument("store", help="store directory")
+    rp.add_argument("--workflow", help="workflow id (required if the store has several)")
+    rp.add_argument("--since", help="only runs started at or after this ISO timestamp")
+    rp.add_argument("--pricing", help="price table YAML (default: bundled)")
+    rp.add_argument("--compile-share", type=float, default=0.7, help="share of runs to compile on")
+    rp.add_argument("--tools", help="YAML of tool declarations: side_effect, severity, idempotent")
+    rp.add_argument(
+        "--check", help="task check as package.module:function (default: output equivalence)"
+    )
+    rp.add_argument("--min-support", type=int, default=5, help="runs needed at a position")
+    rp.add_argument("--json", action="store_true", help="print the report as JSON")
+    rp.set_defaults(func=_replay, parser=rp)
     return parser
 
 

@@ -2,8 +2,8 @@
 
 Contract fields: `plan_id` (content hash), `workflow_id`, `skeleton_hash`,
 `compiled_from`, `steps`, `guards`, `side_effect_policy`, `tier`. Step types in
-M1: `tool`, `llm` and a final `end`. Additive fields (ADR 0005): `LlmStep.role`
-and `expected_tool`, `compile_log`, `manual_overrides`.
+M1: `tool`, `llm` and a final `end`. Additive fields (ADR 0005, 0006): `LlmStep.role`,
+`expected_tool` and `position_id`, `compile_log`, `manual_overrides`.
 """
 
 import json
@@ -47,6 +47,8 @@ class LlmStep(_Model):
     forced_tool: str | None = None
     expected_tool: str | None = None
     """For a tool-choosing step: the tool on the compiled path; any other choice deopts."""
+    position_id: str | None = None
+    """The prefix-tree position this step was compiled from (used by replay)."""
 
 
 class EndStep(_Model):
