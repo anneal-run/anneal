@@ -1,0 +1,8 @@
+{
+  "name": "anneal-run",
+  "version": "0.0.1",
+  "description": "Placeholder. Anneal compiles your agent's hot paths into code; the model only runs on what's new. See https://anneal.run",
+  "homepage": "https://anneal.run",
+  "license": "Apache-2.0",
+  "files": ["README.md"]
+}
