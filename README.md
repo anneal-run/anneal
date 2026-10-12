@@ -13,21 +13,14 @@ pip install anneal-run
 anneal --version
 ```
 
-## Import traces (M1)
+## Analyze a workflow (M1)
 
-Anneal reads a LangSmith run export: one JSON run per line, from `Client.list_runs()`. The format is described in [docs/vendor-notes/langsmith.md](docs/vendor-notes/langsmith.md).
-
-```python
-from anneal.importers.langsmith import load_runs
-from anneal.schema.pricing import PriceTable, fill_costs
-from anneal.schema.store import Store
-
-prices = PriceTable.load()  # bundled table; pass a path to use your own
-runs = [fill_costs(r, prices) for r in load_runs("export.jsonl")]
-Store(".anneal/store").write(runs)  # redacted before it touches disk
+```sh
+anneal import langsmith export.jsonl --store .anneal/store   # redacted on write
+anneal analyze .anneal/store                                  # add --json for machine output
 ```
 
-`anneal schema dump` prints the JSON Schema of a run.
+`anneal analyze` reports run coverage by skeleton, model spend by call class (`removable`, `constrained`, `judgment`, `terminal`), and a conservative Tier 1 saving. The saving counts removable calls in full, and constrained calls only where you pass a measured delta (`--deltas deltas.json`, keyed by position id). The LangSmith export format is described in [docs/vendor-notes/langsmith.md](docs/vendor-notes/langsmith.md). `anneal schema dump` prints the JSON Schema of a run.
 
 ## Develop
 

@@ -59,3 +59,10 @@ def test_rewriting_a_run_id_keeps_the_last_version(tmp_path: Path) -> None:
 def test_unsafe_workflow_ids_are_rejected(tmp_path: Path, bad: str) -> None:
     with pytest.raises(ValueError):
         Store(tmp_path).write([run("a", workflow_id=bad)])
+
+
+def test_workflows_lists_stored_workflow_ids(tmp_path: Path) -> None:
+    store = Store(tmp_path)
+    assert store.workflows() == []
+    store.write([run("a", "wf2"), run("b", "wf1")])
+    assert store.workflows() == ["wf1", "wf2"]
