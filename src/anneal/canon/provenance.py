@@ -18,17 +18,16 @@ Booleans, nulls and empty strings are never matched. A leaf with no match is
 `model_generated` when a model call requested the tool, otherwise `external`.
 """
 
-import contextlib
 import itertools
 import json
 import re
 from collections.abc import Callable, Iterator, Sequence
 from dataclasses import dataclass
-from datetime import date, datetime
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from anneal.canon.dates import parse_dates
 from anneal.canon.shape import leaves
 from anneal.schema import Event, ModelCall, Run, ToolCall
 
@@ -37,16 +36,6 @@ MIN_SUBSTRING = 6
 MIN_CONCAT_PART = 2
 MAX_CONCAT_CANDIDATES = 30
 CONCAT_SEPARATORS = ("", " ", "-", "_", ",", ", ", "/", ":", ".")
-_DATE_FORMATS = (
-    "%b %d, %Y",
-    "%B %d, %Y",
-    "%d %b %Y",
-    "%d %B %Y",
-    "%m/%d/%Y",
-    "%d/%m/%Y",
-    "%Y/%m/%d",
-    "%d.%m.%Y",
-)
 _NUMBER = re.compile(r"[+-]?\d+(?:\.\d+)?")
 _GROUPED = re.compile(r"[+-]?\d{1,3}(?:,\d{3})+(?:\.\d+)?")
 _LAST_KEY = re.compile(r"(?:\.([A-Za-z_][A-Za-z0-9_]*)|\[('.*?'|\".*?\")\])$")
@@ -236,28 +225,13 @@ def _as_number(value: Any) -> float | None:
     return float(text) if _NUMBER.fullmatch(text) else None
 
 
-def _as_dates(value: Any) -> set[date]:
-    if not isinstance(value, str):
-        return set()
-    text = value.strip()
-    found: set[date] = set()
-    with contextlib.suppress(ValueError):
-        found.add(datetime.fromisoformat(text).date())
-    for fmt in _DATE_FORMATS:
-        try:
-            found.add(datetime.strptime(text, fmt).date())
-        except ValueError:
-            continue
-    return found
-
-
 def _reformat(target: Any, sources: list[_Source]) -> Iterator[_Hit]:
     number = _as_number(target)
-    dates = _as_dates(target)
+    dates = parse_dates(target)
     for s in sources:
         if number is not None and _as_number(s.value) == number:
             yield _Hit((s,), "number")
-        elif dates and dates & _as_dates(s.value):
+        elif dates and dates & parse_dates(s.value):
             yield _Hit((s,), "date")
 
 

@@ -103,3 +103,15 @@ def test_long_tail_breaks_coverage() -> None:
 def test_enum_applies_only_to_plain_strings() -> None:
     vocab = ShapeVocab.fit(observations([1, 2] * 30))
     assert not vocab.is_enum("args:route", "$.queue")
+
+
+def test_split_path_inverts_leaf_paths() -> None:
+    from anneal.canon.shape import split_path
+
+    value = {"a": {"b": [10, {"c": "x"}]}, "weird key": 1, "q'uote": 2}
+    for path, _ in leaves(value):
+        node: object = value
+        for key in split_path(path):
+            node = node[key]  # type: ignore[index]
+        assert node == dict(leaves(value))[path]
+    assert split_path("$") == []
