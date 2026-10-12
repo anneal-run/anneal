@@ -18,9 +18,12 @@ anneal --version
 ```sh
 anneal import langsmith export.jsonl --store .anneal/store   # redacted on write
 anneal analyze .anneal/store                                  # add --json for machine output
+anneal replay .anneal/store --tools tools.yaml --check my_checks:task_done
 ```
 
-`anneal analyze` reports run coverage by skeleton, model spend by call class (`removable`, `constrained`, `judgment`, `terminal`), and a conservative Tier 1 saving. The saving counts removable calls in full, and constrained calls only where you pass a measured delta (`--deltas deltas.json`, keyed by position id). The LangSmith export format is described in [docs/vendor-notes/langsmith.md](docs/vendor-notes/langsmith.md). `anneal schema dump` prints the JSON Schema of a run.
+`anneal analyze` reports run coverage by skeleton, model spend by call class (`removable`, `constrained`, `judgment`, `terminal`), and a conservative Tier 1 saving. The saving counts removable calls in full, and constrained calls only where you pass a measured delta (`--deltas deltas.json`, keyed by position id). The LangSmith export format is described in [docs/vendor-notes/langsmith.md](docs/vendor-notes/langsmith.md). `anneal replay` compiles on the earliest 70% of runs and replays the rest against their recordings. It reports task success against Tier 0, wrong executions by severity, fallbacks, and cost per run. `tools.yaml` declares each tool's `side_effect`, `severity` and `idempotent`; undeclared tools are treated as irreversible (S2). `--check` names your task-level success function, `(run, recorded) -> bool`. Without it, the report uses output equivalence and says so.
+
+`anneal schema dump` prints the JSON Schema of a run.
 
 ## Develop
 

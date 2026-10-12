@@ -145,6 +145,7 @@ class _Builder:
     stable_share: float
     log: list[str]
     call_classes: Mapping[str, str]
+    path: list[Step] = field(default_factory=list)
     steps: list[ToolStep | LlmStep] = field(default_factory=list)
     step_of_index: dict[int, str] = field(default_factory=dict)
     manual: list[ManualOverride] = field(default_factory=list)
@@ -207,6 +208,7 @@ class _Builder:
             output_schema=schema,
             forced_tool=forced_tool,
             expected_tool=expected_tool,
+            position_id=position_id(self.path[:index], role),
         )
         self.steps.append(step)
         self.step_of_index[index] = step.id
@@ -308,6 +310,7 @@ def compile_plan(
     b = _Builder(
         views, supporting, dict(tools or {}), dict(overrides or {}), stable_share, log, call_class
     )
+    b.path = path
     try:
         _build_steps(b, path)
         end = _end_step(b)

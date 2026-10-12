@@ -323,3 +323,13 @@ def test_unrequested_tool_call_compiles_nothing() -> None:
     result = compile_plan(runs)
     assert result.plan is None
     assert any("not requested by a model call" in line for line in result.log)
+
+
+def test_llm_steps_record_their_source_position() -> None:
+    runs, _ = generate(seed=0)
+    from anneal.classify import classify
+
+    positions = {p.position_id for p in classify(runs).positions}
+    llm_steps = [s for s in synth_plan().steps if isinstance(s, LlmStep)]
+    assert all(s.position_id in positions for s in llm_steps)
+    assert len({s.position_id for s in llm_steps}) == len(llm_steps)
