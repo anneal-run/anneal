@@ -133,9 +133,9 @@ Schema (CONTRACT, `anneal.schema`, pydantic v2, `schema_version: 1`): `Run` (`ru
 
 **M1.2 Shape, provenance, skeleton (days 3 to 6)**
 
-- [ ] Shape tokenizer: JSON leaves to class tokens (email, URL, UUID, ISO date, numeric string, placeholder type, `enum` when 20 or fewer distinct values with 95%+ coverage, `str` with length bucket, `num`, `bool`, `null`); objects to sorted key sets; arrays to `[shape]` with length bucket
-- [ ] Provenance matcher: for each tool-arg leaf, search earlier output leaves in order: exact; normalized; substring of 6+; numeric or date reformat; JSON-path extraction; concatenation of up to three leaves. Edge records `(from_event, from_path, to_event, to_path, transform)`. No hit with a model-call producer: `model_generated`. No hit: `external`.
-- [ ] Skeleton: sequence of `(kind, tool name or model role, arg shape hash, result shape hash)` hashed with blake3; near-duplicates joined by difflib ratio >= 0.9 (union-find). No subsequence mining in M1; whole-run skeletons only.
+- [x] Shape tokenizer: JSON leaves to class tokens (email, URL, UUID, ISO date, numeric string, placeholder type, `enum` when 20 or fewer distinct values with 95%+ coverage, `str` with length bucket, `num`, `bool`, `null`); objects to sorted key sets; arrays to `[shape]` with length bucket
+- [x] Provenance matcher: for each tool-arg leaf, search earlier output leaves in order: exact; normalized; substring of 6+; numeric or date reformat; JSON-path extraction; concatenation of up to three leaves. Edge records `(from_event, from_path, to_event, to_path, transform)`. No hit with a model-call producer: `model_generated`. No hit: `external`.
+- [x] Skeleton: sequence of `(kind, tool name or model role, arg shape hash, result shape hash)` hashed with blake3; near-duplicates joined by difflib ratio >= 0.9 (union-find). No subsequence mining in M1; whole-run skeletons only.
 
 **M1.3 Call classification (days 6 to 8, CONTRACT)**
 
