@@ -38,6 +38,12 @@ class Store:
             count += 1
         return count
 
+    def workflows(self) -> list[str]:
+        """Workflow ids that have runs in this store."""
+        if not self.root.is_dir():
+            return []
+        return sorted(p.name for p in self.root.iterdir() if p.is_dir() and any(p.glob("*.jsonl")))
+
     def read(self, workflow_id: str, since: datetime | None = None) -> list[Run]:
         """Runs of `workflow_id` started at or after `since`, sorted by start time."""
         folder = self.root / _check_workflow_id(workflow_id)

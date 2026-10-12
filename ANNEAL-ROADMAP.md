@@ -10,7 +10,7 @@ This is the executable backlog for Anneal, an agent compiler: a runtime that rec
 
 - Product: Anneal. Site and docs: `https://anneal.run`. Tagline for the README: Anneal compiles your agent's hot paths into code; the model only runs on what's new.
 - Package: `anneal-run` on PyPI and npm (`anneal` is taken on both). The import package is `anneal` (`import anneal`) and the CLI is `anneal`; the distribution name is independent of both. The names are reserved with a `0.0.1` placeholder release during M1.0; a filename can never be reused on PyPI, so the first real release is `0.1.0`.
-- CLI: `anneal analyze`, `anneal compile`, `anneal run`, `anneal replay`, `anneal status`, `anneal doctor`, `anneal export-report`.
+- CLI: `anneal import`, `anneal analyze`, `anneal compile`, `anneal run`, `anneal replay`, `anneal status`, `anneal doctor`, `anneal export-report` (`import` added by ADR 0004).
 - Config: `anneal.toml`; plan registry `.anneal/plans/`; env prefix `ANNEAL_`.
 - GitHub org: `anneal-run` (fill in the actual org once registered). License Apache-2.0.
 - Email domain for partners and corp dev: `@anneal.run`.
@@ -148,9 +148,9 @@ Every model call in a cluster is classified by what it would take to reproduce i
 | `judgment` | Tool choice varies, or output text flows into later args | Kept as an `llm` step, structured output | None |
 | `terminal` | Produces the run output | Kept | None |
 
-- [ ] Classifier with fixture coverage for all four classes, including the trap case: same tool every run, arguments written by the model
-- [ ] `anneal analyze <store>`: report with run coverage by skeleton, spend share by class, and a conservative Tier 1 estimate that counts `removable` fully and `constrained` only after one measured delta
-- [ ] Synthetic trace generator in `tests/synth/` with planted removable, constrained and judgment calls; the analyzer must recover the planted classes exactly
+- [x] Classifier with fixture coverage for all four classes, including the trap case: same tool every run, arguments written by the model
+- [x] `anneal analyze <store>`: report with run coverage by skeleton, spend share by class, and a conservative Tier 1 estimate that counts `removable` fully and `constrained` only after one measured delta
+- [x] Synthetic trace generator in `tests/synth/` with planted removable, constrained and judgment calls; the analyzer must recover the planted classes exactly
 
 **M1.4 Compile one hot path (days 8 to 12)**
 
