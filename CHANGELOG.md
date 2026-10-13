@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- fix: the classifier treats a model call whose requested tools never ran (structured output via a tool, as LangChain does on Anthropic) as the call's output: `terminal` at the end of a run, else `judgment` / `structured_output`. It was vacuously `removable` (no executed tool, so no unbound argument), which would have compiled a call to a tool that does not exist.
 - M1.9: the memo: `anneal.report.memo` (Gate 1 evaluation with `pass` / `fail` / `stop` / `open` per criterion, H1 repeated-spend share, memo renderer with a synthetic banner) and `make m1`, which runs analyze, compile, replay, 20 injected deopts and the three arms end to end and writes `report/m1.md` (synthetic until a partner exists). ADR 0010.
 - M1.8: three-arm harness (`anneal.replay.arms`: correct / fallback / fallback_wrong / loud / silent per arm and drift); compiled guards mined for enum, range and pattern, with redaction-equivalent pattern classes; a simulated support environment, drift suite and handwritten baseline (`baseline/env_support/`, written by a separate agent); synthetic dry run in `report/m1.8-synthetic-dry-run.md` (`make m1-dryrun`), where the script wins. ADR 0009.
 - M1.7: side effects: `idempotent` / `reconcile` tool declarations with `shadow_only` enforcement, a durable outbox (`intent` → `done` / `not_done` / `unknown`) with `recover` and `NeedsHuman`, executor-generated operation keys passed to tools and carried into history (`operation_key_for` during fallback), and chaos tests that kill the process between intent and done. ADR 0008.
