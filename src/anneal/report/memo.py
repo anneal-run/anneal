@@ -189,7 +189,8 @@ def gate1(
 
 class Memo(BaseModel):
     workflow_id: str
-    synthetic: bool
+    stamp: Literal["synthetic", "dogfood"] | None = None
+    """None for a partner workflow; otherwise the memo is not Gate 1 evidence."""
     source: str
     analyze_all: AnalyzeReport
     analyze_holdout: AnalyzeReport
@@ -221,18 +222,30 @@ def _status(verdict: Verdict) -> str:
     ]
 
 
+_BANNERS = {
+    "synthetic": (
+        "> **SYNTHETIC.** Every number below comes from a simulated environment and a "
+        "simulated model. It exercises the experiment end to end; it is not Gate 1 "
+        "evidence and the hypotheses register is not updated from it."
+    ),
+    "dogfood": (
+        "> **DOGFOOD.** Real model, real tools and real traces, from public repositories, "
+        "but not a partner workflow: the workflow was chosen to exercise the path and "
+        "its task check was written by the implementer. It is not Gate 1 evidence and "
+        "the hypotheses register is not updated from it."
+    ),
+}
+_WOULD_BE = {"synthetic": " (Would be, on real data.)", "dogfood": " (Would be, on partner data.)"}
+_IF = {"synthetic": " (if real)", "dogfood": " (if partner data)"}
+
+
 def render_memo(memo: Memo) -> str:
     gate = memo.gate()
     by_id = {c.id: c for c in gate.criteria}
     r, h, a = memo.replay, memo.analyze_holdout, memo.analyze_all
     out = [f"# Milestone 1 memo: {memo.workflow_id}", ""]
-    if memo.synthetic:
-        out += [
-            "> **SYNTHETIC.** Every number below comes from a simulated environment and a "
-            "simulated model. It exercises the experiment end to end; it is not Gate 1 "
-            "evidence and the hypotheses register is not updated from it.",
-            "",
-        ]
+    if memo.stamp is not None:
+        out += [_BANNERS[memo.stamp], ""]
     out += [
         f"Source: {memo.source}. Task check: `{r.task_check}`.",
         "",
@@ -242,7 +255,7 @@ def render_memo(memo: Memo) -> str:
         _row("---", "---", "---", "---"),
         *(_row(c.id, c.verdict, c.measured, c.required) for c in gate.criteria),
         "",
-        f"**Gate 1: {gate.verdict}.**" + (" (Would be, on real data.)" if memo.synthetic else ""),
+        f"**Gate 1: {gate.verdict}.**" + _WOULD_BE.get(memo.stamp or "", ""),
         "",
         "## H1, H2: where the spend is",
         "",
@@ -355,7 +368,7 @@ def render_memo(memo: Memo) -> str:
     out += [
         "## Hypotheses register",
         "",
-        _row("id", "hypothesis", "number", "status" + (" (if real)" if memo.synthetic else "")),
+        _row("id", "hypothesis", "number", "status" + _IF.get(memo.stamp or "", "")),
         _row("---", "---", "---", "---"),
         *(_row(*row) for row in register),
         "",
