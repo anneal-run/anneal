@@ -14,4 +14,6 @@ htmlcov/
 .anneal/
 .DS_Store
 examples/github_triage/.cache/
-examples/github_triage/data/runs/
+examples/github_triage/data/store/
+examples/github_triage/data/traces/
+examples/github_triage/data/.spend.lock

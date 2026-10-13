@@ -1,0 +1,4065 @@
+{
+ "rows": [
+  {
+   "case_id": "astral-sh/uv#19560",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0030919000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19560",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0049298,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19560",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.000464,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19566",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0032396000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19566",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0050639,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19566",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005885,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19574",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0026735,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19574",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0049046,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19574",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0006216,
+   "model_calls": 2,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19578",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0031152000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19578",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0036093999999999996,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19578",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003974,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19587",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0033158000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19587",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0037767,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19587",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00045119999999999996,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19593",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0042645,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19593",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0045252,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19593",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.000508,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19598",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0033710999999999997,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19598",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0040363000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19598",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00043440000000000004,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19601",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0026918000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19601",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0038392999999999995,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19601",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004129,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19602",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0030242,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19602",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0044733,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19602",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00044790000000000005,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19606",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0030935999999999997,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19606",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0033982,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19606",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003614,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19635",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0032832000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19635",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0056642,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19635",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005441,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19643",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0027136000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19643",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0045168000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19643",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004602,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19658",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0047096,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19658",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0060160000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19658",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005691,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19660",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0024638000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19660",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0029641000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19660",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003996,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19670",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0029943,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19670",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0030518000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19670",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0004086,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19672",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0041988,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19672",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0047241,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19672",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00043770000000000007,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19674",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0049438,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19674",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0051484,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19674",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.000598,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19683",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0041311,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19683",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0037004000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19683",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0004737,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19702",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.002688,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19702",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0039147,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19702",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004706,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19704",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0036625,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19704",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.005408100000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19704",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0004089,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19705",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.004575200000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19705",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0046038,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19705",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005456,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19744",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0034859,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19744",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0043225,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19744",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005234,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19745",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0041663,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19745",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0047421,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19745",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0005896,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19749",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0027938000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19749",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.003919,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19749",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.000452,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19759",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0030617,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19759",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0036438000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19759",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005145,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19771",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0035619000000000002,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19771",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0041779,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19771",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00046310000000000004,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19788",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.004238100000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19788",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0051945,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19788",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005571,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19792",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0039854,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19792",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0059802,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19792",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.000564,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19793",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0026475,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19793",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0028766,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19793",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004063,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19811",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0029488,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19811",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0034911000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19811",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003897,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19817",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0058162,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19817",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0058314000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19817",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0006326,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19830",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0028347,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19830",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.004008,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19830",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.000407,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19832",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0036095,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19832",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0035229000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19832",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004779,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19854",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.003546,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19854",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0043437,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19854",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005405,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19857",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.003411,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19857",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0051088,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19857",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005926,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19873",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0034089000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19873",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0038800000000000006,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19873",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0004392,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19876",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0030604,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19876",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0042294,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19876",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0004936000000000001,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19878",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0044946000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19878",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.004694500000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19878",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005524000000000001,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19885",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0035463,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19885",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.005572200000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19885",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0005669000000000001,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19886",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0024089000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19886",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0030172000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19886",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00040510000000000003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19887",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0038137,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19887",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0048536,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19887",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004535,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19911",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0043184,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19911",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.005146400000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19911",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0006409000000000001,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19916",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0032791000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19916",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.004873199999999999,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19916",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005198,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19918",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0038021000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19918",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0032737,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19918",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0004395,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19929",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.004061,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19929",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.005818200000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19929",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005462,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19948",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0032863000000000002,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19948",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0035396000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19948",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004085,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19952",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0050144,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19952",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0043305,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19952",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0006201000000000001,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19954",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0032764,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19954",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0038729,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19954",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00043890000000000004,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19956",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0034196000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19956",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0042355,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19956",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00044740000000000003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19957",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0037628,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19957",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0030002000000000006,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19957",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0004458,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19963",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0040945,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19963",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.005071600000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19963",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005315,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19972",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0032372000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19972",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0046898,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19972",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005232,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19975",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0025893,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19975",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0030843,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19975",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00040219999999999996,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19988",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0038221,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19988",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0051089,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19988",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005146,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19990",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0035236000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19990",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.003458,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19990",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00042740000000000003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19999",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0035726000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19999",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0054726,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#19999",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0005527,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#20000",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0023897,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#20000",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0027495,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#20000",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.00039840000000000003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#20050",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0027632,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#20050",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.005292100000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#20050",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00043819999999999997,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#20052",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0026874,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#20052",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0034796000000000002,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#20052",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.00038260000000000003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#20055",
+   "drift": null,
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0034352000000000002,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#20055",
+   "drift": null,
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0033588000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "astral-sh/uv#20055",
+   "drift": null,
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004621,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13136",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0030072000000000002,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13136",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0030009,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13136",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004069,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13138",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0029563000000000002,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13138",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0032699,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13138",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00043830000000000003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13139",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0033815,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13139",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0036572000000000006,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13139",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004843,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13148",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0031073000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13148",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0030956,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13148",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00038889999999999997,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13156",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0022175,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13156",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0029739,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13156",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00035660000000000005,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13158",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0041105,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13158",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0039679,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13158",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003982,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13159",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0030109,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13159",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0029100000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13159",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0004185,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13161",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0035492,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13161",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0045054000000000006,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13161",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00045940000000000005,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13164",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0033395,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13164",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.004547600000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13164",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.000475,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13168",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0034595,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13168",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0039407,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13168",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.00041170000000000003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13173",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0025675,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13173",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.003112,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13173",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0004278,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13189",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0028579,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13189",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0029486,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13189",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00041830000000000003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13192",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0026685,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13192",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0036609000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13192",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.00042019999999999997,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13207",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0024603000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13207",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0035389999999999996,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13207",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00043,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13208",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0040685,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13208",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0037507,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13208",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00038510000000000004,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13215",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0032018000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13215",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0038133,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13215",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00045170000000000003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13236",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0030217000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13236",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0028961000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13236",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0004207,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13242",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0028891,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13242",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0034975,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13242",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00039690000000000005,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13252",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0034256000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13252",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0032450000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13252",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003904,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13257",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0025814,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13257",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0039899,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13257",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.000457,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13266",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0035571000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13266",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0037683000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13266",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004182,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13272",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0033652000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13272",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0039412,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13272",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004399,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13287",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0028604,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13287",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0039379,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13287",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003951,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13294",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0034697000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13294",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0036534,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13294",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00045620000000000003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13318",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0030081,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13318",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0033042,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13318",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13321",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0043504,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13321",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0044263,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13321",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004571,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13336",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0029178000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13336",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0041906,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13336",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005146,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13356",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0026836000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13356",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0037722000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13356",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004626,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13358",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0035705,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13358",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0037056,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13358",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004843,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13369",
+   "drift": "new_enum",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0038344,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13369",
+   "drift": "new_enum",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0048825000000000006,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "pydantic/pydantic#13369",
+   "drift": "new_enum",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005011,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21477",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0029997,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21477",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0037409,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21477",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004335,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21484",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0054832,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21484",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0056308999999999994,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21484",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005934000000000001,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21489",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0024239,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21489",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0027839000000000006,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21489",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003709,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21493",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0033206000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21493",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0043917,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21493",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004477,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21510",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0029170999999999997,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21510",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0035975,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21510",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004692,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21514",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0023434000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21514",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0028013000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21514",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0003722,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21515",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0026168000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21515",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0037432999999999998,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21515",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00041660000000000004,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21525",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0054775,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21525",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.006163200000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21525",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.000606,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21528",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0037227000000000002,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21528",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.004028800000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21528",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.000495,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21542",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0034061000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21542",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0047159,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21542",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.000563,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21550",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.003577,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21550",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.004549500000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21550",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004977,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21561",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0030257,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21561",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.005069000000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21561",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00045660000000000004,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21566",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0033178,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21566",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0038232,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21566",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00047640000000000003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21568",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0040518,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21568",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0041128,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21568",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005053,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21575",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0036998,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21575",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0039729,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21575",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005547999999999999,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21576",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0035059,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21576",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0038682000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21576",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004219,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21577",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0029327000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21577",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0045386,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21577",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00048640000000000006,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21578",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.003131,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21578",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0038524,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21578",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004938,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21583",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0042728,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21583",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0053805,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21583",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005769000000000001,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21587",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0035185,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21587",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0041454000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21587",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004835,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21600",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0041993,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21600",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.004347,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21600",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005329000000000001,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21604",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.004705399999999999,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21604",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.004388,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21604",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005229000000000001,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21615",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0028928,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21615",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0046794,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21615",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00045770000000000007,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21618",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0024756000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21618",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0026367,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21618",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00038310000000000004,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21625",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.003227,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21625",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0049922000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21625",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005132,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21627",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.003118,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21627",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.005007800000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21627",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.000438,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21630",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0033577000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21630",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0040014000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21630",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004302,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21635",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0040595,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21635",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0049204,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21635",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005484000000000001,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21640",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0033476000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21640",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0050695,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21640",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005841,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21644",
+   "drift": "renamed_field",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0029974,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21644",
+   "drift": "renamed_field",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0043885,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "python/mypy#21644",
+   "drift": "renamed_field",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00044770000000000004,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120616",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.003939600000000001,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120616",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0045928,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120616",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004937,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120621",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0027821000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120621",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0027674,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120621",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003719,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120624",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0028146000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120624",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0026998,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120624",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003979,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120625",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.003369,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120625",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0034277,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120625",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003934,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120632",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0026406999999999997,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120632",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0033729000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120632",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0003814,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120634",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0038666000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120634",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0035578,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120634",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.00039320000000000007,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120637",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.003471,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120637",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0036995000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120637",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00044510000000000003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120642",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0035603,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120642",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0035692000000000002,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120642",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0004375,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120649",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0025731000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120649",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0032040999999999997,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120649",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00046110000000000004,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120658",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0028328000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120658",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0041448,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120658",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.000419,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120669",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0031976,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120669",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0036680999999999997,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120669",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004435,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120673",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.003139,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120673",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0032331,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120673",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00035739999999999996,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120680",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0032248000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120680",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0043055,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120680",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004645,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120681",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0030436,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120681",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0029577,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120681",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004032,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120688",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0038125,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120688",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0042754,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120688",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005583,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120690",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0035041000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120690",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0041841000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120690",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0004075,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120691",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0022134,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120691",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0033176000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120691",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003634,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120699",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0026389,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120699",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0038973000000000002,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120699",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004507,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120703",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0028108,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120703",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0037989999999999994,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120703",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0003467,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120706",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0048794,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120706",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0044378,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120706",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.0003198,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120713",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0034889,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120713",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0029841,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120713",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.000404,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120716",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0047354,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120716",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0047016,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120716",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005602000000000001,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120720",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0035011000000000005,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120720",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0035553,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120720",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00043170000000000003,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120724",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.002588,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120724",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0038557,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120724",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.00040540000000000004,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120735",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0029018000000000004,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120735",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0032497999999999997,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120735",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003877,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120742",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0023096,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120742",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0032815000000000006,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120742",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0003925,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120747",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "silent",
+   "cost_usd": 0.0036252000000000003,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120747",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback_wrong",
+   "cost_usd": 0.0038988,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120747",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "silent",
+   "cost_usd": 0.00037220000000000005,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120750",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0031745,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120750",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0055844,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120750",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0005669000000000001,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120770",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.002783,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120770",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.003536,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120770",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.0004036,
+   "model_calls": 1,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120797",
+   "drift": "new_topic",
+   "arm": "tier0",
+   "outcome": "correct",
+   "cost_usd": 0.0028281,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120797",
+   "drift": "new_topic",
+   "arm": "compiled",
+   "outcome": "fallback",
+   "cost_usd": 0.0039016,
+   "model_calls": null,
+   "error": null
+  },
+  {
+   "case_id": "godotengine/godot#120797",
+   "drift": "new_topic",
+   "arm": "baseline",
+   "outcome": "correct",
+   "cost_usd": 0.00040040000000000003,
+   "model_calls": 1,
+   "error": null
+  }
+ ],
+ "arms": [
+  "tier0",
+  "compiled",
+  "baseline"
+ ],
+ "drifts": [
+  "new_enum",
+  "new_topic",
+  "renamed_field"
+ ],
+ "reference": "tier0"
+}

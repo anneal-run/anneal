@@ -13,7 +13,7 @@ from typing import Any
 
 from anneal.schema.pricing import PriceTable
 
-LEDGER = Path(__file__).parent / "data" / "spend.json"
+LEDGER = Path(os.environ.get("TRIAGE_DATA", Path(__file__).parent / "data")) / "spend.json"
 
 
 class OverBudget(RuntimeError):

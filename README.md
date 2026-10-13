@@ -13,6 +13,40 @@ pip install anneal-run
 anneal --version
 ```
 
+## Quickstart: a LangGraph agent, end to end
+
+[`examples/github_triage`](examples/github_triage) is a small LangGraph agent that triages GitHub issues with a real model and read-only GitHub tools, traced to LangSmith. The commands below run the whole Milestone 1 path on it. What happened when we did is in [report/github_triage-dogfood.md](report/github_triage-dogfood.md).
+
+```sh
+uv sync                                     # includes the `examples` dependency group
+export GITHUB_TOKEN=...                     # public read-only access is enough
+export ANTHROPIC_API_KEY=...                # or TRIAGE_PROVIDER=openai and OPENAI_API_KEY
+export LANGSMITH_TRACING=true LANGSMITH_API_KEY=... LANGSMITH_PROJECT=github-triage
+export PYTHONPATH=examples
+D=examples/github_triage/data
+
+# 1. Pick closed issues and record what maintainers did with them (the task check's ground truth)
+uv run python -m github_triage.select_issues astral-sh/uv 200 $D/uv.jsonl
+
+# 2. Run the agent on them, traced, oldest first (a split by time is then a split by issue age)
+uv run python -m github_triage.run $D/uv.jsonl --dataset uv
+
+# 3. Export the traces, import them into a redacted local store, and see where the spend goes
+uv run python -m github_triage.experiment export import
+uv run anneal analyze $D/store --workflow github_triage
+
+# 4. Compile, replay (recorded and live), inject deopts into the real agent, run the arms, write the memo
+uv run python -m github_triage.experiment compile replay deopts arms memo
+```
+
+Before step 3, run steps 1 and 2 for the drift repositories too: `pydantic/pydantic` (100 issues), `python/mypy` (30) and `godotengine/godot` (30), each with `--dataset` set to `pydantic`, `mypy` and `godot`, and the output file named to match. The driver expects all four datasets, and the arms need the handwritten baseline in `baseline/github_triage/`. Step 4 uses the Python API for what the CLI does not expose yet:
+- an output path for graph state: `compile_plan(..., output_path="$.triage")`;
+- live model answers: `chat_model_runner`;
+- live read-only tools during replay: `replay_plan(..., live_tools=...)`;
+- resuming the real agent on a deopt: `CompiledWorkflow` with `langgraph_fallback`.
+
+Every paid step goes through a spend ledger capped at `TRIAGE_BUDGET_USD` (default $20). Our full run cost $2.05.
+
 ## Analyze a workflow (M1)
 
 ```sh
