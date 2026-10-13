@@ -9,14 +9,17 @@ puts each branch in its own cluster, where every choice looks stable.
 
 Rules, first match wins, per call:
 
-1. `terminal`: the run's last top-level model call that requests no tool.
+1. `terminal`: the run's last top-level model call that requests no tool, or whose
+   requested tools never ran (structured output returned as a tool request).
 2. `judgment` / `low_support`: the position has fewer than `min_support` runs.
 3. `judgment` / `choice_varies`: the dominant outcome covers less than
    `stable_share` of the position's runs; `off_dominant_choice` for calls that
    took a minority outcome at a stable position.
 4. `judgment` / `text_flows_into_args`: text written by any call at this
    position is the source of a later tool argument.
-5. `judgment` / `text_output`: the dominant outcome requests no tool.
+5. `judgment` / `text_output`: the dominant outcome requests no tool;
+   `structured_output` when its requested tools never ran: the request is the
+   call's output, not a tool choice.
 6. The arguments of the requested tools, per `tool:path` across the dominant
    calls: each must have one binding (same source step, path and transform) in
    at least `stable_share` of them, or the same model-written value in all of
@@ -90,6 +93,8 @@ class _Call:
     index: int
     outcome: str
     terminal: bool
+    executed: bool = True
+    """False when the call requested tools and none of them ran."""
 
 
 @dataclass
@@ -142,9 +147,11 @@ def classify(
             if not isinstance(event, ModelCall):
                 continue
             step = view.steps[i]
-            terminal = step[2] == "text" and bool(top_level) and i == top_level[-1]
+            executed = step[2] == "text" or bool(requested_tools(view, i, event))
+            answers = step[2] == "text" or not executed
+            terminal = answers and bool(top_level) and i == top_level[-1]
             groups[(tuple(view.steps[:i]), step[1])].append(
-                _Call(view.run, event, i, step[2], terminal)
+                _Call(view.run, event, i, step[2], terminal, executed)
             )
 
     calls: list[CallClassification] = []
@@ -225,6 +232,8 @@ def _position_class(
         return "judgment", "text_output", {}
 
     chosen = [c for c in members if c.outcome == dominant]
+    if not all(c.executed for c in chosen):
+        return "judgment", "structured_output", {}
     signatures: dict[str, list[tuple[Any, ...]]] = defaultdict(list)
     for c in chosen:
         view = views[c.run.run_id]

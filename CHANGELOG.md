@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- fix: the classifier treats a model call whose requested tools never ran (structured output via a tool, as LangChain does on Anthropic) as the call's output: `terminal` at the end of a run, else `judgment` / `structured_output`. It was vacuously `removable` (no executed tool, so no unbound argument), which would have compiled a call to a tool that does not exist.
 - fix: provenance binds a tool argument only to sources that existed when the model requested the call, so parallel tool calls cannot bind to each other's results (found in dogfood traces: `list_labels.repo` flipped between the input and `get_issue`'s body).
 - feat: `anneal.integrations.langgraph.chat_model_runner` answers compiled `llm` steps with a LangChain chat model (structured output, usage and cost), for live replay; `from_langchain` reads graph-state messages; `anneal.importers.langsmith.parse_message` is public.
 - fix: the LangSmith importer unwraps tool results that LangGraph's `ToolNode` exports as plain `ToolMessage` dicts (found in dogfood traces; previously the whole message became the result).
