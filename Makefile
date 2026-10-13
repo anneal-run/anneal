@@ -1,4 +1,4 @@
-.PHONY: setup check lint typecheck test m1
+.PHONY: setup check lint typecheck test baseline-test m1-dryrun m1
 
 setup:
 	uv sync
@@ -13,7 +13,13 @@ typecheck:
 test:
 	uv run pytest
 
-check: lint typecheck test
+check: lint typecheck test baseline-test
+
+baseline-test:
+	uv run pytest baseline -q -p no:cacheprovider --no-cov
+
+m1-dryrun:
+	uv run python tests/synth/dry_run.py
 
 m1:
 	@echo "M1 experiment not implemented yet (see ANNEAL-ROADMAP.md, M1.9)" && exit 1

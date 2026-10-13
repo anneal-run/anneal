@@ -4,8 +4,10 @@ import re
 from collections.abc import Sequence
 from typing import Any
 
+from anneal.canon.shape import string_class
 from anneal.compile.plan import Guard
 from anneal.compile.template import TemplateError, render
+from anneal.schema.redact import find_sensitive
 
 _TYPES: dict[str, Any] = {
     "string": lambda v: isinstance(v, str),
@@ -46,6 +48,26 @@ def schema_errors(value: Any, schema: dict[str, Any], path: str = "$") -> list[s
     return errors
 
 
+def _redaction_class(value: str) -> str | None:
+    """`ph:<TYPE>` when the whole value is one sensitive value redaction would replace."""
+    found = find_sensitive(value)
+    if len(found) == 1 and found[0][1] == value.strip():
+        return f"ph:{found[0][0]}"
+    return None
+
+
+def _class_matches(value: str, cls: str) -> bool:
+    """A raw value and its redaction placeholder share a class: guards mined from the
+    redacted store must accept live input, and the other way round."""
+    own = string_class(value)
+    kinds = {own, _redaction_class(value)}
+    if own == "ph:EMAIL":
+        kinds.add("email")
+    if "email" in kinds:
+        kinds.add("ph:EMAIL")
+    return cls in kinds
+
+
 def _passes(guard: Guard, value: Any) -> bool:
     p = guard.params
     match guard.kind:
@@ -61,7 +83,11 @@ def _passes(guard: Guard, value: Any) -> bool:
                 "max", len(value)
             )
         case "pattern":
-            return isinstance(value, str) and re.fullmatch(p["regex"], value) is not None
+            if not isinstance(value, str):
+                return False
+            if "class" in p:
+                return _class_matches(value, p["class"])
+            return re.fullmatch(p["regex"], value) is not None
 
 
 def failing_guard(guards: Sequence[Guard], run_input: Any) -> Guard | None:

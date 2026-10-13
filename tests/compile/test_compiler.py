@@ -120,13 +120,33 @@ def test_tool_declarations_and_cautious_defaults() -> None:
     assert any("create_ticket" in line and "undeclared" in line for line in plan.compile_log)
 
 
-def test_input_guards_cover_every_input_path_the_plan_reads() -> None:
-    guards = {g.path: g for g in synth_plan().guards}
-    assert set(guards) == {"input.email"}
-    assert (guards["input.email"].kind, guards["input.email"].params) == (
-        "schema",
-        {"type": "string"},
-    )
+def test_guards_cover_every_input_field_when_llm_steps_read_the_whole_input() -> None:
+    guards = {g.id: g for g in synth_plan().guards}
+    assert set(guards) == {"schema:input.email", "pattern:input.email", "schema:input.message"}
+    assert guards["schema:input.email"].params == {"type": "string"}
+    assert guards["schema:input.message"].params == {"type": "string"}
+    assert guards["pattern:input.email"].params == {"class": "email"}
+
+
+def test_enum_range_and_pattern_guards_are_mined_from_the_compile_runs() -> None:
+    def make_input(i: int) -> dict[str, Any]:
+        return {
+            "id": f"ID-{i:05d}",
+            "priority": ["low", "normal", "high"][i % 3],
+            "qty": 10 + i,
+            "ref": f"3f2b8c1e-9a4d-4e2b-8f1a-{i:012d}",
+        }
+
+    runs = simple_runs(
+        30, make_input, lambda i: {"id": f"ID-{i:05d}"}
+    )  # the final llm step reads all
+    result = compile_plan(runs)
+    assert result.plan is not None
+    guards = {g.id: g.params for g in result.plan.guards}
+    assert guards["enum:input.priority"] == {"values": ["high", "low", "normal"]}
+    assert guards["range:input.qty"] == {"min": 7.1, "max": 41.9}  # widened 10% of the span
+    assert guards["pattern:input.ref"] == {"class": "uuid"}
+    assert "enum:input.id" not in guards  # identifiers are not enums
 
 
 def test_compiling_is_deterministic() -> None:

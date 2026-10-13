@@ -76,6 +76,11 @@ def leaves(value: Any, path: str = "$", wildcard: bool = False) -> Iterator[tupl
         yield path, value
 
 
+def string_class(text: str) -> str | None:
+    """The class token of a string (`email`, `uuid`, `ph:EMAIL`, ...), or None for plain text."""
+    return _string_class(text)
+
+
 def _string_class(text: str) -> str | None:
     if m := _PLACEHOLDER.fullmatch(text):
         return f"ph:{m.group(1)}"
