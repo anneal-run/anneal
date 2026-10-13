@@ -78,3 +78,7 @@ H2 stops before H4 matters. The ticket summary, the reply and the routing decisi
 
 - Gate 1 on a partner workflow is a run of `make m1` with a partner experiment module, plus the open items listed in the memo.
 - Changing a threshold means editing the roadmap (CONTRACT) and this ADR. The constants live in `anneal.report.memo`.
+
+## Amendment (2026-10-13): a vacuous H3 is open
+
+If no holdout run finished on the compiled path, every run fell back. Compiled task success then equals Tier 0's by construction and says nothing about guards or replay. H3 is `open` in that case, not `pass`. This was found in the github_triage dogfood run, where 60 of 60 holdout runs fell back.

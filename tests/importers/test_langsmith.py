@@ -283,3 +283,29 @@ def test_retriever_runs_are_tool_calls_and_bad_json_results_stay_text() -> None:
     (run,) = import_records([record(), retriever])
     (tool,) = tool_calls(run)
     assert (tool.name, tool.result) == ("docs", "{oops")
+
+
+def test_tool_message_dumped_as_a_plain_dict_is_unwrapped() -> None:
+    """LangGraph's ToolNode output as langsmith 0.14 exports it: a plain message dict."""
+    output = {
+        "additional_kwargs": {},
+        "content": '{"number": 7, "title": "Crash"}',
+        "name": "get_issue",
+        "tool_call_id": "toolu_01",
+        "type": "tool",
+        "status": "success",
+    }
+    tool = child(
+        run_type="tool", name="get_issue", inputs={"number": 7}, outputs={"output": output}
+    )
+    (run,) = import_records([record(), tool])
+    (call,) = tool_calls(run)
+    assert call.result == {"number": 7, "title": "Crash"}
+    assert call.tool_call_id == "toolu_01"
+
+
+def test_a_plain_dict_result_that_is_not_a_message_is_kept() -> None:
+    output = {"type": "tool", "count": 3}  # a tool's own result that happens to have "type"
+    tool = child(run_type="tool", name="t", inputs={}, outputs={"output": output})
+    (run,) = import_records([record(), tool])
+    assert tool_calls(run)[0].result == output

@@ -22,3 +22,13 @@ M1.3 defines `removable` as "tool choice is the same at this position in 95%+ of
 
 - Branching workflows show lower `removable` shares than a skeleton-cluster reading would. That is the honest number.
 - Deep prefix trees fragment support: a minority branch early on splits every later position. M2.2's `branch` step and subsequence mining address this. Until then, low-support positions are reported, not compiled.
+
+## Amendment (2026-10-13): requested tools that never run
+
+LangChain's `with_structured_output` on Anthropic returns the answer as a tool request (`Triage`), and no tool ever runs for it. The github_triage dogfood traces showed this. Under the original rules the call had no executed tool and therefore no unbound argument, so it came out `removable`, and the compiler would have emitted a call to a tool that does not exist.
+
+From now on, a call whose requested tools never ran is treated as returning its request as output:
+- at the end of a run it is `terminal`;
+- elsewhere it is `judgment` / `structured_output`.
+
+Calls whose requested tools ran are unaffected.
