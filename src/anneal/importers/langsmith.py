@@ -292,6 +292,9 @@ def _tool_call(rec: Record, common: dict[str, Any]) -> ToolCall:
     if isinstance(raw, dict) and raw.get("lc") and "kwargs" in raw:  # serialized ToolMessage
         tool_call_id = tool_call_id or raw["kwargs"].get("tool_call_id")
         raw = raw["kwargs"].get("content")
+    elif _is_plain_tool_message(raw):  # ToolMessage dumped as a plain dict (langsmith 0.14)
+        tool_call_id = tool_call_id or raw.get("tool_call_id")
+        raw = raw.get("content")
     elif isinstance(raw, str) and (m := _TOOL_MESSAGE_REPR.match(raw)):
         raw = ast.literal_eval(m.group(1))
     return ToolCall(
@@ -301,6 +304,15 @@ def _tool_call(rec: Record, common: dict[str, Any]) -> ToolCall:
         result=_maybe_json(raw),
         error=rec.get("error"),
         tool_call_id=tool_call_id,
+    )
+
+
+def _is_plain_tool_message(raw: Any) -> bool:
+    return (
+        isinstance(raw, dict)
+        and raw.get("type") == "tool"
+        and "content" in raw
+        and "tool_call_id" in raw
     )
 
 
