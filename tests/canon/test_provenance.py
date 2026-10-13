@@ -226,3 +226,45 @@ def test_json_looking_text_that_is_not_json_is_skipped() -> None:
     run = Builder({"note": "{not json, id A-77}"}).tool("t", {"id": "A-77", "n": 7}).run()
     assert leaf(run, "$.id").status == "model_generated"
     assert leaf(run, "$.n").status == "model_generated"
+
+
+def test_parallel_tool_calls_cannot_bind_to_each_others_results() -> None:
+    """Both calls' arguments were fixed when the model asked for them, before either ran.
+
+    Seen in real traces: `get_issue` and `list_labels` requested together; the issue
+    body mentions the repo, so `list_labels.repo` bound to `get_issue`'s result in
+    some runs and to the input in others, and the position came out inconsistent.
+    """
+    run = Builder({"text": "Please triage issue 7 in acme/widgets."})
+    run.model(
+        requests=[
+            ("get_issue", {"repo": "acme/widgets"}),
+            ("list_labels", {"repo": "acme/widgets"}),
+        ]
+    )
+    for i, (name, result) in enumerate(
+        [("get_issue", {"body": "see acme/widgets"}), ("list_labels", [])]
+    ):
+        run.events.append(
+            ToolCall(
+                event_id=f"t{i}",
+                ts=T0 + timedelta(seconds=i + 1),
+                name=name,
+                args={"repo": "acme/widgets"},
+                result=result,
+                tool_call_id=f"c0-{i}",
+            )
+        )
+    p = leaf(run.run(), "$.repo", tool="list_labels")
+    assert [(e.from_kind, e.transform) for e in p.edges] == [("input", "substring")]
+
+
+def test_a_sequential_call_still_binds_to_the_earlier_result() -> None:
+    run = (
+        Builder({"text": "Please triage issue 7 in acme/widgets."})
+        .tool("get_issue", {"repo": "acme/widgets"}, result={"repo": "acme/widgets"})
+        .tool("list_labels", {"repo": "acme/widgets"})
+        .run()
+    )
+    (edge,) = leaf(run, "$.repo", tool="list_labels").edges
+    assert (edge.from_kind, edge.transform) == ("tool", "exact")
