@@ -172,3 +172,46 @@ def test_holdout_model_calls_are_never_seen_by_the_compiler(
     held = {e.event_id for r in holdout for e in r.events if isinstance(e, ModelCall)}
     assert held and not held & set(report.compiled_from)
     assert not {r.run_id for r in holdout} & set(report.compiled_from)
+
+
+def broken_read(runs: list[Run]) -> tuple[Any, list[Run]]:
+    """A plan whose read-only lookup is called with arguments no recording has, as a
+    live model writing its own arguments would."""
+    from anneal.compile.compiler import compile_plan
+
+    compile_runs, holdout = chronological_split(runs, 0.7)
+    plan = compile_plan(compile_runs, tools=TOOLS).plan
+    assert plan is not None
+    steps: list[Any] = [
+        s.model_copy(update={"args_template": {**s.args_template, "include": "everything"}})
+        if isinstance(s, ToolStep) and s.name == "lookup_customer"
+        else s
+        for s in plan.steps
+    ]
+    return plan.model_copy(update={"steps": steps}), holdout
+
+
+def test_unrecorded_read_arguments_diverge_against_the_recording(runs: list[Run]) -> None:
+    plan, holdout = broken_read(runs)
+    result = replay_plan(plan, holdout, task_check=support_task_done)
+    assert result.tools_mode == "recorded"
+    assert result.wrong_by_severity["S0"] == len(holdout)
+
+
+def test_live_read_only_tools_serve_reads_and_writes_stay_recorded(runs: list[Run]) -> None:
+    plan, holdout = broken_read(runs)
+    live_calls: list[str] = []
+
+    def live(recorded: Run) -> Any:
+        recorded_results = {e.name: e.result for e in recorded.events if e.kind == "tool_call"}
+
+        def call(step: ToolStep, args: Any, key: str | None) -> Any:
+            live_calls.append(step.name)
+            return recorded_results[step.name]
+
+        return call
+
+    result = replay_plan(plan, holdout, task_check=support_task_done, live_tools=live)
+    assert result.tools_mode == "live read-only"
+    assert set(live_calls) == {"lookup_customer"}  # side-effect tools never run live
+    assert result.wrong_by_severity == {"S0": 0, "S1": 0, "S2": 0}
