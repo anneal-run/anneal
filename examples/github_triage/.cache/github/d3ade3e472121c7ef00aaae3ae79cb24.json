@@ -1,0 +1,1 @@
+{"path": "/search/issues", "params": {"q": "repo:astral-sh/uv is:issue created:<2026-03-20T17:59:43Z self update uv executable missing windows install.ps1 PATH", "per_page": 6}, "body": {"total_count": 0, "incomplete_results": false, "items": [], "search_type": "lexical"}}
