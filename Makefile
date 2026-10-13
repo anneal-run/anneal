@@ -15,8 +15,8 @@ test:
 
 check: lint typecheck test baseline-test
 
-baseline-test:
-	uv run pytest baseline -q -p no:cacheprovider --no-cov
+baseline-test:  # one process per baseline: each has its own workflow.py and interface.py
+	for d in baseline/*/; do uv run pytest $$d -q -p no:cacheprovider --no-cov || exit 1; done
 
 m1-dryrun:
 	uv run python tests/synth/dry_run.py
