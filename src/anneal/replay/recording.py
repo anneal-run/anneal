@@ -12,7 +12,6 @@ replay optimistic about forced steps: a live model forced onto a tool would
 answer anyway. Measuring that needs a live runner (ADR 0006).
 """
 
-import json
 from collections import defaultdict, deque
 from dataclasses import dataclass
 from typing import Any
@@ -20,22 +19,8 @@ from typing import Any
 from anneal.classify.classifier import position_id, run_view
 from anneal.compile.plan import LlmStep, ToolStep
 from anneal.runtime.executor import DeoptRequested, LlmResponse
+from anneal.runtime.outbox import canonical
 from anneal.schema import ModelCall, Run, ToolCall
-
-
-def _normalize(value: Any) -> Any:
-    if isinstance(value, dict):
-        return {str(k): _normalize(v) for k, v in value.items()}
-    if isinstance(value, list | tuple):
-        return [_normalize(v) for v in value]
-    if isinstance(value, float) and value.is_integer():
-        return int(value)
-    return value
-
-
-def canonical(args: Any) -> str:
-    """Key-order and int/float-insensitive JSON of tool arguments."""
-    return json.dumps(_normalize(args), sort_keys=True, separators=(",", ":"))
 
 
 @dataclass(frozen=True)
@@ -67,7 +52,7 @@ class RecordingToolServer:
                 self._by_name[e.name].append(e.args)
         self.divergence: DivergenceInfo | None = None
 
-    def __call__(self, step: ToolStep, args: Any) -> Any:
+    def __call__(self, step: ToolStep, args: Any, key: str | None = None) -> Any:
         queue = self._calls.get((step.name, canonical(args)))
         if not queue:
             self.divergence = DivergenceInfo(step.id, step.name, args, self._by_name[step.name])

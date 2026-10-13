@@ -20,8 +20,8 @@ INPUT = {"email": "<EMAIL_1>", "message": "My order 1001 has a problem"}
 TOOLS = {
     "lookup_customer": ToolSpec(side_effect=False, severity="S0", idempotent=True),
     "create_ticket": ToolSpec(severity="S1", idempotent=True),
-    "auto_reply": ToolSpec(severity="S1"),
-    "send_email": ToolSpec(severity="S2"),
+    "auto_reply": ToolSpec(severity="S1", idempotent=True),
+    "send_email": ToolSpec(severity="S2", idempotent=True),
 }
 
 
@@ -33,7 +33,7 @@ def plan() -> WorkflowPlan:
     return result.plan
 
 
-def tools(step: ToolStep, args: Any) -> Any:
+def tools(step: ToolStep, args: Any, key: str | None = None) -> Any:
     return {
         "lookup_customer": {"customer_id": "C-0001", "tier": "gold"},
         "create_ticket": {"ticket_id": "T-00001"},

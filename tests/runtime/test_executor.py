@@ -16,9 +16,13 @@ INPUT = {"email": "<EMAIL_1>", "message": "My order 1001 has a problem"}
 @pytest.fixture(scope="module")
 def plan() -> WorkflowPlan:
     runs, _ = generate(seed=0)
-    result = compile_plan(
-        runs, tools={"lookup_customer": ToolSpec(side_effect=False, severity="S0")}
-    )
+    declared = {
+        "lookup_customer": ToolSpec(side_effect=False, severity="S0"),
+        "create_ticket": ToolSpec(idempotent=True),
+        "auto_reply": ToolSpec(idempotent=True),
+        "send_email": ToolSpec(idempotent=True),
+    }
+    result = compile_plan(runs, tools=declared)
     assert result.plan is not None
     return result.plan
 
@@ -28,7 +32,7 @@ class FakeTools:
         self.calls: list[tuple[str, Any]] = []
         self.fail = fail
 
-    def __call__(self, step: ToolStep, args: Any) -> Any:
+    def __call__(self, step: ToolStep, args: Any, key: str | None = None) -> Any:
         self.calls.append((step.name, args))
         if step.name == self.fail:
             raise RuntimeError("upstream 503")
@@ -181,16 +185,20 @@ def test_steps_run_in_dependency_order_not_list_order() -> None:
         compiled_from=[],
         steps=[
             ToolStep(
-                id="b", name="second", args_template={"x": "{{steps.a.result.v}}"}, severity="S0"
+                id="b",
+                name="second",
+                args_template={"x": "{{steps.a.result.v}}"},
+                severity="S0",
+                side_effect=False,
             ),
-            ToolStep(id="a", name="first", args_template={}, severity="S0"),
+            ToolStep(id="a", name="first", args_template={}, severity="S0", side_effect=False),
             EndStep(output_template="{{steps.b.result.v}}"),
         ],
         guards=[Guard(id="g", kind="schema", path="input.k", params={"type": "string"})],
     )
     order: list[str] = []
 
-    def tools(step: ToolStep, args: Any) -> Any:
+    def tools(step: ToolStep, args: Any, key: str | None = None) -> Any:
         order.append(step.name)
         return {"v": len(order)}
 
