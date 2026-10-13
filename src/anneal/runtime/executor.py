@@ -21,7 +21,7 @@ deopted trace has status `pending`, since the run continues in the original agen
 
 import json
 import uuid
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any, Literal, Protocol
@@ -29,6 +29,7 @@ from typing import Any, Literal, Protocol
 from anneal.compile.plan import EndStep, LlmStep, ToolStep, WorkflowPlan
 from anneal.compile.template import TemplateError, render
 from anneal.runtime.checks import failing_guard, schema_errors
+from anneal.runtime.outbox import NeedsHuman, Outbox, Reconcile, canonical, reconcile_one
 from anneal.schema import Deopt, Event, Message, ModelCall, Run, Severity, ToolCall, ToolCallRequest
 
 
@@ -44,7 +45,9 @@ class LlmResponse:
 
 
 class ToolRunner(Protocol):
-    def __call__(self, step: ToolStep, args: Any) -> Any: ...
+    def __call__(self, step: ToolStep, args: Any, key: str | None) -> Any:
+        """Run the tool. `key` is the operation key for side-effect tools, else None."""
+        ...
 
 
 class LlmRunner(Protocol):
@@ -72,6 +75,15 @@ class ExecutionResult:
     trace: Run
     deopt: DeoptRequested | None = None
     rendered: dict[str, Any] = field(default_factory=dict)
+    operation_keys: dict[str, str] = field(default_factory=dict)
+    """Step id to operation key, for every side-effect step that was attempted."""
+    pending_keys: dict[tuple[str, str], str] = field(default_factory=dict)
+    """`(tool, canonical args)` to key for side-effect calls that did not complete."""
+
+
+def operation_key(run_id: str, step_id: str) -> str:
+    """The operation key of a step; also its tool call id in reconstructed history."""
+    return f"anneal-{run_id}-{step_id}"
 
 
 class _DryValue(str):
@@ -95,6 +107,9 @@ class Executor:
         llm: LlmRunner,
         dry_run: bool = False,
         live_severities: frozenset[Severity] = frozenset({"S0"}),
+        outbox: Outbox | None = None,
+        reconcilers: Mapping[str, Reconcile] | None = None,
+        enforce_side_effects: bool = True,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self.plan = plan
@@ -102,9 +117,17 @@ class Executor:
         self.llm = llm
         self.dry_run = dry_run
         self.live_severities = live_severities
+        self.outbox = outbox if outbox is not None else Outbox()
+        self.reconcilers = dict(reconcilers or {})
+        self.enforce_side_effects = enforce_side_effects
         self.clock = clock
         self._order = plan.dependency_order()
         self._steps = {s.id: s for s in plan.steps}
+        for step in plan.steps:
+            if isinstance(step, ToolStep) and step.reconcile and step.name not in self.reconcilers:
+                raise ValueError(
+                    f"tool {step.name} declares a reconcile hook but none is registered"
+                )
 
     def run(self, run_input: Any, *, run_id: str | None = None) -> ExecutionResult:
         run_id = run_id or uuid.uuid4().hex
@@ -113,6 +136,7 @@ class Executor:
         completed: list[str] = []
         rendered: dict[str, Any] = {}
         events: list[Event] = []
+        keys: dict[str, str] = {}
         output: Any = None
         deopt: DeoptRequested | None = None
         try:
@@ -123,7 +147,7 @@ class Executor:
                 ctx = {"input": run_input, "steps": {k: {"result": v} for k, v in state.items()}}
                 match step:
                     case ToolStep():
-                        state[step_id] = self._tool(step, ctx, run_id, rendered, events)
+                        state[step_id] = self._tool(step, ctx, run_id, rendered, events, keys)
                     case LlmStep():
                         state[step_id] = self._llm(step, ctx, run_id, rendered, events)
                     case EndStep():
@@ -161,6 +185,12 @@ class Executor:
             trace=trace,
             deopt=deopt,
             rendered=rendered,
+            operation_keys=keys,
+            pending_keys={
+                (self._steps[sid].name, canonical(rendered[sid])): key  # type: ignore[union-attr]
+                for sid, key in keys.items()
+                if sid not in completed
+            },
         )
 
     def _render(self, step_id: str, template: Any, ctx: dict[str, Any]) -> Any:
@@ -176,6 +206,7 @@ class Executor:
         run_id: str,
         rendered: dict[str, Any],
         events: list[Event],
+        keys: dict[str, str],
     ) -> Any:
         args = self._render(step.id, step.args_template, ctx)
         rendered[step.id] = args
@@ -183,23 +214,53 @@ class Executor:
             return _dry(step.id)
         if step.severity not in self.live_severities:
             raise DeoptRequested(step.id, f"tool {step.name} is {step.severity}, not live")
-        ts = self.clock()
+        guarded = step.side_effect and self.enforce_side_effects
+        if guarded and not (step.idempotent or step.reconcile):
+            raise DeoptRequested(
+                step.id, f"tool {step.name} is shadow_only: no idempotency key, no reconcile hook"
+            )
         common: dict[str, Any] = {
             "event_id": f"{run_id}:{step.id}",
-            "ts": ts,
+            "ts": self.clock(),
             "name": step.name,
             "args": args,
             "side_effect": step.side_effect,
             "severity": step.severity,
         }
+        key = None
+        if guarded:
+            key = keys[step.id] = operation_key(run_id, step.id)
+            common["idempotency_key"] = key
+            self.outbox.write_intent(key, run_id=run_id, step_id=step.id, tool=step.name, args=args)
         try:
-            result = self.tools(step, args)
-        except Exception as e:  # the tool's failure is the agent's to handle
+            result = self.tools(step, args, key)
+        except Exception as e:
             error = f"{type(e).__name__}: {e}"
             events.append(ToolCall(**common, error=error))
-            raise DeoptRequested(step.id, f"tool error: {error}") from None
+            if key is None:  # read-only, or policy off: the agent can handle the failure
+                raise DeoptRequested(step.id, f"tool error: {error}") from None
+            return self._after_failure(step, key, error)
+        if key is not None:
+            self.outbox.mark(key, "done")
         events.append(ToolCall(**common, result=result))
         return result
+
+    def _after_failure(self, step: ToolStep, key: str, error: str) -> Any:
+        """A side-effect call raised: its outcome is unknown until reconciled."""
+        if not step.reconcile:
+            # Idempotent by key: a repeat under the same key is a no-op at the tool, so the
+            # agent may resume; the key travels with the fallback (ADR 0008).
+            self.outbox.mark(key, "unknown")
+            raise DeoptRequested(step.id, f"tool error, outcome unknown, key {key}: {error}")
+        record = self.outbox.get(key)
+        assert record is not None
+        answer = reconcile_one(record, self.reconcilers)
+        updated = self.outbox.mark(key, answer)
+        if answer == "done":
+            return {"reconciled": "done"}
+        if answer == "not_done":
+            raise DeoptRequested(step.id, f"tool error, reconciled not done: {error}")
+        raise NeedsHuman([updated])
 
     def _llm(
         self,

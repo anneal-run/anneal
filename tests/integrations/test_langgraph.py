@@ -19,9 +19,9 @@ ALL: frozenset[Severity] = frozenset({"S0", "S1", "S2"})
 TOOLS = {
     "lookup_customer": ToolSpec(side_effect=False, severity="S0", idempotent=True),
     "create_ticket": ToolSpec(severity="S1", idempotent=True),
-    "auto_reply": ToolSpec(severity="S1"),
-    "escalate": ToolSpec(severity="S1"),
-    "send_email": ToolSpec(severity="S2"),
+    "auto_reply": ToolSpec(severity="S1", idempotent=True),
+    "escalate": ToolSpec(severity="S1", idempotent=True),
+    "send_email": ToolSpec(severity="S2", idempotent=True),
 }
 
 
@@ -79,7 +79,7 @@ def compiled_llm(step: LlmStep, system: str, user: str, feedback: str | None) ->
 
 
 def injected(plan: WorkflowPlan, toolbox: ToolBox, at: str) -> CompiledWorkflow:
-    def tools(step: ToolStep, args: Any) -> Any:
+    def tools(step: ToolStep, args: Any, key: str | None = None) -> Any:
         if step.id == at:
             raise DeoptRequested(at, "injected")
         return toolbox.call(step.name, args)

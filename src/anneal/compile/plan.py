@@ -32,6 +32,9 @@ class ToolStep(_Model):
     side_effect: bool = True
     severity: Severity = "S2"
     idempotent: bool = False
+    """The tool accepts an operation key and treats a repeat under it as a no-op."""
+    reconcile: bool = False
+    """A `reconcile(key) -> done | not_done | unknown` hook is registered for the tool."""
 
 
 class LlmStep(_Model):
@@ -110,6 +113,14 @@ class WorkflowPlan(_Model):
             raise ValueError("only one end step, and it must be last")
         self.dependency_order()
         return self
+
+    def shadow_only_steps(self) -> list[str]:
+        """Side-effect tool steps with neither an idempotency key nor a reconcile hook."""
+        return [
+            s.id
+            for s in self.steps
+            if isinstance(s, ToolStep) and s.side_effect and not (s.idempotent or s.reconcile)
+        ]
 
     def dependencies(self) -> dict[str, set[str]]:
         """Step id to the step ids its templates read."""

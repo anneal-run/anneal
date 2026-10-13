@@ -68,6 +68,9 @@ class ToolSpec(BaseModel):
     side_effect: bool = True
     severity: Severity = "S2"
     idempotent: bool = False
+    """Accepts an operation key and treats a repeat under it as a no-op."""
+    reconcile: bool = False
+    """A `reconcile(key)` hook will be registered with the executor."""
 
 
 @dataclass
@@ -170,7 +173,13 @@ class _Builder:
             side_effect=spec.side_effect,
             severity=spec.severity,
             idempotent=spec.idempotent,
+            reconcile=spec.reconcile,
         )
+        if spec.side_effect and not (spec.idempotent or spec.reconcile):
+            self.log.append(
+                f"tool {name}: shadow_only (side effect, no idempotency key, no reconcile hook); "
+                "a compiled path deopts before it"
+            )
         self.steps.append(step)
         self.step_of_index[index] = step.id
         return step

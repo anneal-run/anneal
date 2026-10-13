@@ -119,7 +119,9 @@ def replay_plan(
     for recorded in holdout:
         server = RecordingToolServer(recorded)
         llm = llm_factory(recorded) if llm_factory else RecordedLlm(recorded)
-        executor = Executor(plan, tools=server, llm=llm, live_severities=ALL_SEVERITIES)
+        executor = Executor(
+            plan, tools=server, llm=llm, live_severities=ALL_SEVERITIES, enforce_side_effects=False
+        )
         result = executor.run(recorded.input, run_id=f"replay:{recorded.run_id}")
         tier0_ok = bool(check(recorded, recorded))
         cost_tier0 = _cost(recorded)
