@@ -60,3 +60,24 @@ def test_guards(g: Guard, ok: Any, bad: Any) -> None:
     assert failing_guard([g], {"v": ok}) is None
     assert failing_guard([g], {"v": bad}) == g
     assert failing_guard([g], {}) == g  # a missing path fails every guard
+
+
+def test_pattern_guards_can_name_a_string_class() -> None:
+    g = guard("pattern", **{"class": "email"})
+    assert failing_guard([g], {"v": "a@b.io"}) is None
+    assert failing_guard([g], {"v": "not an email"}) == g
+
+
+@pytest.mark.parametrize(
+    ("mined", "value"),
+    [
+        ("ph:EMAIL", "jane@acme.com"),  # compiled from the redacted store, run on live input
+        ("email", "<EMAIL_3>"),  # compiled from raw traces, run on redacted input
+        ("ph:CARD", "4111 1111 1111 1111"),
+        ("ph:PHONE", "+1 415 555 0132"),
+    ],
+)
+def test_a_value_and_its_redaction_placeholder_share_a_class(mined: str, value: str) -> None:
+    g = guard("pattern", **{"class": mined})
+    assert failing_guard([g], {"v": value}) is None
+    assert failing_guard([g], {"v": "plain text"}) == g

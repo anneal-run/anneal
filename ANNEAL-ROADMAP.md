@@ -188,9 +188,9 @@ A deopt reconstructs what the agent's own history would have been, in the framew
 
 **M1.8 The baseline arm (days 10 to 14, in parallel)**
 
-- [ ] A competent engineer, or Claude Code working from the same traces and the same task definition, writes the same workflow as a plain script or graph with the tests the task-level check requires. Time box: one working day. Everything about how long it took and what it needed is logged.
-- [ ] The baseline is run on the same chronological holdout with the same task-level check and the same cost accounting
-- [ ] Drift suite: three injected changes to the holdout inputs (a new enum value, a schema change such as a renamed field, a new input topic). For each arm record: fails loudly, fails silently (wrong result with no signal), or falls back. The compiled arm's guards in M1 are only schema, enum, range, length and pattern; no OOD scoring yet.
+- [ ] A competent engineer, or Claude Code working from the same traces and the same task definition, writes the same workflow as a plain script or graph with the tests the task-level check requires. Time box: one working day. Everything about how long it took and what it needed is logged. *(Dry run done on a synthetic workflow: `baseline/env_support/`, built in 1 min 46 s by a separate agent from the brief and traces only. Still to be done on the partner's workflow.)*
+- [ ] The baseline is run on the same chronological holdout with the same task-level check and the same cost accounting *(Mechanism done: `anneal.replay.arms`; synthetic results in `report/m1.8-synthetic-dry-run.md`, ADR 0009.)*
+- [ ] Drift suite: three injected changes to the holdout inputs (a new enum value, a schema change such as a renamed field, a new input topic). For each arm record: fails loudly, fails silently (wrong result with no signal), or falls back. The compiled arm's guards in M1 are only schema, enum, range, length and pattern; no OOD scoring yet. *(Mechanism done, with schema, enum, range and pattern guards mined for the compiled arm. Synthetic run: compiled falls back on the new enum and the renamed field, and fails silently on a new topic. ADR 0009.)*
 
 **M1.9 The memo (days 16 to 20)**
 

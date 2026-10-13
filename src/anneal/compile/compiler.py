@@ -34,7 +34,7 @@ from pydantic import BaseModel, ConfigDict
 
 from anneal.canon.dates import DATE_FORMATS, parse_dates
 from anneal.canon.provenance import provenance
-from anneal.canon.shape import leaves, split_path
+from anneal.canon.shape import ShapeVocab, leaves, split_path, string_class
 from anneal.canon.skeleton import skeleton, skeleton_hash
 from anneal.classify import classify
 from anneal.classify.classifier import (
@@ -506,6 +506,13 @@ def _end_step(b: _Builder) -> EndStep:
 def _guards(
     steps: Sequence[ToolStep | LlmStep | EndStep], supporting: list[RunView]
 ) -> list[Guard]:
+    """Guards on the input fields the plan reads, mined from the compile runs.
+
+    Every read field gets a `schema` guard (type). When an llm step reads the whole
+    input, every field present in all compile runs is read. Strings whose values all
+    share a class get a `pattern` guard, enum-like strings an `enum` guard, and numbers
+    a `range` guard widened by 10% of the observed span.
+    """
     paths: set[str] = set()
     for s in steps:
         templates: list[Any]
@@ -518,18 +525,43 @@ def _guards(
                 templates = [s.output_template]
         for t in templates:
             paths |= input_paths(t)
-    guards = []
+    inputs = [v.run.input for v in supporting]
+    flat = [dict(leaves(i)) for i in inputs]
+    if "input" in paths:
+        common = set.intersection(*(set(f) for f in flat)) if flat else set()
+        paths |= {"input" + p[1:] for p in common if p != "$" and "[" not in p}
+    vocab = ShapeVocab.fit(("input", i) for i in inputs)
+    guards: list[Guard] = []
     for path in sorted(paths - {"input"}):
-        observed = []
-        for v in supporting:
-            flat = dict(leaves(v.run.input))
-            leaf = "$" + path.removeprefix("input")
-            if leaf in flat:
-                observed.append(flat[leaf])
+        leaf = "$" + path.removeprefix("input")
+        observed = [f[leaf] for f in flat if leaf in f]
         kind = _json_type(observed) if observed else None
         guards.append(
             Guard(
                 id=f"schema:{path}", kind="schema", path=path, params={"type": kind} if kind else {}
             )
         )
+        if kind == "string":
+            classes = {string_class(v) for v in observed}
+            if len(classes) == 1 and None not in classes:
+                cls = classes.pop()
+                guards.append(
+                    Guard(id=f"pattern:{path}", kind="pattern", path=path, params={"class": cls})
+                )
+            elif vocab.is_enum("input", leaf):
+                values = sorted(vocab.values("input", leaf))
+                guards.append(
+                    Guard(id=f"enum:{path}", kind="enum", path=path, params={"values": values})
+                )
+        elif kind in {"integer", "number"}:
+            low, high = min(observed), max(observed)
+            pad = (high - low) * 0.1
+            guards.append(
+                Guard(
+                    id=f"range:{path}",
+                    kind="range",
+                    path=path,
+                    params={"min": round(low - pad, 6), "max": round(high + pad, 6)},
+                )
+            )
     return guards
