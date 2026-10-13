@@ -177,6 +177,11 @@ def _output_message(outputs: dict[str, Any]) -> Any:
     return None
 
 
+def parse_message(raw: Any) -> Message:
+    """A message in any shape a LangSmith export uses (lc-serialized, plain dict, text)."""
+    return _message(raw)
+
+
 def _message(raw: Any) -> Message:
     if isinstance(raw, dict) and raw.get("lc") and "kwargs" in raw:
         kw = raw["kwargs"]
