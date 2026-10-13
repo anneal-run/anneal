@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- fix: provenance binds a tool argument only to sources that existed when the model requested the call, so parallel tool calls cannot bind to each other's results (found in dogfood traces: `list_labels.repo` flipped between the input and `get_issue`'s body).
 - feat: `anneal.integrations.langgraph.chat_model_runner` answers compiled `llm` steps with a LangChain chat model (structured output, usage and cost), for live replay; `from_langchain` reads graph-state messages; `anneal.importers.langsmith.parse_message` is public.
 - fix: the LangSmith importer unwraps tool results that LangGraph's `ToolNode` exports as plain `ToolMessage` dicts (found in dogfood traces; previously the whole message became the result).
 - M1.9: the memo: `anneal.report.memo` (Gate 1 evaluation with `pass` / `fail` / `stop` / `open` per criterion, H1 repeated-spend share, memo renderer with a synthetic banner) and `make m1`, which runs analyze, compile, replay, 20 injected deopts and the three arms end to end and writes `report/m1.md` (synthetic until a partner exists). ADR 0010.

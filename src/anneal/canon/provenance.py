@@ -91,8 +91,12 @@ def provenance(run: Run) -> list[LeafProvenance]:
     for order, event in enumerate(run.events):
         if isinstance(event, ToolCall):
             requested = _requested_by_model(run.events[:order], event)
+            # Arguments were fixed when the model asked for the call: results of tools
+            # that ran after that request (parallel siblings) cannot be their source.
+            asked = _request_order(run.events[:order], event)
+            available = [s for s in sources if s.order < asked] if asked is not None else sources
             for path, value in leaves(event.args):
-                out.append(_leaf(event.event_id, path, value, sources, requested))
+                out.append(_leaf(event.event_id, path, value, available, requested))
             if not event.error:
                 sources += [
                     _Source(event.event_id, "tool", p, v, order)
@@ -102,6 +106,19 @@ def provenance(run: Run) -> list[LeafProvenance]:
         elif isinstance(event, ModelCall) and event.output_text:
             sources.append(_Source(event.event_id, "model", "$", event.output_text, order))
     return out
+
+
+def _request_order(before: Sequence[Event], tool: ToolCall) -> int | None:
+    """Position of the model call that requested `tool` (by tool_call_id), if known."""
+    if not tool.tool_call_id:
+        return None
+    for order in range(len(before) - 1, -1, -1):
+        event = before[order]
+        if isinstance(event, ModelCall) and any(
+            r.id == tool.tool_call_id for r in event.tool_calls_requested
+        ):
+            return order
+    return None
 
 
 def _usable(value: Any) -> bool:
