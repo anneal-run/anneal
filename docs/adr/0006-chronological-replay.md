@@ -50,3 +50,7 @@ Wrong-execution rates are computed among accepted runs (correct plus wrong).
 
 - With a small removable share and frequent fallbacks, compiled cost per run can exceed Tier 0. The synthetic workflow shows exactly this: $0.0966 against $0.0882, with 37% fallbacks. The report shows it rather than hiding it.
 - H3 cannot be passed on recorded-mode replay alone. The report says so on every run.
+
+## Amendment (2026-10-13): live read-only tools
+
+With live model answers, a constrained step writes arguments no recording has, for example a new search query. Served from the recording, every such read was a divergence, so an S0 wrong execution would be counted even when the read was harmless. `replay_plan(..., live_tools=...)` serves steps of tools declared `side_effect=False` from a live runner. Side-effect tools are always served from the recording: replay never writes. The report states which mode was used (`tools_mode`).
