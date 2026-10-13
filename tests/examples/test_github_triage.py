@@ -54,6 +54,15 @@ def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json=[{"body": body}])
     if path.startswith(f"/repos/{REPO}/issues/"):
         return httpx.Response(200, json=ISSUES[int(path.rsplit("/", 1)[1])])
+    if path == "/graphql":
+        number = json.loads(request.content)["variables"]["number"]
+        nodes = (
+            [{"duplicateOf": {"number": 7}}]
+            if number == 9 and request.headers.get("x-native")
+            else [{}]
+        )
+        issue = {"timelineItems": {"nodes": nodes}}
+        return httpx.Response(200, json={"data": {"repository": {"issue": issue}}})
     if path == "/search/issues":
         return httpx.Response(200, json={"items": list(ISSUES.values())})
     return httpx.Response(404)
@@ -108,6 +117,19 @@ def test_search_only_sees_earlier_issues_and_never_the_issue_itself(gh: GitHub) 
     assert [x["number"] for x in found] == [7]
     (cached,) = [json.loads(p.read_text()) for p in gh.cache_dir.glob("*.json")]
     assert "created:<2026-02-01T00:00:00Z" in cached["params"]["q"]
+
+
+def test_duplicate_target_from_githubs_close_as_duplicate_link(tmp_path: Path) -> None:
+    from github_triage.select_issues import duplicate_target
+
+    def native(request: httpx.Request) -> httpx.Response:
+        request.headers["x-native"] = "1"
+        if request.url.path.endswith("/comments"):
+            return httpx.Response(200, json=[])
+        return handler(request)
+
+    gh = GitHub(cache_dir=tmp_path, client=httpx.Client(transport=httpx.MockTransport(native)))
+    assert duplicate_target(gh, REPO, 9) == 7  # no comment: only the GraphQL link has it
 
 
 def test_selection_keeps_duplicates_only_with_a_target(gh: GitHub) -> None:
@@ -217,3 +239,22 @@ def test_run_check_reads_the_issue_from_the_recorded_input() -> None:
         source="test",
     )
     assert check(recorded, recorded)
+
+
+def test_budget_ledger_survives_concurrent_writers(tmp_path: Path) -> None:
+    from concurrent.futures import ProcessPoolExecutor
+
+    from github_triage.budget import Budget
+
+    path = tmp_path / "spend.json"
+    with ProcessPoolExecutor(4) as pool:
+        list(pool.map(_add_cents, [path] * 40))
+    assert Budget(path, cap=1).spent() == {"p": pytest.approx(0.4)}
+    with pytest.raises(Exception, match="spent"):
+        Budget(path, cap=0.3).check()
+
+
+def _add_cents(path: Path) -> None:
+    from github_triage.budget import Budget
+
+    Budget(path, cap=1).add("p", 0.01)

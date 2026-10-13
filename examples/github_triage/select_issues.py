@@ -34,7 +34,26 @@ def _is_duplicate(item: dict[str, Any]) -> bool:
     return item.get("state_reason") == "duplicate" or any("duplicate" in x for x in labels)
 
 
+_CLOSED_AS_DUPLICATE = """
+query($owner: String!, $name: String!, $number: Int!) {
+  repository(owner: $owner, name: $name) {
+    issue(number: $number) {
+      timelineItems(itemTypes: [CLOSED_EVENT], last: 5) {
+        nodes { ... on ClosedEvent { duplicateOf { ... on Issue { number } } } }
+      }
+    }
+  }
+}"""
+
+
 def duplicate_target(gh: GitHub, repo: str, number: int) -> int | None:
+    """The issue's duplicate target: GitHub's "close as duplicate" link (GraphQL only;
+    REST does not return it), else a "Duplicate of #N" comment."""
+    owner, name = repo.split("/")
+    data = gh.graphql(_CLOSED_AS_DUPLICATE, owner=owner, name=name, number=number)
+    for node in reversed(data["repository"]["issue"]["timelineItems"]["nodes"]):
+        if (node.get("duplicateOf") or {}).get("number"):
+            return int(node["duplicateOf"]["number"])
     pattern = re.compile(
         rf"duplicate of\s+(?:https://github\.com/{re.escape(repo)}/issues/|#)(\d+)", re.I
     )
@@ -84,3 +103,27 @@ def select(gh: GitHub, repo: str, n: int, since: str, until: str) -> tuple[list[
         if len(found.get("items", [])) < 100:
             break
     return sorted(picked, key=lambda t: t.created_at), dropped
+
+
+def main(argv: list[str] | None = None) -> None:
+    """python -m github_triage.select_issues owner/name N out.jsonl [--since --until]"""
+    import argparse
+    import json
+    from pathlib import Path
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("repo")
+    parser.add_argument("n", type=int)
+    parser.add_argument("out", type=Path)
+    parser.add_argument("--since", default="2026-01-01")
+    parser.add_argument("--until", default="2026-06-30")
+    args = parser.parse_args(argv)
+    truths, dropped = select(GitHub(), args.repo, args.n, args.since, args.until)
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.write_text("".join(json.dumps(t.to_json()) + "\n" for t in truths))
+    dups = sum(t.duplicate_of is not None for t in truths)
+    print(f"{args.repo}: {len(truths)} issues, {dups} duplicates, {dropped} dropped -> {args.out}")
+
+
+if __name__ == "__main__":
+    main()

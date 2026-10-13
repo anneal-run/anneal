@@ -6,7 +6,8 @@ stops calling tools, then one structured-output call for the final triage (the
 same pattern as LangGraph's prebuilt agent with `response_format`).
 
 Model from env: `TRIAGE_PROVIDER` (`anthropic` or `openai`, default `anthropic`)
-and `TRIAGE_MODEL` (default `claude-haiku-5-5`).
+and `TRIAGE_MODEL` (default `claude-haiku-5-5`). No temperature is set for Anthropic:
+the Claude 5 models reject it.
 """
 
 import os
@@ -60,7 +61,6 @@ def chat_model() -> BaseChatModel:
 
         return ChatAnthropic(
             model_name=model,
-            temperature=0,
             max_tokens=2048,  # type: ignore[call-arg]  # pydantic alias of max_tokens_to_sample
             timeout=60,
             stop=None,
@@ -89,7 +89,9 @@ def build_agent(
         return {"messages": [with_tools.invoke(prompt(state["messages"]))]}
 
     def respond(state: TriageState) -> dict[str, Any]:
-        result = structured.invoke(prompt(state["messages"]))
+        # Claude 5 models reject a conversation that ends with an assistant turn.
+        ask = HumanMessage(content="Give your final triage.")
+        result = structured.invoke([*prompt(state["messages"]), ask])
         assert isinstance(result, Triage)
         return {"triage": result.model_dump()}
 
