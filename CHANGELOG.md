@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- fix: Gate 1's H3 is `open`, not `pass`, when no holdout run finished on the compiled path (100% fallback makes compiled success equal Tier 0's by construction). ADR 0010 amended.
 - feat: memos carry a `stamp` (`synthetic` or `dogfood`) instead of a `synthetic` flag; a DOGFOOD memo says it is real-path data but not a partner workflow and not Gate 1 evidence.
 - fix: three-arm drift behaviour can be scored relative to a reference arm (`evaluate(..., reference="tier0")`): only cases the reference got done count, and a drift type is labelled by the rise it causes over the arm's own holdout rates (10-point margin). With a real Tier 0 at 72-83% task success, the old rule labelled every arm "fails silently" everywhere. ADR 0011.
 - feat: `replay_plan(..., live_tools=...)` serves read-only tool steps live during replay (side-effect tools stay recorded), so a live model answer with new arguments (a new search query) is not counted as a divergence; reported as `tools_mode`.

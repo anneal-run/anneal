@@ -145,13 +145,16 @@ def gate1(
     s0 = replay.wrong_rate_by_severity.get("S0", 0.0)
     gap = replay.tier0_success_rate - replay.compiled_success_rate
     h3_ok = replay.compiled and gap <= H3_SUCCESS_GAP + 1e-9 and s12 == 0 and s0 <= S0_BUDGET
+    # Every run fell back: compiled success equals Tier 0's by construction, no evidence.
+    vacuous = replay.compiled and replay.accepted_success_rate is None
     h3 = Criterion(
         id="H3",
-        verdict="pass" if h3_ok else "fail",
+        verdict="open" if h3_ok and vacuous else "pass" if h3_ok else "fail",
         measured=(
             f"task success {_pct(replay.compiled_success_rate)} compiled vs "
             f"{_pct(replay.tier0_success_rate)} Tier 0; S1+S2 wrong {s12}; S0 wrong {_pct(s0)}"
             + ("" if replay.compiled else "; nothing compiled")
+            + ("; no holdout run finished on the compiled path" if vacuous else "")
         ),
         required=(
             f"within {H3_SUCCESS_GAP * 100:.0f} point of Tier 0; zero S1/S2 wrong; "

@@ -273,3 +273,19 @@ def test_dogfood_memo_is_stamped_and_not_evidence() -> None:
     assert "not Gate 1 evidence" in text
     assert "(Would be, on partner data.)" in text
     assert "status (if partner data)" in text
+
+
+def test_h3_is_open_when_the_compiled_path_never_finished_a_run() -> None:
+    """With every holdout run falling back, compiled success equals Tier 0's by
+    construction: that is no evidence for H3 (found in the dogfood run, 60 of 60)."""
+    replay = replay_report(correct=0, fallback=30, fallback_rate=1.0, accepted_success_rate=None)
+    v = verdicts(replay=replay)
+    assert v["H3"] == "open"
+    gate = gate1(
+        holdout=analyze_report(0.5),
+        replay=replay,
+        fallback=fallback_report(),
+        arms=arms_report(),
+        build_seconds={"compiled": 600.0, "baseline": 8 * 3600.0},
+    )
+    assert "no holdout run finished on the compiled path" in gate.criteria[1].measured
