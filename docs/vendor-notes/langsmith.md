@@ -59,6 +59,7 @@ These were captured on 2026-10-12 by tracing a fake tool-calling agent through `
   - a serialized `ToolMessage` (content in `kwargs.content`);
   - a plain value;
   - a Python repr string, `content='...' name='...' tool_call_id='...'`. The tracer records this when the tool returns a `ToolMessage` object. The importer parses the repr with `ast.literal_eval` on the quoted content only.
+  - a plain message dict, `{"type": "tool", "content": ..., "tool_call_id": ...}`. This is what langsmith 0.14.8 records for LangGraph's `ToolNode`. Seen on 2026-10-13 in real dogfood traces; the synthetic fixture never produced it.
 - String content that parses as a JSON object or array is decoded.
 
 ## Token convention
