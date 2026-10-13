@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- fix: three-arm drift behaviour can be scored relative to a reference arm (`evaluate(..., reference="tier0")`): only cases the reference got done count, and a drift type is labelled by the rise it causes over the arm's own holdout rates (10-point margin). With a real Tier 0 at 72-83% task success, the old rule labelled every arm "fails silently" everywhere. ADR 0011.
 - feat: `replay_plan(..., live_tools=...)` serves read-only tool steps live during replay (side-effect tools stay recorded), so a live model answer with new arguments (a new search query) is not counted as a divergence; reported as `tools_mode`.
 - fix: a step whose parallel tool calls all need model-written arguments compiles to one forced `llm` step per tool instead of refusing the whole plan (the dogfood agent's first call, `get_issue` with `list_labels`, blocked compilation). ADR 0005 amended.
 - fix: `compile_plan(..., output_path=...)` compiles only the part of the run output the caller uses (a LangGraph graph returns its whole state); a terminal structured-output call compiles to an `llm` step with a schema merged from the recorded answers (nullable type lists supported by the checker). ADR 0005 amended.
