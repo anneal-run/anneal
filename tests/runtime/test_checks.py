@@ -81,3 +81,11 @@ def test_a_value_and_its_redaction_placeholder_share_a_class(mined: str, value: 
     g = guard("pattern", **{"class": mined})
     assert failing_guard([g], {"v": value}) is None
     assert failing_guard([g], {"v": "plain text"}) == g
+
+
+def test_nullable_type_lists() -> None:
+    from anneal.runtime.checks import schema_errors
+
+    schema = {"type": ["integer", "null"]}
+    assert schema_errors(3, schema) == [] and schema_errors(None, schema) == []
+    assert schema_errors("3", schema) == ["value: expected one of ['integer', 'null']"]

@@ -39,6 +39,14 @@ dev = [
     "ruff>=0.6",
     "types-pyyaml>=6.0",
 ]
+examples = [
+    "httpx>=0.28.1",
+    "langchain-anthropic>=1.7.6",
+    "langchain-openai>=1.7.1",
+]
+
+[tool.uv]
+default-groups = ["dev", "examples"]
 
 [build-system]
 requires = ["hatchling>=1.26"]
@@ -58,10 +66,10 @@ select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
 [tool.mypy]
 strict = true
 python_version = "3.12"
-files = ["src", "tests"]
-mypy_path = "tests"
+files = ["src", "tests", "examples"]
+mypy_path = "tests:examples"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["tests"]
+pythonpath = ["tests", "examples"]
 addopts = "--cov=anneal --cov-report=term-missing"

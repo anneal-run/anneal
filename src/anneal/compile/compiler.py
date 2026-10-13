@@ -108,6 +108,28 @@ def _value_schema(value: Any) -> dict[str, Any]:
     return {"type": "null"}
 
 
+def _merged_schema(values: list[Any]) -> dict[str, Any]:
+    """A schema every one of `values` satisfies: object keys merged, a key that is
+    sometimes null gets `["<type>", "null"]`, list items from the non-empty lists."""
+    present = [v for v in values if v is not None]
+    if not present:
+        return {"type": "null"}
+    if all(isinstance(v, dict) for v in present):
+        keys = sorted({k for v in present for k in v})
+        props = {k: _merged_schema([v.get(k) for v in present]) for k in keys}
+        schema = _object_schema(props)
+    elif all(isinstance(v, list) for v in present):
+        schema = {"type": "array", "items": _merged_schema([x for v in present for x in v])}
+        if not any(present):
+            schema["items"] = {}
+    else:
+        kind = _json_type(present)
+        schema = {"type": kind} if kind else {}
+    if len(present) < len(values) and "type" in schema:
+        schema["type"] = [schema["type"], "null"]
+    return schema
+
+
 def _json_type(values: list[Any]) -> str | None:
     kinds = {_value_schema(v)["type"] for v in values}
     if kinds == {"integer", "number"}:
@@ -152,6 +174,9 @@ class _Builder:
     steps: list[ToolStep | LlmStep] = field(default_factory=list)
     step_of_index: dict[int, str] = field(default_factory=dict)
     manual: list[ManualOverride] = field(default_factory=list)
+    output_path: str | None = None
+    structured: dict[int, str] = field(default_factory=dict)
+    """Path index of a structured-output call (a tool request that never ran) to its step."""
 
     def next_id(self) -> str:
         return f"s{len(self.steps)}"
@@ -303,8 +328,13 @@ def compile_plan(
     overrides: dict[str, Any] | None = None,
     min_support: int = MIN_SUPPORT,
     stable_share: float = STABLE_SHARE,
+    output_path: str | None = None,
 ) -> CompileResult:
-    """Compile the workflow's dominant path; `plan` is None when nothing can be compiled."""
+    """Compile the workflow's dominant path; `plan` is None when nothing can be compiled.
+
+    `output_path` (for example `$.triage`) names the part of the run output the caller
+    uses, when the recorded output holds more (a LangGraph graph returns its whole state,
+    message history included). The compiled path returns only that part, at that path."""
     log: list[str] = []
     if not runs:
         return CompileResult(None, ["no runs"])
@@ -320,6 +350,7 @@ def compile_plan(
         views, supporting, dict(tools or {}), dict(overrides or {}), stable_share, log, call_class
     )
     b.path = path
+    b.output_path = output_path
     try:
         _build_steps(b, path)
         end = _end_step(b)
@@ -359,6 +390,20 @@ def _build_steps(b: _Builder, path: list[Step]) -> None:
         pid = position_id(path[:i], name)
         tool_indices = [rep.index_of[t.event_id] for t in requested_tools(rep, i, model_calls[0])]
         consumed |= set(tool_indices)
+        if cls == "terminal" and not tool_indices and model_calls[0].tool_calls_requested:
+            requests = [c.tool_calls_requested[0].args for c in model_calls]
+            schema = _merged_schema(requests)
+            if schema.get("type") != "object":
+                raise _Refused(f"step {i}: structured output is not an object")
+            llm = b.llm_step(
+                i,
+                model_calls,
+                name,
+                schema,
+                "Reply with JSON holding: " + ", ".join(schema["properties"]) + ".",
+            )
+            b.structured[i] = llm.id
+            continue
         if cls == "terminal" or (cls == "judgment" and outcome == "text"):
             b.llm_step(
                 i,
@@ -483,10 +528,17 @@ def _bound_call(
 
 
 def _end_step(b: _Builder) -> EndStep:
+    outputs = [_project(v.run.output, b.output_path) for v in b.supporting]
+    for index, step_id in b.structured.items():
+        answers = [v.events[index].tool_calls_requested[0].args for v in b.supporting]  # type: ignore[union-attr]
+        if outputs == answers:
+            return EndStep(
+                output_template=_at_path(f"{{{{steps.{step_id}.result}}}}", b.output_path)
+            )
     per_path: dict[str, list[tuple[Any, ...]]] = {}
     values: dict[str, list[Any]] = {}
-    for v in b.supporting:
-        run = v.run
+    for v, output in zip(b.supporting, outputs, strict=True):
+        run = v.run.model_copy(update={"output": output})
         last_ts = run.events[-1].ts if run.events else run.started_at
         probe = ToolCall(event_id="__output__", ts=last_ts, name="__output__", args=run.output)
         for leaf in provenance(run.model_copy(update={"events": [*run.events, probe]})):
@@ -496,14 +548,34 @@ def _end_step(b: _Builder) -> EndStep:
                     leaf_signature(leaf, val, v, allow_model=True)
                 )
                 values.setdefault(leaf.path, []).append(val)
-    template: Any = json.loads(json.dumps(b.supporting[0].run.output))
+    template: Any = json.loads(json.dumps(outputs[0]))
     for path, sigs in sorted(per_path.items()):
         try:
             value = b.bind(f"output:{path}", sigs, values[path])
         except _Refused as e:
             raise _Refused(f"run output {path} is not reproducible ({e})") from None
         template = _set_path(template, path, value)
-    return EndStep(output_template=template)
+    return EndStep(output_template=_at_path(template, b.output_path))
+
+
+def _project(output: Any, path: str | None) -> Any:
+    """The part of a run output at `path` (the whole output when None)."""
+    node = output
+    for key in split_path(path) if path else []:
+        try:
+            node = node[key]
+        except (KeyError, IndexError, TypeError):
+            raise _Refused(f"run output has nothing at {path}") from None
+    return node
+
+
+def _at_path(value: Any, path: str | None) -> Any:
+    """`value` placed at `path` in an otherwise empty output."""
+    for key in reversed(split_path(path) if path else []):
+        if not isinstance(key, str):
+            raise _Refused(f"output_path {path} must name object keys only")
+        value = {key: value}
+    return value
 
 
 def _guards(

@@ -13,3 +13,5 @@ htmlcov/
 .hypothesis/
 .anneal/
 .DS_Store
+examples/github_triage/.cache/
+examples/github_triage/data/runs/

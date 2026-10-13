@@ -136,3 +136,40 @@ def test_position_reports_the_class_most_of_its_calls_received() -> None:
         assert p.spend_usd == pytest.approx(
             sum(c.cost_usd or 0.0 for c in members if c.call_class == top)
         )
+
+
+def structured(run_id: str, i: int, final_requests_tool: bool) -> Run:
+    """A run whose final call returns structured output through a tool the run never
+    executes, the way LangChain's `with_structured_output` does on Anthropic."""
+    run = flow(run_id, i, "get", {"id": f"ID-{i:05d}"}, {})
+    answer = ModelCall(
+        event_id=f"{run_id}-s",
+        ts=T0,
+        scope="respond",
+        tool_calls_requested=[ToolCallRequest(id="s", name="Answer", args={"label": "bug"})]
+        if final_requests_tool
+        else [],
+        output_text="" if final_requests_tool else '{"label": "bug"}',
+    )
+    return run.model_copy(update={"events": [*run.events, answer]})
+
+
+def test_a_tool_request_that_never_runs_is_the_output_not_a_removable_call() -> None:
+    runs = [structured(f"r{i}", i, final_requests_tool=True) for i in range(20)]
+    result = classify(runs)
+    assert by_event(result)["r0-s"] == "terminal"
+    assert reasons(result)["r0-s"] == "terminal"
+    # the same answer as plain text was always terminal
+    plain = classify([structured(f"r{i}", i, final_requests_tool=False) for i in range(20)])
+    assert by_event(plain)["r0-s"] == "terminal"
+
+
+def test_an_unexecuted_request_before_the_end_is_judgment() -> None:
+    runs = []
+    for i in range(20):
+        run = structured(f"r{i}", i, final_requests_tool=True)
+        events = list(run.events)
+        events.insert(2, events.pop())  # the unexecuted request is no longer last
+        runs.append(run.model_copy(update={"events": events}))
+    result = classify(runs)
+    assert (by_event(result)["r0-s"], reasons(result)["r0-s"]) == ("judgment", "structured_output")

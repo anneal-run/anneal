@@ -64,3 +64,11 @@ ANNEAL-ROADMAP.md M1.4 fixes the plan's contract fields, the three M1 step types
 The compiler used to refuse a step where more than one requested tool needs model-written arguments. The github_triage dogfood agent's first call requests `get_issue` and `list_labels` together, with the repository and number read out of a free-text message. Because of that refusal, no plan could be compiled at all.
 
 Such a step now compiles to one forced-tool `llm` step per tool, each followed by its tool step. This costs one model call more than the recording, which the compile log says. The reconstructed history then has two sequential tool calls instead of one parallel turn, and both are valid agent history.
+
+## Amendment (2026-10-13): output path and structured terminal steps
+
+Two changes, both forced by the github_triage dogfood traces.
+
+**An output path.** A LangGraph graph returns its whole state, message history included: provider content blocks, signatures and ids. No plan can reproduce that, and no caller uses it. `compile_plan(..., output_path="$.triage")` names the part of the output the caller uses. The end step reproduces only that part and returns it at that path.
+
+**Structured terminal steps.** A final call that answers through a tool request that never runs is LangChain's `with_structured_output` on Anthropic, `terminal` since the ADR 0004 amendment. It compiles to an `llm` step whose output schema is merged from the recorded answers: keys unioned, `["<type>", "null"]` where a key is sometimes null. The schema checker accepts such type lists. If the projected output equals that answer in every supporting run, the end step is `{{steps.<id>.result}}`. Reconstructed history skips such a step, since only text `llm` steps become assistant messages.
