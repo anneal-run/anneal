@@ -30,7 +30,7 @@ from anneal.compile.plan import ToolStep, WorkflowPlan
 from anneal.replay.critical import equivalent
 from anneal.replay.recording import RecordedLlm, RecordingToolServer
 from anneal.replay.split import chronological_split
-from anneal.runtime.executor import Executor, LlmRunner
+from anneal.runtime.executor import Executor, LlmRunner, ToolRunner
 from anneal.schema import ModelCall, Run, Severity
 
 ALL_SEVERITIES: frozenset[Severity] = frozenset({"S0", "S1", "S2"})
@@ -76,6 +76,7 @@ class ReplayReport(BaseModel):
     compile_runs: int
     holdout_runs: int
     llm_mode: Literal["recorded", "live"]
+    tools_mode: Literal["recorded", "live read-only"] = "recorded"
     task_check: str
     correct: int
     fallback: int
@@ -111,16 +112,25 @@ def replay_plan(
     llm_factory: Callable[[Run], LlmRunner] | None = None,
     compile_runs: int = 0,
     compile_log: list[str] | None = None,
+    live_tools: Callable[[Run], ToolRunner] | None = None,
 ) -> ReplayReport:
-    """Run `plan` on every holdout run against its recording and score it."""
+    """Run `plan` on every holdout run against its recording and score it.
+
+    With `live_tools`, steps of tools declared without side effects are served by that
+    runner instead of the recording. Live model answers write arguments no recording
+    has (a new search query), and against the recording every such read would count
+    as a divergence. Side-effect tools are always served from the recording."""
     check = task_check or same_outcome
     steps = {s.id: s for s in plan.steps}
     rows: list[ReplayRow] = []
     for recorded in holdout:
         server = RecordingToolServer(recorded)
         llm = llm_factory(recorded) if llm_factory else RecordedLlm(recorded)
+        tools: ToolRunner = server
+        if live_tools is not None:
+            tools = _reads_live(server, live_tools(recorded))
         executor = Executor(
-            plan, tools=server, llm=llm, live_severities=ALL_SEVERITIES, enforce_side_effects=False
+            plan, tools=tools, llm=llm, live_severities=ALL_SEVERITIES, enforce_side_effects=False
         )
         result = executor.run(recorded.input, run_id=f"replay:{recorded.run_id}")
         tier0_ok = bool(check(recorded, recorded))
@@ -166,9 +176,20 @@ def replay_plan(
                     cost_compiled=spent,
                 )
             )
-    return _report(
+    report = _report(
         plan, rows, compile_runs, compile_log or plan.compile_log, llm_factory, task_check
     )
+    if live_tools is not None:
+        report = report.model_copy(update={"tools_mode": "live read-only"})
+    return report
+
+
+def _reads_live(recorded: ToolRunner, live: ToolRunner) -> ToolRunner:
+    def call(step: ToolStep, args: Any, key: str | None) -> Any:
+        runner = recorded if step.side_effect else live
+        return runner(step, args, key)
+
+    return call
 
 
 def _report(

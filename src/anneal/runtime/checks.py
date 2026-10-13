@@ -27,6 +27,10 @@ def schema_errors(value: Any, schema: dict[str, Any], path: str = "$") -> list[s
     if "enum" in schema and value not in schema["enum"]:
         return [f"{where}: not one of {schema['enum']}"]
     kind = schema.get("type")
+    if isinstance(kind, list):  # ["integer", "null"]
+        if not any(_TYPES[k](value) for k in kind):
+            return [f"{where}: expected one of {kind}"]
+        kind = next(k for k in kind if _TYPES[k](value))
     if kind and not _TYPES[kind](value):
         return [f"{where}: expected {kind}"]
     errors: list[str] = []

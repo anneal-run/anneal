@@ -36,3 +36,9 @@ ANNEAL-ROADMAP.md M1.2 specifies the shape tokens, the provenance strategies and
 
 - Short identifiers embedded in free text (for example `"1234"` in a ticket) are `model_generated`. The substring threshold (6) is deliberate, and such arguments land in `constrained`, not `removable`.
 - Transitive joining can chain dissimilar skeletons through intermediates. M1.3 reports per-cluster alignment, so this will show up in numbers rather than silently.
+
+## Amendment (2026-10-13): sources are cut off at request time
+
+A tool argument is matched only against sources that existed when the model requested the call. Those are the run input, plus the results and model text recorded before the requesting model call. Without this cutoff, parallel tool calls requested together could bind to each other's results. The github_triage dogfood traces showed this: `list_labels.repo` bound to `get_issue`'s body in some runs and to the input in others, and the position read as inconsistent.
+
+Tool calls with no `tool_call_id` match keep the old rule: every source recorded before the call.
