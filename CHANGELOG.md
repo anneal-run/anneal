@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- fix: a step whose parallel tool calls all need model-written arguments compiles to one forced `llm` step per tool instead of refusing the whole plan (the dogfood agent's first call, `get_issue` with `list_labels`, blocked compilation). ADR 0005 amended.
 - fix: `compile_plan(..., output_path=...)` compiles only the part of the run output the caller uses (a LangGraph graph returns its whole state); a terminal structured-output call compiles to an `llm` step with a schema merged from the recorded answers (nullable type lists supported by the checker). ADR 0005 amended.
 - fix: the classifier treats a model call whose requested tools never ran (structured output via a tool, as LangChain does on Anthropic) as the call's output: `terminal` at the end of a run, else `judgment` / `structured_output`. It was vacuously `removable` (no executed tool, so no unbound argument), which would have compiled a call to a tool that does not exist.
 - fix: the classifier treats a model call whose requested tools never ran (structured output via a tool, as LangChain does on Anthropic) as the call's output: `terminal` at the end of a run, else `judgment` / `structured_output`. It was vacuously `removable` (no executed tool, so no unbound argument), which would have compiled a call to a tool that does not exist.

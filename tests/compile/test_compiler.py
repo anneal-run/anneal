@@ -355,6 +355,67 @@ def test_llm_steps_record_their_source_position() -> None:
     assert len({s.position_id for s in llm_steps}) == len(llm_steps)
 
 
+def parallel_runs(n: int = 10) -> list[Run]:
+    """A model asks for two tools at once and writes both calls' arguments itself (as the
+    triage agent does with get_issue and list_labels, reading them out of free text)."""
+    runs = []
+    for i in range(n):
+        a_args, b_args = {"number": 100 + i}, {"repo": f"org/r{i % 3}x"}
+        events: list[Event] = [
+            ModelCall(
+                event_id=f"r{i}-m",
+                ts=T0,
+                scope="a",
+                tool_calls_requested=[
+                    ToolCallRequest(id="ca", name="get_issue", args=a_args),
+                    ToolCallRequest(id="cb", name="list_labels", args=b_args),
+                ],
+            ),
+            ToolCall(
+                event_id=f"r{i}-ta",
+                ts=T0,
+                name="get_issue",
+                args=a_args,
+                result={"ok": 1},
+                tool_call_id="ca",
+            ),
+            ToolCall(
+                event_id=f"r{i}-tb",
+                ts=T0,
+                name="list_labels",
+                args=b_args,
+                result=[],
+                tool_call_id="cb",
+            ),
+            ModelCall(event_id=f"r{i}-f", ts=T0, scope="a", output_text=f"done {i}"),
+        ]
+        runs.append(
+            Run(
+                run_id=f"r{i}",
+                workflow_id="wf",
+                started_at=T0 + timedelta(minutes=i),
+                status="success",
+                input={"text": f"Please look at issue {100 + i}, it is broken"},
+                output=f"done {i}",
+                events=events,
+                source="t",
+            )
+        )
+    return runs
+
+
+def test_parallel_calls_with_model_written_arguments_get_one_forced_step_each() -> None:
+    result = compile_plan(parallel_runs())
+    assert result.plan is not None, result.log
+    assert shape_of(result.plan)[:4] == [
+        ("llm", "get_issue"),
+        ("tool", "get_issue"),
+        ("llm", "list_labels"),
+        ("tool", "list_labels"),
+    ]
+    assert any("one forced llm step per tool" in line for line in result.log)
+
+
 def structured_runs(n: int = 10) -> list[Run]:
     """A LangGraph-style run: the output is the whole graph state, and the answer the
     caller wants (`$.triage`) is a structured-output call's request, not model text."""

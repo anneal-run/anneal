@@ -59,6 +59,12 @@ ANNEAL-ROADMAP.md M1.4 fixes the plan's contract fields, the three M1 step types
 - A judgment step that chooses between tools still costs a model call on every run, and deopts on the minority branch. Savings come only from removable calls and measured constrained deltas, as M1.3 requires.
 - `constrained` calls whose model-written argument is copied from an earlier model's text (the synthetic `send_email(body=<draft>)`) could bind to that step's output instead of asking again. That is left as M2 work, so the classifier and the compiler keep agreeing on what is constrained.
 
+## Amendment (2026-10-13): parallel calls with model-written arguments
+
+The compiler used to refuse a step where more than one requested tool needs model-written arguments. The github_triage dogfood agent's first call requests `get_issue` and `list_labels` together, with the repository and number read out of a free-text message. Because of that refusal, no plan could be compiled at all.
+
+Such a step now compiles to one forced-tool `llm` step per tool, each followed by its tool step. This costs one model call more than the recording, which the compile log says. The reconstructed history then has two sequential tool calls instead of one parallel turn, and both are valid agent history.
+
 ## Amendment (2026-10-13): output path and structured terminal steps
 
 Two changes, both forced by the github_triage dogfood traces.
