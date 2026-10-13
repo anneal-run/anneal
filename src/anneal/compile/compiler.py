@@ -456,9 +456,12 @@ def _bound_call(
                     continue
             template = _set_path(template, path, value)
         planned.append((tool.name, t_index, template, ask))
-    asking = [(name, idx, tpl, ask) for name, idx, tpl, ask in planned if ask]
+    asking = [name for name, _, _, ask in planned if ask]
     if len(asking) > 1:
-        raise _Refused(f"step {i}: more than one tool needs model-written arguments")
+        b.log.append(
+            f"step {i}: {', '.join(asking)} were requested together and need model-written "
+            "arguments; one forced llm step per tool (one model call more than recorded)"
+        )
     for name, t_index, template, ask in planned:
         if ask:
             rep_tool = rep.events[t_index]
