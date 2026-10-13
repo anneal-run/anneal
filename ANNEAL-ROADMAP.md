@@ -194,7 +194,7 @@ A deopt reconstructs what the agent's own history would have been, in the framew
 
 **M1.9 The memo (days 16 to 20)**
 
-- [ ] `report/m1.md`: spend share by class (H1, H2); replay task success and wrong-execution by severity (H3); fallback results; baseline comparison table (build time, cost per task, task success, drift behavior per arm) (H4); list of manual steps taken; hypotheses register updated with numbers
+- [ ] `report/m1.md`: spend share by class (H1, H2); replay task success and wrong-execution by severity (H3); fallback results; baseline comparison table (build time, cost per task, task success, drift behavior per arm) (H4); list of manual steps taken; hypotheses register updated with numbers *(Mechanism done: `anneal.report.memo` evaluates Gate 1 and renders the memo; `make m1` writes `report/m1.md` from the simulated workflow, marked synthetic, verdict "stop" on H2. The register is not updated from synthetic numbers. ADR 0010.)*
 - [ ] The memo is sent to the partner and to at least two other teams whose traces were analyzed
 
 **Gate 1** (all required unless marked)

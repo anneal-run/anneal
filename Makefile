@@ -22,4 +22,4 @@ m1-dryrun:
 	uv run python tests/synth/dry_run.py
 
 m1:
-	@echo "M1 experiment not implemented yet (see ANNEAL-ROADMAP.md, M1.9)" && exit 1
+	uv run python tests/synth/m1.py
