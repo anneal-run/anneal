@@ -65,6 +65,12 @@ These were captured on 2026-10-12 by tracing a fake tool-calling agent through `
 
 `ModelCall.tokens_in` includes cached tokens, and `tokens_cached` is the subset. That matches OpenAI's `prompt_tokens` and LangChain's `usage_metadata.input_tokens`. Anthropic's raw API counts cache reads separately from `input_tokens`, but LangChain normalizes them into the total.
 
+## Seen in real exports (2026-10-13, langsmith 0.14.8)
+
+- **`Client.list_runs` is deprecated.** It warns: "removed after Jan 31, 2027; use `client.runs.query()`". The example exporter still uses it, and has to move before that date.
+- **Exports are large.** Every `llm` run carries the whole message history in `inputs`. 200 triage traces of about 6 model calls each came to 93 MB of JSONL. Exporting one trace at a time (`list_runs(trace_id=...)`) took about 10 minutes for 360 traces.
+- **Re-run issues appear twice.** An interrupted runner re-traces in-flight inputs. The example exporter keeps the latest finished trace per input.
+
 ## Not handled yet
 
 - Embedding runs: skipped as structure, so their cost is not counted.
