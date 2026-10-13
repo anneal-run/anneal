@@ -58,3 +58,11 @@ ANNEAL-ROADMAP.md M1.4 fixes the plan's contract fields, the three M1 step types
 
 - A judgment step that chooses between tools still costs a model call on every run, and deopts on the minority branch. Savings come only from removable calls and measured constrained deltas, as M1.3 requires.
 - `constrained` calls whose model-written argument is copied from an earlier model's text (the synthetic `send_email(body=<draft>)`) could bind to that step's output instead of asking again. That is left as M2 work, so the classifier and the compiler keep agreeing on what is constrained.
+
+## Amendment (2026-10-13): output path and structured terminal steps
+
+Two changes, both forced by the github_triage dogfood traces.
+
+**An output path.** A LangGraph graph returns its whole state, message history included: provider content blocks, signatures and ids. No plan can reproduce that, and no caller uses it. `compile_plan(..., output_path="$.triage")` names the part of the output the caller uses. The end step reproduces only that part and returns it at that path.
+
+**Structured terminal steps.** A final call that answers through a tool request that never runs is LangChain's `with_structured_output` on Anthropic, `terminal` since the ADR 0004 amendment. It compiles to an `llm` step whose output schema is merged from the recorded answers: keys unioned, `["<type>", "null"]` where a key is sometimes null. The schema checker accepts such type lists. If the projected output equals that answer in every supporting run, the end step is `{{steps.<id>.result}}`. Reconstructed history skips such a step, since only text `llm` steps become assistant messages.
