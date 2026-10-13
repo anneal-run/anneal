@@ -17,7 +17,7 @@ from collections import defaultdict
 from collections.abc import Iterable
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, TypeGuard
 
 from anneal.schema import Event, Message, ModelCall, Run, ToolCall, ToolCallRequest
 
@@ -307,7 +307,7 @@ def _tool_call(rec: Record, common: dict[str, Any]) -> ToolCall:
     )
 
 
-def _is_plain_tool_message(raw: Any) -> bool:
+def _is_plain_tool_message(raw: Any) -> TypeGuard[dict[str, Any]]:
     return (
         isinstance(raw, dict)
         and raw.get("type") == "tool"
