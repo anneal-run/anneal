@@ -1,0 +1,1 @@
+{"path": "/graphql", "params": {"owner": "python", "name": "mypy", "number": 21525}, "body": {"repository": {"issue": {"timelineItems": {"nodes": [{"duplicateOf": {"number": 13916}}]}}}}}
