@@ -353,3 +353,80 @@ def test_llm_steps_record_their_source_position() -> None:
     llm_steps = [s for s in synth_plan().steps if isinstance(s, LlmStep)]
     assert all(s.position_id in positions for s in llm_steps)
     assert len({s.position_id for s in llm_steps}) == len(llm_steps)
+
+
+def structured_runs(n: int = 10) -> list[Run]:
+    """A LangGraph-style run: the output is the whole graph state, and the answer the
+    caller wants (`$.triage`) is a structured-output call's request, not model text."""
+    runs = []
+    for i in range(n):
+        args = {"id": f"ID-{i:05d}"}
+        answer = {"labels": ["bug"] if i % 2 else ["bug", "docs"], "dup": i if i % 3 else None}
+        events: list[Event] = [
+            ModelCall(
+                event_id=f"r{i}-m",
+                ts=T0,
+                scope="agent",
+                tool_calls_requested=[ToolCallRequest(id="c", name="t", args=args)],
+            ),
+            ToolCall(
+                event_id=f"r{i}-t", ts=T0, name="t", args=args, result={"ok": 1}, tool_call_id="c"
+            ),
+            ModelCall(
+                event_id=f"r{i}-s",
+                ts=T0,
+                scope="respond",
+                tool_calls_requested=[ToolCallRequest(id="s", name="Triage", args=answer)],
+            ),
+        ]
+        state = {"messages": [{"content": f"m{i}", "signature": f"sig-{i}"}], "triage": answer}
+        runs.append(
+            Run(
+                run_id=f"r{i}",
+                workflow_id="wf",
+                started_at=T0 + timedelta(minutes=i),
+                status="success",
+                input={"id": f"ID-{i:05d}"},
+                output=state,
+                events=events,
+                source="t",
+            )
+        )
+    return runs
+
+
+def test_graph_state_output_needs_an_output_path() -> None:
+    result = compile_plan(structured_runs())
+    assert result.plan is None
+    assert "not reproducible" in result.log[-1]
+
+
+def test_structured_terminal_call_compiles_to_an_llm_step_with_its_schema() -> None:
+    result = compile_plan(structured_runs(), output_path="$.triage")
+    assert result.plan is not None, result.log
+    assert shape_of(result.plan) == [("tool", "t"), ("llm", None), ("end", None)]
+    answer = step(result.plan, "s1")
+    assert answer.output_schema["properties"] == {
+        "labels": {"type": "array", "items": {"type": "string"}},
+        "dup": {"type": ["integer", "null"]},
+    }
+    assert step(result.plan, "end").output_template == {"triage": "{{steps.s1.result}}"}
+
+
+def test_executing_a_structured_terminal_plan_returns_the_answer_at_the_output_path() -> None:
+    from anneal.runtime.executor import Executor, LlmResponse
+
+    result = compile_plan(
+        structured_runs(),
+        output_path="$.triage",
+        tools={"t": ToolSpec(side_effect=False, severity="S0")},
+    )
+    assert result.plan is not None, result.log
+    answer = {"labels": ["bug"], "dup": None}
+    executor = Executor(
+        result.plan,
+        tools=lambda s, a, k: {"ok": 1},
+        llm=lambda s, sys, u, f: LlmResponse(output=answer),
+    )
+    run = executor.run({"id": "ID-00001"}, run_id="x")
+    assert (run.status, run.output) == ("success", {"triage": answer})

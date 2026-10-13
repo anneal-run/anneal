@@ -85,7 +85,11 @@ def reconstruct_history(
                         name=step.name,
                     ),
                 ]
-            case LlmStep() if step.forced_tool is None and step.expected_tool is None:
+            case LlmStep() if (
+                step.forced_tool is None
+                and step.expected_tool is None
+                and "text" in execution.state[step_id]
+            ):
                 history.append(Message(role="assistant", content=execution.state[step_id]["text"]))
             case LlmStep() | EndStep():
                 pass
