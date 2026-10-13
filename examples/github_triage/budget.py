@@ -5,6 +5,7 @@ works for any provider in `pricing.yaml`. The ledger is a JSON file shared by ev
 script in the experiment; `TRIAGE_BUDGET_USD` sets the cap (default 20).
 """
 
+import fcntl
 import json
 import os
 from pathlib import Path
@@ -47,7 +48,10 @@ class Budget:
         return total
 
     def add(self, phase: str, usd: float) -> None:
-        spent = self.spent()
-        spent[phase] = spent.get(phase, 0.0) + usd
+        """Add spend under an exclusive lock: several runner processes share the ledger."""
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        self.path.write_text(json.dumps(spent, indent=1, sort_keys=True))
+        with (self.path.parent / ".spend.lock").open("w") as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            spent = self.spent()
+            spent[phase] = spent.get(phase, 0.0) + usd
+            self.path.write_text(json.dumps(spent, indent=1, sort_keys=True))

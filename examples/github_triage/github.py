@@ -61,7 +61,23 @@ class GitHub:
         file.write_text(json.dumps({"path": path, "params": params, "body": body}))
         return body
 
-    def _fetch(self, path: str, params: Mapping[str, Any]) -> Any:
+    def graphql(self, query: str, **variables: Any) -> Any:
+        """POST a GraphQL query (cached like GETs) and return its `data`."""
+        file = self._key("/graphql", {"query": query, **variables})
+        if file.exists():
+            return json.loads(file.read_text())["body"]
+        if self.offline:
+            raise CacheMiss(f"graphql {variables}")
+        body = self._fetch("/graphql", {}, json_body={"query": query, "variables": variables})
+        if body.get("errors"):
+            raise RuntimeError(f"graphql: {body['errors']}")
+        file.parent.mkdir(parents=True, exist_ok=True)
+        file.write_text(json.dumps({"path": "/graphql", "params": variables, "body": body["data"]}))
+        return body["data"]
+
+    def _fetch(
+        self, path: str, params: Mapping[str, Any], json_body: dict[str, Any] | None = None
+    ) -> Any:
         bucket = "search" if path.startswith("/search/") else "core"
         headers = {"Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28"}
         if self.token:
@@ -70,7 +86,10 @@ class GitHub:
         for _ in range(5):
             if (wait := self._wait_until.get(bucket, 0) - time.time()) > 0:
                 self.sleep(wait)
-            response = client.get(API + path, params=dict(params), headers=headers)
+            if json_body is None:
+                response = client.get(API + path, params=dict(params), headers=headers)
+            else:
+                response = client.post(API + path, json=json_body, headers=headers)
             self.requests += 1
             self._note_limits(bucket, response)
             if response.status_code in (403, 429) and self._rate_limited(response):
