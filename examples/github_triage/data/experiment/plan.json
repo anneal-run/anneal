@@ -1,0 +1,327 @@
+{
+ "plan_version": 0,
+ "plan_id": "677630e80e7c7017",
+ "workflow_id": "github_triage",
+ "skeleton_hash": "a38874c93b726d159a114889c788e3cb381126b07010a2a51c56c8825a07c014",
+ "compiled_from": [
+  "01a13576-4f2b-7b53-b542-12add78c7e18",
+  "01a13576-87f3-7a82-a51e-7f26e9d7cd62",
+  "01a13576-8f87-7bc3-a8d6-93d1f272171a",
+  "01a13577-15ea-7323-bd48-90f4aaee55c9",
+  "01a13577-2087-7020-91f7-0e066560a23e",
+  "01a13577-e27a-7ae1-b9bb-1f86851e278a",
+  "01a13578-000e-74f1-99eb-0ed39e7a9b1b",
+  "01a13578-0fbc-7690-91b6-9f87fadcc82b",
+  "01a13578-12c6-7e33-97d5-e587b53aded3",
+  "01a13578-1418-7340-93dc-4fbd49864e4c",
+  "01a13578-5679-7c41-b905-2cbb6656e7b3",
+  "01a13578-643d-7ef3-bd96-ed59a8ac9a41",
+  "01a13578-dd07-7be2-8d89-dd29ecf9f885",
+  "01a13578-dd7b-78d3-896b-afe6276788e6",
+  "01a13579-d4a3-7b60-82fe-cbb7dcc0eda9",
+  "01a1357a-418b-7680-a161-a416bd739c38",
+  "01a1357a-4827-7a11-9c00-d71034a2c6ca",
+  "01a1357b-26c3-7031-8994-9fec35d98ca3",
+  "01a1357b-293a-7310-b9e1-6015fb64fe1a",
+  "01a1357b-3faa-7c21-b595-5b720457be58",
+  "01a1357c-153c-7133-8588-d882bc6702a5",
+  "01a1357c-175e-75f0-b306-dc9bdf92b3f2",
+  "01a1357c-218e-7143-ad3f-11ae075e58fe",
+  "01a1357d-0f6e-7152-82e0-f1550fdcd397",
+  "01a1357f-c817-7001-b9ae-4bd2875b06cb",
+  "01a1357f-cf36-7e91-b8f6-3a249c478cd6",
+  "01a13580-bcf5-7291-ac45-e37c65849901",
+  "01a13580-c282-70c3-8c8f-53728aefb583",
+  "01a13581-aefa-79d2-b1c0-b9284285e2ef",
+  "01a13581-de5d-7e93-b6c5-71a42165140f",
+  "01a13582-08aa-7293-8eaf-8a42db8058e2",
+  "01a13582-99d8-7693-ba1c-23a76cd4fcda",
+  "01a13582-a602-7181-8d15-e8c426e1abba",
+  "01a13583-bc6e-7f31-8250-17553ec161b9",
+  "01a13583-c61d-7310-a828-f8faed7dd6f7",
+  "01a13584-7b08-77c0-91f3-f5f9cd6687ca",
+  "01a13585-5f65-78d2-bb3b-7fe7edd1a5bf",
+  "01a13586-5865-7080-8a18-8ab6fb59c116",
+  "01a13586-5a83-7581-9215-22ad1c0953f3",
+  "01a13586-7806-7f13-9f40-75e983ebc6f5",
+  "01a13586-83e4-7ac3-ba67-bec8ee1267e0",
+  "01a13586-851b-7352-b499-337079a9d093",
+  "01a13587-3992-7552-9460-3542b2c27e43",
+  "01a13587-4a77-7230-a2a3-098eb5d433ad",
+  "01a13587-6e61-7923-bf0b-600909aa79ed"
+ ],
+ "steps": [
+  {
+   "kind": "llm",
+   "id": "s0",
+   "role": "agent",
+   "model": "claude-haiku-5-5",
+   "system_template": "You help the maintainers of an open source project triage newly opened GitHub issues.\n\nFor each issue:\n- Read the issue.\n- Check the repository's labels and suggest the ones that apply. Only suggest labels that exist in the repository.\n- Search for similar earlier issues. If an earlier issue reports the same problem, mark the new one as a duplicate of it. If you're not sure, don't mark it as a duplicate.\n- Draft a short, friendly reply to the reporter with draft_comment. Don't promise fixes or timelines.\n\nWhen you're done, give your final triage.",
+   "user_template": "Run input:\n{{input}}\n\nCall the tool `get_issue`. Reply with JSON holding only these arguments: number, repo.",
+   "output_schema": {
+    "type": "object",
+    "properties": {
+     "number": {
+      "type": "integer"
+     },
+     "repo": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "number",
+     "repo"
+    ],
+    "additionalProperties": false
+   },
+   "forced_tool": "get_issue",
+   "expected_tool": null,
+   "position_id": "9f5f3c39931e"
+  },
+  {
+   "kind": "tool",
+   "id": "s1",
+   "name": "get_issue",
+   "args_template": {
+    "number": "{{steps.s0.result.number}}",
+    "repo": "{{steps.s0.result.repo}}"
+   },
+   "side_effect": false,
+   "severity": "S0",
+   "idempotent": true,
+   "reconcile": false
+  },
+  {
+   "kind": "llm",
+   "id": "s2",
+   "role": "agent",
+   "model": "claude-haiku-5-5",
+   "system_template": "You help the maintainers of an open source project triage newly opened GitHub issues.\n\nFor each issue:\n- Read the issue.\n- Check the repository's labels and suggest the ones that apply. Only suggest labels that exist in the repository.\n- Search for similar earlier issues. If an earlier issue reports the same problem, mark the new one as a duplicate of it. If you're not sure, don't mark it as a duplicate.\n- Draft a short, friendly reply to the reporter with draft_comment. Don't promise fixes or timelines.\n\nWhen you're done, give your final triage.",
+   "user_template": "Run input:\n{{input}}\n\nResult of step s0 (model agent):\n{{steps.s0.result}}\n\nResult of step s1 (get_issue):\n{{steps.s1.result}}\n\nCall the tool `list_labels`. Reply with JSON holding only these arguments: repo.",
+   "output_schema": {
+    "type": "object",
+    "properties": {
+     "repo": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "repo"
+    ],
+    "additionalProperties": false
+   },
+   "forced_tool": "list_labels",
+   "expected_tool": null,
+   "position_id": "9f5f3c39931e"
+  },
+  {
+   "kind": "tool",
+   "id": "s3",
+   "name": "list_labels",
+   "args_template": {
+    "repo": "{{steps.s2.result.repo}}"
+   },
+   "side_effect": false,
+   "severity": "S0",
+   "idempotent": true,
+   "reconcile": false
+  },
+  {
+   "kind": "llm",
+   "id": "s4",
+   "role": "agent",
+   "model": "claude-haiku-5-5",
+   "system_template": "You help the maintainers of an open source project triage newly opened GitHub issues.\n\nFor each issue:\n- Read the issue.\n- Check the repository's labels and suggest the ones that apply. Only suggest labels that exist in the repository.\n- Search for similar earlier issues. If an earlier issue reports the same problem, mark the new one as a duplicate of it. If you're not sure, don't mark it as a duplicate.\n- Draft a short, friendly reply to the reporter with draft_comment. Don't promise fixes or timelines.\n\nWhen you're done, give your final triage.",
+   "user_template": "Run input:\n{{input}}\n\nResult of step s0 (model agent):\n{{steps.s0.result}}\n\nResult of step s1 (get_issue):\n{{steps.s1.result}}\n\nResult of step s2 (model agent):\n{{steps.s2.result}}\n\nResult of step s3 (list_labels):\n{{steps.s3.result}}\n\nCall the tool `search_similar_issues`. Reply with JSON holding only these arguments: query, repo.",
+   "output_schema": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string"
+     },
+     "repo": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "query",
+     "repo"
+    ],
+    "additionalProperties": false
+   },
+   "forced_tool": "search_similar_issues",
+   "expected_tool": null,
+   "position_id": "b4f3b921a440"
+  },
+  {
+   "kind": "tool",
+   "id": "s5",
+   "name": "search_similar_issues",
+   "args_template": {
+    "query": "{{steps.s4.result.query}}",
+    "repo": "{{steps.s4.result.repo}}"
+   },
+   "side_effect": false,
+   "severity": "S0",
+   "idempotent": true,
+   "reconcile": false
+  },
+  {
+   "kind": "llm",
+   "id": "s6",
+   "role": "agent",
+   "model": "claude-haiku-5-5",
+   "system_template": "You help the maintainers of an open source project triage newly opened GitHub issues.\n\nFor each issue:\n- Read the issue.\n- Check the repository's labels and suggest the ones that apply. Only suggest labels that exist in the repository.\n- Search for similar earlier issues. If an earlier issue reports the same problem, mark the new one as a duplicate of it. If you're not sure, don't mark it as a duplicate.\n- Draft a short, friendly reply to the reporter with draft_comment. Don't promise fixes or timelines.\n\nWhen you're done, give your final triage.",
+   "user_template": "Run input:\n{{input}}\n\nResult of step s0 (model agent):\n{{steps.s0.result}}\n\nResult of step s1 (get_issue):\n{{steps.s1.result}}\n\nResult of step s2 (model agent):\n{{steps.s2.result}}\n\nResult of step s3 (list_labels):\n{{steps.s3.result}}\n\nResult of step s4 (model agent):\n{{steps.s4.result}}\n\nResult of step s5 (search_similar_issues):\n{{steps.s5.result}}\n\nChoose the next tool from ['draft_comment', 'get_issue', 'search_similar_issues'] and its arguments. Reply with JSON {\"tool\": \"...\", \"arguments\": {...}}.",
+   "output_schema": {
+    "type": "object",
+    "properties": {
+     "tool": {
+      "enum": [
+       "draft_comment",
+       "get_issue",
+       "search_similar_issues"
+      ]
+     },
+     "arguments": {
+      "type": "object"
+     }
+    },
+    "required": [
+     "tool",
+     "arguments"
+    ],
+    "additionalProperties": false
+   },
+   "forced_tool": null,
+   "expected_tool": "search_similar_issues",
+   "position_id": "299dbf4cff32"
+  },
+  {
+   "kind": "tool",
+   "id": "s7",
+   "name": "search_similar_issues",
+   "args_template": "{{steps.s6.result.arguments}}",
+   "side_effect": false,
+   "severity": "S0",
+   "idempotent": true,
+   "reconcile": false
+  },
+  {
+   "kind": "llm",
+   "id": "s8",
+   "role": "agent",
+   "model": "claude-haiku-5-5",
+   "system_template": "You help the maintainers of an open source project triage newly opened GitHub issues.\n\nFor each issue:\n- Read the issue.\n- Check the repository's labels and suggest the ones that apply. Only suggest labels that exist in the repository.\n- Search for similar earlier issues. If an earlier issue reports the same problem, mark the new one as a duplicate of it. If you're not sure, don't mark it as a duplicate.\n- Draft a short, friendly reply to the reporter with draft_comment. Don't promise fixes or timelines.\n\nWhen you're done, give your final triage.",
+   "user_template": "Run input:\n{{input}}\n\nResult of step s0 (model agent):\n{{steps.s0.result}}\n\nResult of step s1 (get_issue):\n{{steps.s1.result}}\n\nResult of step s2 (model agent):\n{{steps.s2.result}}\n\nResult of step s3 (list_labels):\n{{steps.s3.result}}\n\nResult of step s4 (model agent):\n{{steps.s4.result}}\n\nResult of step s5 (search_similar_issues):\n{{steps.s5.result}}\n\nResult of step s6 (model agent):\n{{steps.s6.result}}\n\nResult of step s7 (search_similar_issues):\n{{steps.s7.result}}\n\nChoose the next tool from ['draft_comment', 'get_issue', 'search_similar_issues'] and its arguments. Reply with JSON {\"tool\": \"...\", \"arguments\": {...}}.",
+   "output_schema": {
+    "type": "object",
+    "properties": {
+     "tool": {
+      "enum": [
+       "draft_comment",
+       "get_issue",
+       "search_similar_issues"
+      ]
+     },
+     "arguments": {
+      "type": "object"
+     }
+    },
+    "required": [
+     "tool",
+     "arguments"
+    ],
+    "additionalProperties": false
+   },
+   "forced_tool": null,
+   "expected_tool": "draft_comment",
+   "position_id": "ff4c0ae55f9f"
+  },
+  {
+   "kind": "tool",
+   "id": "s9",
+   "name": "draft_comment",
+   "args_template": "{{steps.s8.result.arguments}}",
+   "side_effect": false,
+   "severity": "S0",
+   "idempotent": true,
+   "reconcile": false
+  },
+  {
+   "kind": "llm",
+   "id": "s10",
+   "role": "agent",
+   "model": "claude-haiku-5-5",
+   "system_template": "You help the maintainers of an open source project triage newly opened GitHub issues.\n\nFor each issue:\n- Read the issue.\n- Check the repository's labels and suggest the ones that apply. Only suggest labels that exist in the repository.\n- Search for similar earlier issues. If an earlier issue reports the same problem, mark the new one as a duplicate of it. If you're not sure, don't mark it as a duplicate.\n- Draft a short, friendly reply to the reporter with draft_comment. Don't promise fixes or timelines.\n\nWhen you're done, give your final triage.",
+   "user_template": "Run input:\n{{input}}\n\nResult of step s0 (model agent):\n{{steps.s0.result}}\n\nResult of step s1 (get_issue):\n{{steps.s1.result}}\n\nResult of step s2 (model agent):\n{{steps.s2.result}}\n\nResult of step s3 (list_labels):\n{{steps.s3.result}}\n\nResult of step s4 (model agent):\n{{steps.s4.result}}\n\nResult of step s5 (search_similar_issues):\n{{steps.s5.result}}\n\nResult of step s6 (model agent):\n{{steps.s6.result}}\n\nResult of step s7 (search_similar_issues):\n{{steps.s7.result}}\n\nResult of step s8 (model agent):\n{{steps.s8.result}}\n\nResult of step s9 (draft_comment):\n{{steps.s9.result}}\n\nReply with JSON {\"text\": \"...\"} holding your message.",
+   "output_schema": {
+    "type": "object",
+    "properties": {
+     "text": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "text"
+    ],
+    "additionalProperties": false
+   },
+   "forced_tool": null,
+   "expected_tool": null,
+   "position_id": "e69ce3a01c1c"
+  },
+  {
+   "kind": "llm",
+   "id": "s11",
+   "role": "RunnableSequence",
+   "model": "claude-haiku-5-5",
+   "system_template": "You help the maintainers of an open source project triage newly opened GitHub issues.\n\nFor each issue:\n- Read the issue.\n- Check the repository's labels and suggest the ones that apply. Only suggest labels that exist in the repository.\n- Search for similar earlier issues. If an earlier issue reports the same problem, mark the new one as a duplicate of it. If you're not sure, don't mark it as a duplicate.\n- Draft a short, friendly reply to the reporter with draft_comment. Don't promise fixes or timelines.\n\nWhen you're done, give your final triage.",
+   "user_template": "Run input:\n{{input}}\n\nResult of step s0 (model agent):\n{{steps.s0.result}}\n\nResult of step s1 (get_issue):\n{{steps.s1.result}}\n\nResult of step s2 (model agent):\n{{steps.s2.result}}\n\nResult of step s3 (list_labels):\n{{steps.s3.result}}\n\nResult of step s4 (model agent):\n{{steps.s4.result}}\n\nResult of step s5 (search_similar_issues):\n{{steps.s5.result}}\n\nResult of step s6 (model agent):\n{{steps.s6.result}}\n\nResult of step s7 (search_similar_issues):\n{{steps.s7.result}}\n\nResult of step s8 (model agent):\n{{steps.s8.result}}\n\nResult of step s9 (draft_comment):\n{{steps.s9.result}}\n\nResult of step s10 (model agent):\n{{steps.s10.result}}\n\nReply with JSON holding: draft_reply, duplicate_of, suggested_labels.",
+   "output_schema": {
+    "type": "object",
+    "properties": {
+     "draft_reply": {
+      "type": "string"
+     },
+     "duplicate_of": {
+      "type": "null"
+     },
+     "suggested_labels": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     }
+    },
+    "required": [
+     "draft_reply",
+     "duplicate_of",
+     "suggested_labels"
+    ],
+    "additionalProperties": false
+   },
+   "forced_tool": null,
+   "expected_tool": null,
+   "position_id": "08a379c151b6"
+  },
+  {
+   "kind": "end",
+   "id": "end",
+   "output_template": {
+    "triage": "{{steps.s11.result}}"
+   }
+  }
+ ],
+ "guards": [],
+ "side_effect_policy": "s0_live_only",
+ "tier": 1,
+ "compile_log": [
+  "dominant path: 11 steps, 45 of 140 runs",
+  "refused binding 9f5f3c39931e get_issue:$.repo (substring from input.messages[0].content); asking the model",
+  "refused binding 9f5f3c39931e list_labels:$.repo (substring from input.messages[0].content); asking the model",
+  "step 0: get_issue, list_labels were requested together and need model-written arguments; one forced llm step per tool (one model call more than recorded)",
+  "refused binding b4f3b921a440 search_similar_issues:$.repo (inconsistent across runs (37 of 45 agree)); asking the model"
+ ],
+ "manual_overrides": []
+}

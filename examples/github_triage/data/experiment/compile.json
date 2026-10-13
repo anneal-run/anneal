@@ -1,0 +1,12 @@
+{
+ "log": [
+  "dominant path: 11 steps, 45 of 140 runs",
+  "refused binding 9f5f3c39931e get_issue:$.repo (substring from input.messages[0].content); asking the model",
+  "refused binding 9f5f3c39931e list_labels:$.repo (substring from input.messages[0].content); asking the model",
+  "step 0: get_issue, list_labels were requested together and need model-written arguments; one forced llm step per tool (one model call more than recorded)",
+  "refused binding b4f3b921a440 search_similar_issues:$.repo (inconsistent across runs (37 of 45 agree)); asking the model",
+  "plan 677630e80e7c7017: 13 steps, 0 guards"
+ ],
+ "seconds": 0.44979729200713336,
+ "compiled": true
+}

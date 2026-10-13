@@ -78,7 +78,7 @@ class RunCheck:
     def __init__(self, truths: dict[tuple[str, int], Truth], labels: dict[str, set[str]]) -> None:
         self.truths = truths
         self.labels = labels
-        self.__qualname__ = "github_triage.check:RunCheck"
+        self.__qualname__ = "RunCheck"
 
     def __call__(self, run: Run, recorded: Run) -> bool:
         repo, number = issue_ref(recorded.input)
