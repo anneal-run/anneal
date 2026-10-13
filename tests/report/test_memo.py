@@ -215,7 +215,7 @@ def test_repeated_spend_share_counts_clusters_with_enough_support() -> None:
 def test_memo_renders_every_section_and_the_synthetic_banner() -> None:
     memo = Memo(
         workflow_id="wf",
-        synthetic=True,
+        stamp="synthetic",
         source="simulated environment",
         analyze_all=analyze_report(0.5),
         analyze_holdout=analyze_report(0.5),
@@ -251,13 +251,28 @@ def test_memo_renders_every_section_and_the_synthetic_banner() -> None:
 def test_real_memo_has_no_synthetic_banner() -> None:
     memo = Memo(
         workflow_id="wf",
-        synthetic=False,
         source="partner export",
         analyze_all=analyze_report(0.5),
         analyze_holdout=analyze_report(0.5),
         replay=replay_report(),
     )
     assert "SYNTHETIC" not in render_memo(memo)
+
+
+def test_dogfood_memo_is_stamped_and_not_evidence() -> None:
+    memo = Memo(
+        workflow_id="wf",
+        stamp="dogfood",
+        source="public GitHub issues",
+        analyze_all=analyze_report(0.5),
+        analyze_holdout=analyze_report(0.5),
+        replay=replay_report(),
+    )
+    text = render_memo(memo)
+    assert "**DOGFOOD.**" in text and "SYNTHETIC" not in text
+    assert "not Gate 1 evidence" in text
+    assert "(Would be, on partner data.)" in text
+    assert "status (if partner data)" in text
 
 
 def test_h3_is_open_when_the_compiled_path_never_finished_a_run() -> None:

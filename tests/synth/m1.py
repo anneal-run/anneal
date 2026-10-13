@@ -151,7 +151,7 @@ def build_memo() -> Memo:
     ]
     return Memo(
         workflow_id=WORKFLOW,
-        synthetic=True,
+        stamp="synthetic",
         source=(
             f"simulated support environment, {len(runs)} Tier 0 runs "
             "(`tests/synth/env.py`); baseline in `baseline/env_support/`"
