@@ -173,10 +173,10 @@ Every model call in a cluster is classified by what it would take to reproduce i
 
 A deopt reconstructs what the agent's own history would have been, in the framework's own message format: for each completed compiled step, one assistant message carrying the tool call and one tool-result message carrying the result, in order, after the original system prompt and the run input. The original agent loop then continues as if it had done the work. A summary message is not acceptable as resume state.
 
-- [ ] History reconstruction for the one framework the partner uses (the OpenAI Agents SDK, LangGraph or the Claude Agent SDK), pinned and documented in `docs/vendor-notes/`
-- [ ] `fallback(history)` registration API; the user supplies the original agent entrypoint
-- [ ] Twenty injected deopts at different steps on real runs; the original agent must complete the task in 20 of 20 with task-level success, and its tool calls after resumption must not repeat a completed step
-- [ ] A deopt mid-plan on a run that already executed a side-effect step: the test asserts the reconstructed history includes that step's call and result, so the agent does not redo it
+- [x] History reconstruction for the one framework the partner uses (the OpenAI Agents SDK, LangGraph or the Claude Agent SDK), pinned and documented in `docs/vendor-notes/`
+- [x] `fallback(history)` registration API; the user supplies the original agent entrypoint
+- [ ] Twenty injected deopts at different steps on real runs; the original agent must complete the task in 20 of 20 with task-level success, and its tool calls after resumption must not repeat a completed step *(Passes on synthetic runs with a real LangGraph graph and a history-driven policy model, with a negative control; still to be run with a partner's real runs and agent. ADR 0007.)*
+- [x] A deopt mid-plan on a run that already executed a side-effect step: the test asserts the reconstructed history includes that step's call and result, so the agent does not redo it
 
 **M1.7 Side effects, from day one (days 8 to 16, CONTRACT)**
 

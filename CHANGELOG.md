@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- M1.6: fallback that resumes the original agent: framework-neutral history reconstruction (a tool call and its result per completed step, never a summary), `CompiledWorkflow` with `register_fallback`, the LangGraph integration (`anneal-run[langgraph]`: `to_langchain`, `langgraph_fallback`), and 20 injected deopts finishing without repeating a step. ADR 0007, LangGraph vendor notes.
 - M1.5: `anneal replay`: chronological split, recording-backed tool server (divergence = wrong execution at the tool's severity), recorded-or-live LLM answers by prefix-tree position, per-workflow task checks, critical-field equivalence, and a report of outcomes, wrong executions by severity, deopts and divergences by step, and cost per run against Tier 0. `LlmStep.position_id`. ADR 0006.
 - M1.4: `WorkflowPlan` v0 with content-hash ids and a registry; the template language (`input`/`steps` refs, `trim`, `lower`, `fmt_date`, `concat`) with a strict renderer; the Tier 1 compiler for the dominant path (refused bindings logged, manual overrides recorded as automation debt); the executor (dependency order, guards, dry-run, one structured-output retry, deopt before non-live writes, tier 1 traces). ADR 0005.
 - M1.3: call classifier over prefix-tree positions (removable / constrained / judgment / terminal, with reasons and argument bindings), `anneal import langsmith`, `anneal analyze` (skeleton coverage, spend by class, conservative Tier 1 estimate with measured constrained deltas), synthetic generator with planted classes recovered exactly. ADR 0004.
