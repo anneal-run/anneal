@@ -1,8 +1,7 @@
-"""Anneal: an agent compiler.
+"""Anneal v3: harness a workflow, score structural challengers on a holdout.
 
-Records agent runs, finds reproducible structure, compiles it to guarded
-deterministic steps, and hands back to the original agent on anything it
-cannot reproduce.
+The Milestone 1 compiler (import, analyze, replay) is still here. It is not
+the challenger. `anneal challenge` is the product this tree is building.
 """
 
 from importlib.metadata import PackageNotFoundError, version
