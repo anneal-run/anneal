@@ -1,7 +1,7 @@
 [project]
 name = "anneal-run"
 version = "0.0.1"
-description = "Anneal compiles your agent's hot paths into code; the model only runs on what's new."
+description = "Prove a cheaper or more correct architecture for an agent workflow on a holdout."
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]

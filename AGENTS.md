@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Roadmap: ANNEAL-ROADMAP.md (the executable backlog; read it first). Packages live under src/.
+Roadmap: ANNEAL-ROADMAP.md is the Milestone 1 compiler. The product being built now is Anneal v3, specified in ANNEAL-V3-PLAYBOOK.md. Reuse the trace store, the LangSmith importer, replay, and critical-field matching. Do not treat the compiler as the challenger. Packages live under src/. `anneal challenge` is the v3 entry point.
 
 Purpose: Anneal (anneal.run), an agent compiler. Records agent runs, finds reproducible structure, compiles it to guarded deterministic steps, hands back to the original agent on anything it cannot reproduce. Every claim of savings is measured against a handwritten workflow for the same task.
 

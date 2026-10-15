@@ -1,10 +1,17 @@
 # Anneal
 
-Anneal compiles your agent's hot paths into code; the model only runs on what's new.
+Anneal v3 tests whether a coding agent, given a harness and a holdout, can find a better architecture for an existing agent workflow than the same coding agent would find on its own. The spec is [ANNEAL-V3-PLAYBOOK.md](ANNEAL-V3-PLAYBOOK.md).
 
-Anneal records how an agent performs a workflow and compiles the reproducible parts into deterministic steps. Guards filter the inputs, and when a guard fails or a step cannot be reproduced, Anneal hands control back to the original agent. Every savings number is reported next to a handwritten script for the same workflow.
+```sh
+anneal challenge harness .anneal/store --tools tools.yaml --out harness/
+anneal challenge pack --source . --harness harness --out pack-c --arm C --p0 --budget budget.json
+anneal challenge orchestrate --budget budget.json --baseline baseline.jsonl \
+    --submissions candidates/ --holdout holdout.json --out report/workflow.md
+```
 
-Status: pre-alpha (Milestone 1). See [ANNEAL-ROADMAP.md](ANNEAL-ROADMAP.md) and <https://anneal.run>.
+`challenge harness` writes fixtures and recordings from the optimization split only. Holdout run ids go in `SEAL.json` and are not copied into an arm's pack. `challenge orchestrate` ranks on the optimization set, opens the holdout once for the top three structural candidates per arm, and refuses anything past the shared search budget. A prompt-only win is reported and cannot be the structural winner.
+
+The Milestone 1 compiler is still in this tree (`anneal import`, `anneal analyze`, `anneal replay`). It records a workflow and tries to compile the observed path. On `examples/github_triage` that path did not survive the holdout; a separate coding agent wrote a cheaper script instead. The compiler is evidence and a trace library, not the v3 challenger. See [ANNEAL-ROADMAP.md](ANNEAL-ROADMAP.md) and <https://anneal.run>.
 
 ## Install
 

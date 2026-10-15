@@ -10,6 +10,7 @@ from datetime import datetime
 from pathlib import Path
 
 from anneal import __version__
+from anneal.challenge.cli import add_parser as add_challenge_parser
 from anneal.schema import Run
 from anneal.schema.pricing import PriceTable, fill_costs
 from anneal.schema.store import Store
@@ -89,7 +90,9 @@ def build_parser() -> argparse.ArgumentParser:
     """Build the top-level `anneal` argument parser."""
     parser = argparse.ArgumentParser(
         prog="anneal",
-        description="Compile your agent's hot paths into code; the model only runs on what's new.",
+        description=(
+            "Prove a cheaper or more correct architecture for an agent workflow on a holdout."
+        ),
     )
     parser.add_argument("--version", action="version", version=f"anneal {__version__}")
     commands = parser.add_subparsers(dest="command", metavar="<command>")
@@ -130,6 +133,7 @@ def build_parser() -> argparse.ArgumentParser:
     rp.add_argument("--min-support", type=int, default=5, help="runs needed at a position")
     rp.add_argument("--json", action="store_true", help="print the report as JSON")
     rp.set_defaults(func=_replay, parser=rp)
+    add_challenge_parser(commands)
     return parser
 
 
