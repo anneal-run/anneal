@@ -6,7 +6,9 @@ Anneal v3 tests whether a coding agent, given a harness and a holdout, can find 
 
 The promise is a pull request in a working day, a verdict when the evidence exists, and never a verdict before that. The skill for the pairing session is [skills/anneal/SKILL.md](skills/anneal/SKILL.md) (Codex: [skills/anneal/CODEX.md](skills/anneal/CODEX.md)). Do the steps in this order. Nothing deploys.
 
-The correctness margin for each workflow is `margin_points` in [anneal.toml](anneal.toml). Every report prints that margin, the n it requires, the n reached, and the verdict.
+The correctness margin for each workflow is `margin_points` in [anneal.toml](anneal.toml). Every report prints that margin, the n it requires, the n reached, and the verdict. The pack budget in that file is 4 candidates, $10, and 6 hours.
+
+The harness, the engine session, and the shadow runner use the partner's provider keys from their environment. Anneal does not pay for the partner's workflow.
 
 1. Import the export and build the harness. Holdout run ids are sealed in `SEAL.json` before any proposer starts. Log every manual edit and its duration in `report/harness-log.md`.
 

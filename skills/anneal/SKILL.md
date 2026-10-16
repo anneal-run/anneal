@@ -1,6 +1,8 @@
 # Anneal
 
-Build a harness for one workflow, run an isolated proposer, and open a pull request only if the holdout can support the verdict. Do this in the partner's repository. Do not deploy anything.
+Build a harness for one workflow, run an isolated proposer, and open a pull request the same day. Do this in the partner's repository. Do not deploy anything.
+
+The harness, the engine session, and the shadow runner use the partner's provider keys from their environment. Anneal does not pay for the partner's workflow.
 
 ## Before any session
 
@@ -34,7 +36,7 @@ Every time a person edits a file, answers a prompt, or restarts a failed command
 
 ## Engine
 
-Write `budget.json` as `{"candidates": 4, "dollars": 20, "hours": 6}` unless the partner sets a tighter cap.
+Write `budget.json` as `{"candidates": 4, "dollars": 10, "hours": 6}`, the cap in `anneal.toml`. A partner may set a tighter cap. They may not raise it.
 
 ```sh
 anneal challenge pack \
