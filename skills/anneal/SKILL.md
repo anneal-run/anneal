@@ -6,7 +6,7 @@ The harness, the engine session, and the shadow runner use the partner's provide
 
 ## Before any session
 
-1. Import the LangSmith export into a local store: `anneal import langsmith <export.jsonl> --store .anneal/store`.
+1. If the partner already has a LangSmith export, import it: `anneal import langsmith <export.jsonl> --store .anneal/store`. If they do not, capture by running. Turn LangSmith tracing on with their environment variables, run the entrypoint on the inputs in the repo, export the project, and import that file. Log the capture's wall clock and its model cost on their own, apart from the harness clock. The harness clock starts at the next step.
 2. Declare tools in `tools.yaml`. A read-only tool is `side_effect: false`. A tool that posts, writes, or deletes is `side_effect: true`.
 3. Build the harness, and stop if this command fails. The holdout is sealed here, before any proposer runs:
 

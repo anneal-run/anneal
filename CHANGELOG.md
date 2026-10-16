@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- change: when a repository has no LangSmith export, the skill's first step is to capture by running. Tracing goes on through the environment, the entrypoint runs on the inputs in the repo, and that export is imported. A verdict still waits until the evidence exists.
 - change: the engine cap is 4 candidates, $10, and 6 hours. It was $20. Every engine session so far spent under $0.35. The numbers live in `anneal.toml` and in the pack's `BUDGET.json`.
 - feat: shadow accumulation on the pull request. `shadow_runner.py` records paired results, `anneal challenge shadow` prints the verdict and the n reached, and it stops early only when the difference is clearly outside the per-workflow margin in `anneal.toml`.
 - feat: a partner path from a LangSmith export to a pull request: `skills/anneal`, an arm C pack that requires a confidence fallback, a holdout power check that prints `cannot adjudicate; n required: N`, and `anneal challenge pr` (feature flag, original implementation, fixtures, rollback note; nothing deploys).

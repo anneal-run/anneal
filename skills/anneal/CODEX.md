@@ -6,4 +6,5 @@ This is the same procedure as `SKILL.md`, for a Codex session in the partner's r
 2. The task prompt is the pack's `PROMPT.md` plus `BUDGET.json`. Do not add an architecture menu, and do not paste a known cheaper implementation.
 3. Write submissions under `submissions/` in that directory. Each structural candidate sets `fallback_rate` to the share of cases that invoked the original implementation, and the candidate's cost includes those calls.
 4. Stop when the budget in `BUDGET.json` is spent, or when three structurally different candidates are submitted, whichever comes first.
-5. Return to the repository root for `anneal challenge orchestrate --require-fallback` and, only if that command names a structural winner, `anneal challenge pr`. A refusal that says `cannot adjudicate; n required: N` ends the task. Do not deploy.
+5. If the repository has no LangSmith export, capture by running before the pack exists: tracing on through the environment, the entrypoint on the inputs in the repo, then export and `anneal import langsmith`. That time and its model cost are not harness time.
+6. Return to the repository root for `anneal challenge orchestrate --require-fallback` and `anneal challenge pr`. A verdict of `cannot adjudicate` still gets the pull request, with the shadow runner attached and the flag off. Do not deploy.
