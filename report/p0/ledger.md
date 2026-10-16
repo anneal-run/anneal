@@ -1,8 +1,24 @@
 # P0 session record
 
-The holdout was not opened. `anneal challenge orchestrate` was not run. There is no verdict.
+The holdout was opened once, after the API account had credit. `report/p0/verdict.md` is the orchestrator output and was not edited.
 
-The Anthropic API returned `Your credit balance is too low to access the Anthropic API` when Arm C was still searching, and again when this session probed `POST /v1/messages` on 2026-10-16. There is no `GITHUB_TOKEN` in the operator environment, so the live GitHub tools cannot be called either. Scoring a candidate on the sealed 42 runs requires those calls. The optimization-set costs inside the submissions are the arms' own projections and are not a holdout result.
+Reading: `incomplete`. Arm C submitted nothing, so the three-arm comparison was not run. Both scored candidates are cost wins on the holdout and are worth it. Neither is a correctness win: the intervals include zero, and the minimum detectable effect is 30.6 points.
+
+Against `report/prereg.md`: H2 expected one structural cost win and H5 expected Arm B to match Arm C. Arm C has no candidate, so that reading (`harness_is_the_product`) was not reached. H3 and H4 stay fails: no merge and no paid commitment.
+
+## Holdout
+
+Each submission's agent was run on the 42 sealed cases with `claude-haiku-5-5`. A tool call whose arguments were already in that run's trace returned the recorded result. Any other call went to GitHub. No observation is marked mocked. Cost uses the price table in `pricing.yaml`.
+
+| Arm | Candidate | Holdout correct | Holdout cost | Live tool calls | Replayed tool calls |
+| --- | --- | ---: | ---: | ---: | ---: |
+| baseline | original workflow | 36/42 | $0.1419 | — | — |
+| A | `A-cache-agent-loop` | 38/42 | $0.0882 | 122 | 100 |
+| B | `caching` | 37/42 | $0.0841 | 117 | 102 |
+
+Holdout model spend was $0.0882 for A and $0.0841 for B. There were no run errors.
+
+The orchestrator, amortizing search cost over 10,000 runs, reports a holdout cost reduction of 37.8% for A and 40.2% for B. Both are worth it. B is the structural winner among the candidates that were scored. The reading stays `incomplete` until C has a scored candidate.
 
 ## Sessions
 
@@ -16,9 +32,9 @@ An earlier launch the same morning was stopped after a few minutes because one s
 | B | 551 | 0.189460 | `caching` | 1.0 |
 | C | 453 | 0.245058 | none | — |
 
-Arm A and Arm B each edited the agent to turn on prompt caching and wrote one `structural` candidate. Both say the search made no new workflow calls: Arm A's meter is empty, and Arm B's meter is the recomputed optimization-set bill. Each submission's `search_cost_usd` equals the sum of its `calls`, and each `opt` list is exactly the 98 optimization run ids. Neither list contains a holdout id. On those 98 cases their correctness flags match the baseline on every case. Their reported optimization costs are $0.2499 (A) and $0.1895 (B), against a baseline of $0.3317 on the same cases.
+Arm A and Arm B each edited the agent to turn on prompt caching and wrote one `structural` candidate. Both say the search made no new workflow calls: Arm A's meter is empty, and Arm B's meter is the recomputed optimization-set bill. Each submission's `search_cost_usd` equals the sum of its `calls`, and each `opt` list is exactly the 98 optimization run ids. Neither list contains a holdout id.
 
-Arm C recorded 453 calls ($0.245058) while trying variants and then stopped. Its log is the credit-balance error. It wrote no submission, so that spend is search that produced nothing to score.
+Arm C recorded 453 calls ($0.245058) while trying variants and then stopped. Its log is the credit-balance error. It wrote no submission. Those calls are search spend, not a holdout score.
 
 ## Baseline
 
@@ -28,5 +44,3 @@ Arm C recorded 453 calls ($0.245058) while trying variants and then stopped. Its
 | --- | ---: | ---: | ---: |
 | optimization | 98 | 71 | $0.3317 |
 | holdout | 42 | 36 | $0.1419 |
-
-The holdout rows are the baseline only. No candidate has a holdout score.
