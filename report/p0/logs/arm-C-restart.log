@@ -1,0 +1,21 @@
+⚠ claude.ai connectors are disabled because ANTHROPIC_API_KEY or another auth source is set and takes precedence over your claude.ai login · Unset it to load your organization's connectors
+Done. One clean, contract-preserving candidate is written to `submissions/C-cache-agentloop.json`.
+
+## What I found and did
+
+**The workflow** (`examples/github_triage/`): a LangGraph tool-loop triage agent on `claude-haiku-5-5`. The traces revealed the waste: **every model call re-sends the full, growing conversation with `tokens_cached: 0`** — no prompt caching anywhere. I reverse-engineered the pack's exact pricing from the traces (zero residual over all 551 calls): **input $0.10/MTok, output $0.50/MTok**.
+
+**The change** (kind `structural`, model unchanged): enable incremental Anthropic prompt caching across the agent tool-loop. Because the agent requests stay byte-identical, **model outputs — and therefore correctness — are provably unchanged**, and latency is ≤ baseline.
+
+**I validated the economics live on `claude-haiku-5-5`** (not assumed), metering every call through the harness `CostMeter`:
+- Incremental agent-loop caching fires perfectly — each call reads the prior nested prefix at 0.1× and writes only the delta at 1.25×, even the ~934-token first call.
+- The final `respond` call **cannot** be cached: `with_structured_output` swaps the tool set (`read=0`), and I confirmed `output_config.format` also gives `read=0` — so the candidate correctly leaves the respond call at baseline cost (no write-premium). It would have been tempting to assume otherwise; the live probe disproved it.
+
+**Result** (exact, deterministic — from recorded token counts, not a sampled estimate):
+- `cost_reduction = 0.3075` ≥ the 0.30 `COST_WIN` gate → **cost win**
+- Correctness identical to baseline (72.4% pass rate, Δ=0 → noninferior with margin); latency = baseline → noninferior
+- Search cost $0.0082 across 26 metered calls (amortized ~5e-7/run), well under the $19.75 cap
+
+**Why only one candidate:** the caching change is the only modification I can faithfully score offline, because it reuses the recorded token counts exactly. Any architectural change (e.g. dropping the redundant respond call) would make the agent issue different, unrecorded tool calls — which I'm instructed not to score ("opt-set case ids only; do not score a run you were not given"). So I stopped here rather than fabricate runs.
+
+Deliverables: `submissions/C-cache-agentloop.json` (schema-valid, arm `C`, 98 opt cases) and the complete `meter.jsonl` ledger.

@@ -1,0 +1,998 @@
+{
+  "id": "C-cache-agentloop",
+  "arm": "C",
+  "kind": "structural",
+  "search_cost_usd": 0.008229485,
+  "human_hours": 1.0,
+  "monthly_runs": 10000,
+  "calls": [
+    {
+      "cost_usd": 0.00016465,
+      "latency_ms": 1601.638
+    },
+    {
+      "cost_usd": 0.000493625,
+      "latency_ms": 1211.744
+    },
+    {
+      "cost_usd": 0.00013018,
+      "latency_ms": 1338.514
+    },
+    {
+      "cost_usd": 0.00014745,
+      "latency_ms": 1259.397
+    },
+    {
+      "cost_usd": 0.00016186,
+      "latency_ms": 1362.013
+    },
+    {
+      "cost_usd": 0.00082365,
+      "latency_ms": 1244.995
+    },
+    {
+      "cost_usd": 0.001000025,
+      "latency_ms": 0.0
+    },
+    {
+      "cost_usd": 0.000885525,
+      "latency_ms": 0.0
+    },
+    {
+      "cost_usd": 0.00110065,
+      "latency_ms": 0.0
+    },
+    {
+      "cost_usd": 2.57e-05,
+      "latency_ms": 1349.611
+    },
+    {
+      "cost_usd": 6.043e-05,
+      "latency_ms": 1181.485
+    },
+    {
+      "cost_usd": 6.345e-05,
+      "latency_ms": 1047.798
+    },
+    {
+      "cost_usd": 6.761e-05,
+      "latency_ms": 2564.363
+    },
+    {
+      "cost_usd": 7.259e-05,
+      "latency_ms": 1243.032
+    },
+    {
+      "cost_usd": 0.0008415,
+      "latency_ms": 2097.393
+    },
+    {
+      "cost_usd": 2.57e-05,
+      "latency_ms": 1448.461
+    },
+    {
+      "cost_usd": 5.424e-05,
+      "latency_ms": 974.534
+    },
+    {
+      "cost_usd": 5.862e-05,
+      "latency_ms": 951.657
+    },
+    {
+      "cost_usd": 6.378e-05,
+      "latency_ms": 1527.856
+    },
+    {
+      "cost_usd": 0.0007675,
+      "latency_ms": 2293.472
+    },
+    {
+      "cost_usd": 2.57e-05,
+      "latency_ms": 5490.291
+    },
+    {
+      "cost_usd": 6.953e-05,
+      "latency_ms": 1653.67
+    },
+    {
+      "cost_usd": 7.299e-05,
+      "latency_ms": 1530.044
+    },
+    {
+      "cost_usd": 7.597e-05,
+      "latency_ms": 2033.244
+    },
+    {
+      "cost_usd": 7.906e-05,
+      "latency_ms": 1120.942
+    },
+    {
+      "cost_usd": 0.0008975,
+      "latency_ms": 2642.522
+    }
+  ],
+  "opt": [
+    {
+      "case_id": "01a13576-4f2b-7b53-b542-12add78c7e18",
+      "correct": true,
+      "cost_usd": 0.002651305,
+      "latency_ms": 16469.736,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-4f2c-7752-8757-401f798b0c2c",
+      "correct": true,
+      "cost_usd": 0.00231702,
+      "latency_ms": 14756.777,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-4f2c-7752-8757-402ce0909382",
+      "correct": false,
+      "cost_usd": 0.002725985,
+      "latency_ms": 14524.72,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-4f2c-7752-8757-4031fb6b2274",
+      "correct": true,
+      "cost_usd": 0.00234521,
+      "latency_ms": 12859.982,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-816e-7393-88be-f5060f904aa2",
+      "correct": true,
+      "cost_usd": 0.002663715,
+      "latency_ms": 13274.638,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-87f3-7a82-a51e-7f26e9d7cd62",
+      "correct": false,
+      "cost_usd": 0.001980005,
+      "latency_ms": 12468.59,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-88d9-7dd1-ad61-370e0f6794e4",
+      "correct": true,
+      "cost_usd": 0.00185677,
+      "latency_ms": 10278.162,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-8f87-7bc3-a8d6-93d1f272171a",
+      "correct": true,
+      "cost_usd": 0.002089205,
+      "latency_ms": 27854.508,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-b103-7811-b728-90f8b1bc9d11",
+      "correct": true,
+      "cost_usd": 0.00212438,
+      "latency_ms": 12601.774,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-b54b-73e1-9d8e-f0fec029bec1",
+      "correct": false,
+      "cost_usd": 0.00279253,
+      "latency_ms": 16145.289,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-b8af-76c2-befa-541a91c9cc45",
+      "correct": true,
+      "cost_usd": 0.002007855,
+      "latency_ms": 12010.787,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-e245-7aa2-8dc7-0dd639ecba3f",
+      "correct": true,
+      "cost_usd": 0.00237095,
+      "latency_ms": 13346.703,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-e79f-7581-a3df-1d2aa9825d86",
+      "correct": true,
+      "cost_usd": 0.002435365,
+      "latency_ms": 11846.05,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-f464-7c31-b323-79c4b7e3ab5c",
+      "correct": false,
+      "cost_usd": 0.002305215,
+      "latency_ms": 11291.438,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13576-fc60-76c2-b23e-445385fac354",
+      "correct": true,
+      "cost_usd": 0.00221838,
+      "latency_ms": 11820.291,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-15ea-7323-bd48-90f4aaee55c9",
+      "correct": true,
+      "cost_usd": 0.002233265,
+      "latency_ms": 23914.955,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-166c-7c12-ac2e-81cc97bdf53a",
+      "correct": false,
+      "cost_usd": 0.00178505,
+      "latency_ms": 20245.403,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-2087-7020-91f7-0e066560a23e",
+      "correct": true,
+      "cost_usd": 0.00233733,
+      "latency_ms": 21695.217,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-2a91-7783-90ee-06e91f47901a",
+      "correct": true,
+      "cost_usd": 0.00207451,
+      "latency_ms": 17337.932,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-6586-7c72-9f42-96d3503c18cf",
+      "correct": false,
+      "cost_usd": 0.00223622,
+      "latency_ms": 13406.459,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-6e4d-7d62-9b66-3fc5a9d52191",
+      "correct": false,
+      "cost_usd": 0.001943835,
+      "latency_ms": 10622.074,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-735a-7f23-9922-d0a1542f8acb",
+      "correct": true,
+      "cost_usd": 0.00307355,
+      "latency_ms": 15303.405,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-754b-7502-8314-2ac2c085cd07",
+      "correct": true,
+      "cost_usd": 0.00242159,
+      "latency_ms": 13745.587,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-97d4-7313-87d5-e1f4932dbdaf",
+      "correct": true,
+      "cost_usd": 0.002170615,
+      "latency_ms": 13832.772,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-99ea-7133-8c3f-9b9fd2b5791b",
+      "correct": true,
+      "cost_usd": 0.003568395,
+      "latency_ms": 16429.605,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-ab01-7f01-9a4a-acae9c946d42",
+      "correct": true,
+      "cost_usd": 0.00244783,
+      "latency_ms": 14197.424,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-af2a-74d0-81a0-7d348f627b43",
+      "correct": true,
+      "cost_usd": 0.00185579,
+      "latency_ms": 11237.769,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-cde0-7880-8d8f-4fe3180a256a",
+      "correct": false,
+      "cost_usd": 0.002253575,
+      "latency_ms": 12841.573,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-da1e-76a2-9de1-794b417c7f6f",
+      "correct": true,
+      "cost_usd": 0.002775965,
+      "latency_ms": 13723.256,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-db17-7d81-acce-d751a44277da",
+      "correct": true,
+      "cost_usd": 0.002542505,
+      "latency_ms": 14251.454,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13577-e27a-7ae1-b9bb-1f86851e278a",
+      "correct": true,
+      "cost_usd": 0.00250016,
+      "latency_ms": 12698.827,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-000e-74f1-99eb-0ed39e7a9b1b",
+      "correct": true,
+      "cost_usd": 0.00179739,
+      "latency_ms": 13539.92,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-0fbc-7690-91b6-9f87fadcc82b",
+      "correct": true,
+      "cost_usd": 0.002162385,
+      "latency_ms": 18100.262,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-12c6-7e33-97d5-e587b53aded3",
+      "correct": true,
+      "cost_usd": 0.002833495,
+      "latency_ms": 23105.844,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-1418-7340-93dc-4fbd49864e4c",
+      "correct": true,
+      "cost_usd": 0.001955665,
+      "latency_ms": 18459.026,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-34f6-7e10-9938-2abb4ee03e9d",
+      "correct": true,
+      "cost_usd": 0.002665295,
+      "latency_ms": 12099.538,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-5679-7c41-b905-2cbb6656e7b3",
+      "correct": false,
+      "cost_usd": 0.00233023,
+      "latency_ms": 14472.758,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-5c38-7801-9043-a2331803b529",
+      "correct": true,
+      "cost_usd": 0.00225116,
+      "latency_ms": 13016.474,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-643d-7ef3-bd96-ed59a8ac9a41",
+      "correct": false,
+      "cost_usd": 0.00239161,
+      "latency_ms": 11924.372,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-6d0e-7631-a473-2a0879f45c17",
+      "correct": true,
+      "cost_usd": 0.00219,
+      "latency_ms": 14885.239,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-8f0a-7c70-ba33-538831628faf",
+      "correct": true,
+      "cost_usd": 0.00269608,
+      "latency_ms": 15071.107,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-8f14-7b62-a79e-2355037a0b94",
+      "correct": true,
+      "cost_usd": 0.00172657,
+      "latency_ms": 9878.853,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-92db-7b33-850e-de08052ca06f",
+      "correct": false,
+      "cost_usd": 0.002536685,
+      "latency_ms": 14760.677,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-a73d-7e53-8a87-e7d0faa9bb6e",
+      "correct": false,
+      "cost_usd": 0.002621565,
+      "latency_ms": 13875.572,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-b5ae-7362-9898-61548f0cad20",
+      "correct": false,
+      "cost_usd": 0.001838485,
+      "latency_ms": 10063.364,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-c9ec-7361-8fbb-3b752d2cb2cd",
+      "correct": false,
+      "cost_usd": 0.00201864,
+      "latency_ms": 10940.845,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-cc86-7752-9f77-3b94d7996015",
+      "correct": true,
+      "cost_usd": 0.001943865,
+      "latency_ms": 30744.566,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-dd07-7be2-8d89-dd29ecf9f885",
+      "correct": true,
+      "cost_usd": 0.002373285,
+      "latency_ms": 29830.218,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-dd7b-78d3-896b-afe6276788e6",
+      "correct": true,
+      "cost_usd": 0.002561835,
+      "latency_ms": 30047.314,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13578-f4ac-7b30-a230-ed7ce324a8de",
+      "correct": true,
+      "cost_usd": 0.003379815,
+      "latency_ms": 28520.235,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13579-44a4-7c30-bd70-1600cca324f5",
+      "correct": false,
+      "cost_usd": 0.00246871,
+      "latency_ms": 13659.812,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13579-52e1-74f0-ab48-3f53f97befd2",
+      "correct": true,
+      "cost_usd": 0.002048225,
+      "latency_ms": 11246.398,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13579-ab9a-7d41-b1a6-c3a2cad0d975",
+      "correct": true,
+      "cost_usd": 0.002238565,
+      "latency_ms": 10497.487,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13579-ab9a-7d41-b1a6-c3bed52dc5a4",
+      "correct": false,
+      "cost_usd": 0.003208045,
+      "latency_ms": 40070.134,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13579-ab9a-7d41-b1a6-c3c8d43fc141",
+      "correct": false,
+      "cost_usd": 0.00255495,
+      "latency_ms": 38377.545,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13579-ab9b-7d60-9adf-2b6a8e55ac07",
+      "correct": true,
+      "cost_usd": 0.002401655,
+      "latency_ms": 36732.748,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13579-d4a3-7b60-82fe-cbb7dcc0eda9",
+      "correct": true,
+      "cost_usd": 0.00281907,
+      "latency_ms": 28516.536,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357a-3b1d-7160-8c3a-bb76ee237747",
+      "correct": false,
+      "cost_usd": 0.002756855,
+      "latency_ms": 66697.728,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357a-418b-7680-a161-a416bd739c38",
+      "correct": true,
+      "cost_usd": 0.001991425,
+      "latency_ms": 59305.908,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357a-440b-7b02-a925-3ae0e99d869a",
+      "correct": true,
+      "cost_usd": 0.002099865,
+      "latency_ms": 58035.239,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357a-4827-7a11-9c00-d71034a2c6ca",
+      "correct": true,
+      "cost_usd": 0.002435195,
+      "latency_ms": 57944.046,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357b-26c3-7031-8994-9fec35d98ca3",
+      "correct": true,
+      "cost_usd": 0.00223088,
+      "latency_ms": 61591.63,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357b-293a-7310-b9e1-6015fb64fe1a",
+      "correct": false,
+      "cost_usd": 0.003052715,
+      "latency_ms": 63568.469,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357b-2a82-7611-8cdb-af469cceb3a3",
+      "correct": true,
+      "cost_usd": 0.00206718,
+      "latency_ms": 60084.656,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357b-3faa-7c21-b595-5b720457be58",
+      "correct": true,
+      "cost_usd": 0.002542655,
+      "latency_ms": 57068.289,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357c-153c-7133-8588-d882bc6702a5",
+      "correct": true,
+      "cost_usd": 0.002081395,
+      "latency_ms": 61300.232,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357c-175e-75f0-b306-dc9bdf92b3f2",
+      "correct": false,
+      "cost_usd": 0.00233593,
+      "latency_ms": 62599.515,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357c-1e9a-7131-86fa-feec1199099c",
+      "correct": true,
+      "cost_usd": 0.002476905,
+      "latency_ms": 61646.51,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357c-218e-7143-ad3f-11ae075e58fe",
+      "correct": false,
+      "cost_usd": 0.00223296,
+      "latency_ms": 117969.416,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357d-04b7-7e80-a6ff-f18d333918e3",
+      "correct": true,
+      "cost_usd": 0.001917315,
+      "latency_ms": 59667.891,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357d-0bec-79b2-8e10-dd9de6458933",
+      "correct": false,
+      "cost_usd": 0.00257213,
+      "latency_ms": 58594.219,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357d-0f6e-7152-82e0-f1550fdcd397",
+      "correct": true,
+      "cost_usd": 0.002002125,
+      "latency_ms": 58892.296,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357d-edd7-7091-845c-808e622e64b3",
+      "correct": true,
+      "cost_usd": 0.002771065,
+      "latency_ms": 63202.48,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357d-ee62-7581-9c73-a347d7b33b14",
+      "correct": true,
+      "cost_usd": 0.00265996,
+      "latency_ms": 63636.37,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357d-f0d1-72d2-bb49-4e0640b8bd0f",
+      "correct": true,
+      "cost_usd": 0.00228661,
+      "latency_ms": 62409.692,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357d-f57d-7cf3-b665-a74040fbcbf0",
+      "correct": true,
+      "cost_usd": 0.00194347,
+      "latency_ms": 59287.091,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357e-dd22-7451-9141-6a30dbecf447",
+      "correct": true,
+      "cost_usd": 0.00208529,
+      "latency_ms": 61968.583,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357e-e49e-7db1-8e9d-bcc9efdc2763",
+      "correct": false,
+      "cost_usd": 0.00204165,
+      "latency_ms": 59597.452,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357e-e4bc-7df0-9aa5-79956d6a71fa",
+      "correct": true,
+      "cost_usd": 0.001841475,
+      "latency_ms": 58197.049,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357e-e6fc-7ae2-86ed-195b6a2daa16",
+      "correct": true,
+      "cost_usd": 0.002996735,
+      "latency_ms": 63916.175,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357f-c817-7001-b9ae-4bd2875b06cb",
+      "correct": true,
+      "cost_usd": 0.001972525,
+      "latency_ms": 61950.018,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357f-cd76-7b11-9e1e-83666f9332d8",
+      "correct": false,
+      "cost_usd": 0.0023434,
+      "latency_ms": 62728.508,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357f-cf36-7e91-b8f6-3a249c478cd6",
+      "correct": true,
+      "cost_usd": 0.001911415,
+      "latency_ms": 60856.612,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a1357f-e0ad-77b1-ad2c-89ad96d4094f",
+      "correct": false,
+      "cost_usd": 0.0022776,
+      "latency_ms": 59289.923,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13580-ba18-7490-99eb-7b0726bebf0e",
+      "correct": true,
+      "cost_usd": 0.00211932,
+      "latency_ms": 10489.0,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13580-bcf5-7291-ac45-e37c65849901",
+      "correct": true,
+      "cost_usd": 0.00261472,
+      "latency_ms": 61949.675,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13580-c282-70c3-8c8f-53728aefb583",
+      "correct": true,
+      "cost_usd": 0.00205161,
+      "latency_ms": 58154.605,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13580-c84d-7030-bd32-82ee85253a48",
+      "correct": false,
+      "cost_usd": 0.002390145,
+      "latency_ms": 58995.179,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13580-e315-7983-b6b1-bb3875289a5b",
+      "correct": true,
+      "cost_usd": 0.00249339,
+      "latency_ms": 52758.861,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13581-a5b3-7460-aa9a-73656e37dcc8",
+      "correct": true,
+      "cost_usd": 0.002299075,
+      "latency_ms": 12344.336,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13581-aec6-7a73-ab83-0441d405378d",
+      "correct": true,
+      "cost_usd": 0.002437635,
+      "latency_ms": 12268.21,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13581-aefa-79d2-b1c0-b9284285e2ef",
+      "correct": true,
+      "cost_usd": 0.0021629,
+      "latency_ms": 12784.093,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13581-b135-7620-9fa8-59fc478d2ddd",
+      "correct": true,
+      "cost_usd": 0.002049585,
+      "latency_ms": 11556.05,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13581-d5ee-7231-9819-71623d0fbdae",
+      "correct": true,
+      "cost_usd": 0.002360435,
+      "latency_ms": 12980.097,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13581-de5d-7e93-b6c5-71a42165140f",
+      "correct": true,
+      "cost_usd": 0.002282715,
+      "latency_ms": 50850.369,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13581-deb7-7612-999f-73dba4a1d878",
+      "correct": true,
+      "cost_usd": 0.00271419,
+      "latency_ms": 51377.065,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13581-e0f1-7411-8166-2f89833f6aaf",
+      "correct": true,
+      "cost_usd": 0.00258633,
+      "latency_ms": 50446.586,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    },
+    {
+      "case_id": "01a13582-08aa-7293-8eaf-8a42db8058e2",
+      "correct": false,
+      "cost_usd": 0.002018675,
+      "latency_ms": 37161.972,
+      "tools": [],
+      "mocked": false,
+      "safety_ok": true
+    }
+  ]
+}

@@ -1,10 +1,8 @@
 # P0 session record
 
-The holdout was opened once, after the API account had credit. `report/p0/verdict.md` is the orchestrator output and was not edited.
+The holdout was opened once for each submitted candidate. `report/p0/verdict.md` is the orchestrator output and was not edited.
 
-Reading: `incomplete`. Arm C submitted nothing, so the three-arm comparison was not run. Both scored candidates are cost wins on the holdout and are worth it. Neither is a correctness win: the intervals include zero, and the minimum detectable effect is 30.6 points.
-
-Against `report/prereg.md`: H2 expected one structural cost win and H5 expected Arm B to match Arm C. Arm C has no candidate, so that reading (`harness_is_the_product`) was not reached. H3 and H4 stay fails: no merge and no paid commitment.
+Reading: `harness_is_the_product`. Structural winner among the candidates that cleared the bar: `B/caching`. Arm C was scored and is not worth it. H3 and H4 stay fails: no merge and no paid commitment.
 
 ## Holdout
 
@@ -15,10 +13,11 @@ Each submission's agent was run on the 42 sealed cases with `claude-haiku-5-5`. 
 | baseline | original workflow | 36/42 | $0.1419 | — | — |
 | A | `A-cache-agent-loop` | 38/42 | $0.0882 | 122 | 100 |
 | B | `caching` | 37/42 | $0.0841 | 117 | 102 |
+| C | `C-cache-agentloop` | 34/42 | $0.1345 | 110 | 104 |
 
-Holdout model spend was $0.0882 for A and $0.0841 for B. There were no run errors.
+Holdout model spend was $0.0882 for A, $0.0841 for B, and $0.1345 for C. There were no run errors.
 
-The orchestrator, amortizing search cost over 10,000 runs, reports a holdout cost reduction of 37.8% for A and 40.2% for B. Both are worth it. B is the structural winner among the candidates that were scored. The reading stays `incomplete` until C has a scored candidate.
+The orchestrator, amortizing search cost over 10,000 runs, reports a holdout cost reduction of 37.8% for A, 40.2% for B, and 5.2% for C. A and B are worth it. C is disqualified as overfit: the optimization-set saving in the submission is larger than the holdout saving of the code left in the pack. That code is the original agent. The caching change described in the session log is not in `examples/github_triage/agent.py`.
 
 ## Sessions
 
@@ -34,7 +33,7 @@ An earlier launch the same morning was stopped after a few minutes because one s
 
 Arm A and Arm B each edited the agent to turn on prompt caching and wrote one `structural` candidate. Both say the search made no new workflow calls: Arm A's meter is empty, and Arm B's meter is the recomputed optimization-set bill. Each submission's `search_cost_usd` equals the sum of its `calls`, and each `opt` list is exactly the 98 optimization run ids. Neither list contains a holdout id.
 
-Arm C recorded 453 calls ($0.245058) while trying variants and then stopped. Its log is the credit-balance error. It wrote no submission. Those calls are search spend, not a holdout score.
+Arm C's first session recorded 453 calls ($0.245058) and stopped with a credit-balance error. It wrote no submission. A replacement session, in a clean pack, ran from 2026-10-16T13:38:21Z to 2026-10-16T13:55:00Z with $19.75 remaining of the $20 cap. It submitted `C-cache-agentloop` after 26 metered calls ($0.008229).
 
 ## Baseline
 
