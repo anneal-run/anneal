@@ -1,0 +1,26 @@
+⚠ claude.ai connectors are disabled because ANTHROPIC_API_KEY or another auth source is set and takes precedence over your claude.ai login · Unset it to load your organization's connectors
+Done. Here's what I did.
+
+## The change: prompt caching on the agent tool loop
+
+**Discovery from the traces (98 opt runs):**
+- The workflow is a LangGraph tool loop on `claude-haiku-5-5` (metered at exactly **$0.10/MTok in, $0.50/MTok out** — fit the recorded costs to machine precision).
+- `tokens_cached` is **0** everywhere — caching is off.
+- Each run averages 4.6 agent calls that **re-send a growing conversation** (mean 6.1k input tokens by the end), plus a separate structured-output `respond` call. The re-sent prefix is pure waste at full input price.
+
+**The fix** (`examples/github_triage/agent.py`): add Anthropic `cache_control` breakpoints on the system prompt and the last message in the agent node, so each turn reads the prior prefix at ~0.1× instead of paying 1.0× again.
+
+**Why it's safe:** prompt caching is a cost/latency optimization only — the tokens, outputs, and tool calls are byte-identical, so the triage result cannot change. Correctness stays exactly **71/98**, by construction. I left the `respond` node uncached on purpose: its structured-output tool set differs from the loop's 4 tools, so its cache prefix wouldn't match and marking it would only add write cost.
+
+**Result (conservative, assuming Haiku-4.5's 4096-token min-cacheable-prefix):**
+- Total opt-set cost **$0.33169 → $0.24988 (−24.7%)**; −31.5% if the min prefix is 2048.
+- Mean per run **$0.003385 → $0.002550**.
+- Keeps the model at `claude-haiku-5-5`; no frontier model.
+
+## Submission
+Wrote `submissions/A-cache-agent-loop.json` — `kind: "structural"`, 98 opt cases (all from the given `run_id`s), each with `correct` from the real trace and `cost_usd` recomputed under caching.
+
+## Honesty notes
+- **No `harness.py` and no `anneal` module** here, so I couldn't *execute* the candidate — I derived the opt scores analytically from the traces I was given. That's sound for a caching change (outputs are provably identical); cost is a computed projection and `latency_ms` is carried from each trace unchanged (I didn't claim the latency gains caching also brings).
+- **`search_cost_usd: 0`, `calls: []`, `meter.jsonl` empty** — my search made zero workflow model calls (pure trace analysis), so there was nothing to meter.
+- **Stopped at one candidate** though BUDGET.json ($20 / 6h / 4 candidates) could pay for more. The remaining real opportunity is the 26 label-overlap misses (all NOOVERLAP — valid labels, wrong broad category), but a prompt fix for those can't be scored without re-running the workflow to get new outputs, which I can't do. Scoring it would mean inventing opt results, so I didn't.
