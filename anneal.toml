@@ -1,0 +1,5 @@
+[workflows.github_triage]
+margin_points = 2.0
+
+[workflows.open_deep_research]
+margin_points = 2.0

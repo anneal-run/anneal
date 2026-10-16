@@ -4,7 +4,9 @@ Anneal v3 tests whether a coding agent, given a harness and a holdout, can find 
 
 ## Partner quickstart
 
-A partner goes from a LangSmith export to a pull request in their own repository. The skill for the pairing session is [skills/anneal/SKILL.md](skills/anneal/SKILL.md) (Codex: [skills/anneal/CODEX.md](skills/anneal/CODEX.md)). Do the steps in this order. Nothing here deploys.
+The promise is a pull request in a working day, a verdict when the evidence exists, and never a verdict before that. The skill for the pairing session is [skills/anneal/SKILL.md](skills/anneal/SKILL.md) (Codex: [skills/anneal/CODEX.md](skills/anneal/CODEX.md)). Do the steps in this order. Nothing deploys.
+
+The correctness margin for each workflow is `margin_points` in [anneal.toml](anneal.toml). Every report prints that margin, the n it requires, the n reached, and the verdict.
 
 1. Import the export and build the harness. Holdout run ids are sealed in `SEAL.json` before any proposer starts. Log every manual edit and its duration in `report/harness-log.md`.
 
@@ -21,7 +23,7 @@ Read-only tools stay live. Side-effecting tools are replayed from recordings. A 
 anneal challenge pack --source . --harness harness --out pack/ --arm C --p0 --budget budget.json
 ```
 
-3. Score with the power check. The command prints the minimum detectable effect. If the holdout cannot support the 2-point correctness margin, it prints `cannot adjudicate; n required: N` and writes no winner. `--require-fallback` refuses a structural candidate that does not report how often it called the original implementation.
+3. Score with the power check. `--require-fallback` refuses a structural candidate that does not report how often it called the original implementation. If the holdout cannot support the margin, the verdict is `cannot adjudicate` and the report still prints the n reached. A later shadow count can stop early when the paired difference is clearly outside the margin either way.
 
 ```sh
 anneal challenge orchestrate --budget budget.json --baseline baseline.jsonl \
@@ -29,14 +31,15 @@ anneal challenge orchestrate --budget budget.json --baseline baseline.jsonl \
     --out report/verdict.md
 ```
 
-4. Write the pull request only when a structural winner is named. The winner sits behind a feature flag, the original implementation stays on the path, the fixtures are the tests, and `rollback.md` says to unset the flag.
+4. Write the pull request the same day. The winner sits behind a feature flag, the original implementation stays on the path, `shadow_runner.py` records a pair on every case, the fixtures are the tests, and `rollback.md` says to unset the flag. The verdict on that pull request is whatever the evidence can support, including `cannot adjudicate`.
 
 ```sh
 anneal challenge pr --workflow <id> --winner <candidate> \
     --verdict report/verdict.md --fixtures harness/fixtures.jsonl --out pr/
+anneal challenge shadow --pairs shadow.jsonl --config anneal.toml --workflow <id>
 ```
 
-The same path on `examples/github_triage` is timed in [report/product-dry-run.md](report/product-dry-run.md). That holdout is 42 cases, so the evaluator stops at `cannot adjudicate; n required: 9812`. The harness log is [report/harness-log.md](report/harness-log.md).
+The same path on `examples/github_triage` is timed in [report/product-dry-run.md](report/product-dry-run.md). That holdout is 42 cases, so the verdict is `cannot adjudicate` with n reached 42 and n required 9812. The harness log is [report/harness-log.md](report/harness-log.md). The first run on `open_deep_research` at the pinned commit is [report/p1/memo.md](report/p1/memo.md).
 
 `challenge harness` writes fixtures and recordings from the optimization split only. Holdout run ids are not copied into an arm's pack. `challenge orchestrate` ranks on the optimization set, opens the holdout once for the top three structural candidates per arm, and refuses anything past the shared search budget. A prompt-only win is reported and cannot be the structural winner. Search spend is the sum of metered model calls; a typed dollar total is refused.
 

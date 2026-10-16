@@ -33,7 +33,13 @@ def write_pull_request(
             f"{verdict.as_posix()}\n\n"
             "## Rollback\n\n"
             f"See `rollback.md`. Unset `{flag}`. "
-            "There is no migration, and nothing in this change deploys.\n"
+            "There is no migration, and nothing in this change deploys.\n\n"
+            "## Shadow\n\n"
+            "`shadow_runner.py` runs the original implementation and the winner on the same case, "
+            "returns the original result, and appends the pair. "
+            "`anneal challenge shadow` prints the verdict and the n reached. "
+            "It stops early only when that difference is clearly outside the margin "
+            "in `anneal.toml`.\n"
         ),
         encoding="utf-8",
     )
@@ -44,6 +50,7 @@ def write_pull_request(
         ),
         encoding="utf-8",
     )
+    (dest / "shadow_runner.py").write_text(_SHADOW_RUNNER, encoding="utf-8")
     (dest / "test_fixtures.py").write_text(
         (
             '"""The harness fixtures travel with the change."""\n\n'
@@ -54,3 +61,48 @@ def write_pull_request(
         ),
         encoding="utf-8",
     )
+
+
+_SHADOW_RUNNER = '''\
+"""Shadow the winner beside the original implementation. The caller sees the original result."""
+
+import json
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any
+
+
+def append_pair(
+    path: Path,
+    case_id: str,
+    *,
+    baseline_correct: bool,
+    candidate_correct: bool,
+) -> None:
+    row = {
+        "case_id": case_id,
+        "baseline_correct": baseline_correct,
+        "candidate_correct": candidate_correct,
+    }
+    with Path(path).open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(row) + "\\n")
+
+
+def run_shadow(
+    case_id: str,
+    case: Any,
+    original: Callable[[Any], Any],
+    candidate: Callable[[Any], Any],
+    judge: Callable[[Any], bool],
+    path: Path,
+) -> Any:
+    baseline = original(case)
+    proposed = candidate(case)
+    append_pair(
+        path,
+        case_id,
+        baseline_correct=bool(judge(baseline)),
+        candidate_correct=bool(judge(proposed)),
+    )
+    return baseline
+'''

@@ -108,5 +108,7 @@ def test_orchestrate_refuses_a_holdout_that_cannot_support_the_margin(tmp_path: 
     )
     assert code == 2
     text = out.read_text(encoding="utf-8")
-    assert text == f"cannot adjudicate; n required: {n_required()}\n"
+    assert f"margin: 2.0 points; n required: {n_required()}" in text
+    assert "n reached: 20" in text
+    assert "verdict: cannot adjudicate" in text
     assert "harness_is_the_product" not in text

@@ -6,7 +6,9 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from anneal.challenge.budget import BudgetLedger, SearchBudget, Spend
 from anneal.challenge.models import Candidate, MeteredCall, Observation, Verdict
-from anneal.challenge.verdict import judge
+from anneal.challenge.power import n_required
+from anneal.challenge.shadow import evidence_header
+from anneal.challenge.verdict import CORRECTNESS_MARGIN_POINTS, judge
 from anneal.schema.pricing import PriceTable
 
 Reading = Literal[
@@ -53,6 +55,9 @@ class ChallengeReport(_Model):
     paid_commitment: bool = False
     paid_price: str | None = None
     spent: dict[str, Spend] = Field(default_factory=dict)
+    margin_points: float = 2.0
+    n_reached: int = 0
+    n_required: int = 0
 
 
 class SealedHoldout:
@@ -88,6 +93,7 @@ def orchestrate(
     paid_commitment: bool = False,
     paid_price: str | None = None,
     require_fallback: bool = False,
+    margin_points: float = CORRECTNESS_MARGIN_POINTS,
 ) -> ChallengeReport:
     """Score submissions in order until each arm's budget is spent, then reveal the holdout."""
     ledger = BudgetLedger(budget)
@@ -172,12 +178,21 @@ def orchestrate(
         paid_commitment=paid_commitment,
         paid_price=paid_price,
         spent={arm: ledger.spent(arm) for arm in sorted({item.arm for item in candidates})},
+        margin_points=margin_points,
+        n_reached=len(baseline_holdout),
+        n_required=n_required(margin_points),
     )
 
 
 def render_markdown(report: ChallengeReport) -> str:
     """Verdict report. These headings are the v3 hypotheses, not the Milestone 1 register."""
     lines = [
+        evidence_header(
+            n=report.n_reached,
+            margin_points=report.margin_points,
+            verdict=report.reading,
+        ).rstrip("\n"),
+        "",
         "# Anneal v3 challenge",
         "",
         f"Reading: `{report.reading}`.",

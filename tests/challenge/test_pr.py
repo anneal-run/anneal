@@ -27,6 +27,9 @@ def test_pr_keeps_the_original_behind_a_flag(tmp_path: Path) -> None:
     assert str(verdict) in body
     assert "Nothing was deployed" in (dest / "rollback.md").read_text(encoding="utf-8")
     assert "FIXTURES" in (dest / "test_fixtures.py").read_text(encoding="utf-8")
+    runner = (dest / "shadow_runner.py").read_text(encoding="utf-8")
+    assert "def run_shadow" in runner
+    assert "return baseline" in runner
 
 
 def test_pr_refuses_to_overwrite(tmp_path: Path) -> None:

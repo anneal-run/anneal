@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- feat: shadow accumulation on the pull request. `shadow_runner.py` records paired results, `anneal challenge shadow` prints the verdict and the n reached, and it stops early only when the difference is clearly outside the per-workflow margin in `anneal.toml`.
 - feat: a partner path from a LangSmith export to a pull request: `skills/anneal`, an arm C pack that requires a confidence fallback, a holdout power check that prints `cannot adjudicate; n required: N`, and `anneal challenge pr` (feature flag, original implementation, fixtures, rollback note; nothing deploys).
 - examples: the github_triage dogfood run end to end (`experiment.py`), its data, the DOGFOOD memo (`report/github_triage-memo.md`) and the write-up with breakages, pre-registration vs actual and differences from the synthetic environment (`report/github_triage-dogfood.md`); README quickstart built from it.
 - fix: Gate 1's H3 is `open`, not `pass`, when no holdout run finished on the compiled path (100% fallback makes compiled success equal Tier 0's by construction). ADR 0010 amended.

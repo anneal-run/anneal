@@ -65,13 +65,13 @@ anneal challenge orchestrate \
   --out report/verdict.md
 ```
 
-The command prints the minimum detectable effect. If the holdout cannot support the 2-point correctness margin, the only output is `cannot adjudicate; n required: N` and there is no winner. Do not lower the margin.
+The command prints the margin from `anneal.toml`, the n that margin requires, the n reached, and the verdict. If the holdout cannot support the margin, the verdict is `cannot adjudicate`. Do not lower the margin. Keep scoring new pairs with `anneal challenge shadow`. That command stops early only when the paired difference is clearly outside the margin either way.
 
 A scored candidate has three verdicts: compatible, correct, worth it. The split is chronological. Overfit and mock-only candidates are disqualified. A prompt, cache, or model change is reported and is never the structural winner. Use a downstream signal as the label when the workflow has one. Otherwise label a set by hand and log the hours in the harness log and as `--labeling-hours`.
 
 ## Pull request
 
-Only after a verdict names a structural winner:
+Write this the same day, including when the verdict is `cannot adjudicate`. The pull request carries the shadow runner. A verdict that the winner is worth it waits until the evidence exists.
 
 ```sh
 anneal challenge pr \
