@@ -2,14 +2,43 @@
 
 Anneal v3 tests whether a coding agent, given a harness and a holdout, can find a better architecture for an existing agent workflow than the same coding agent would find on its own. The spec is [ANNEAL-V3-PLAYBOOK.md](ANNEAL-V3-PLAYBOOK.md).
 
+## Partner quickstart
+
+A partner goes from a LangSmith export to a pull request in their own repository. The skill for the pairing session is [skills/anneal/SKILL.md](skills/anneal/SKILL.md) (Codex: [skills/anneal/CODEX.md](skills/anneal/CODEX.md)). Do the steps in this order. Nothing here deploys.
+
+1. Import the export and build the harness. Holdout run ids are sealed in `SEAL.json` before any proposer starts. Log every manual edit and its duration in `report/harness-log.md`.
+
 ```sh
-anneal challenge harness .anneal/store --tools tools.yaml --out harness/
-anneal challenge pack --source . --harness harness --out pack-c --arm C --p0 --budget budget.json
-anneal challenge orchestrate --budget budget.json --baseline baseline.jsonl \
-    --submissions candidates/ --holdout holdout.json --out report/workflow.md
+anneal import langsmith export.jsonl --store .anneal/store
+anneal challenge harness .anneal/store --tools tools.yaml --workflow <id> --out harness/ --file <workflow>
 ```
 
-`challenge harness` writes fixtures and recordings from the optimization split only. Holdout run ids go in `SEAL.json` and are not copied into an arm's pack. `challenge orchestrate` ranks on the optimization set, opens the holdout once for the top three structural candidates per arm, and refuses anything past the shared search budget. A prompt-only win is reported and cannot be the structural winner.
+Read-only tools stay live. Side-effecting tools are replayed from recordings. A tool with no recording is marked mock.
+
+2. Pack an isolated proposer. `--p0` leaves out the architecture menu. The prompt requires three structurally different candidates, and each one falls back to the original implementation. Caching, a model swap, and a prompt edit are not architectures. Run the session in the pack directory only.
+
+```sh
+anneal challenge pack --source . --harness harness --out pack/ --arm C --p0 --budget budget.json
+```
+
+3. Score with the power check. The command prints the minimum detectable effect. If the holdout cannot support the 2-point correctness margin, it prints `cannot adjudicate; n required: N` and writes no winner. `--require-fallback` refuses a structural candidate that does not report how often it called the original implementation.
+
+```sh
+anneal challenge orchestrate --budget budget.json --baseline baseline.jsonl \
+    --submissions pack/submissions --holdout holdout.json --require-fallback \
+    --out report/verdict.md
+```
+
+4. Write the pull request only when a structural winner is named. The winner sits behind a feature flag, the original implementation stays on the path, the fixtures are the tests, and `rollback.md` says to unset the flag.
+
+```sh
+anneal challenge pr --workflow <id> --winner <candidate> \
+    --verdict report/verdict.md --fixtures harness/fixtures.jsonl --out pr/
+```
+
+The same path on `examples/github_triage` is timed in [report/product-dry-run.md](report/product-dry-run.md). That holdout is 42 cases, so the evaluator stops at `cannot adjudicate; n required: 9812`. The harness log is [report/harness-log.md](report/harness-log.md).
+
+`challenge harness` writes fixtures and recordings from the optimization split only. Holdout run ids are not copied into an arm's pack. `challenge orchestrate` ranks on the optimization set, opens the holdout once for the top three structural candidates per arm, and refuses anything past the shared search budget. A prompt-only win is reported and cannot be the structural winner. Search spend is the sum of metered model calls; a typed dollar total is refused.
 
 The Milestone 1 compiler is still in this tree (`anneal import`, `anneal analyze`, `anneal replay`). It records a workflow and tries to compile the observed path. On `examples/github_triage` that path did not survive the holdout; a separate coding agent wrote a cheaper script instead. The compiler is evidence and a trace library, not the v3 challenger. See [ANNEAL-ROADMAP.md](ANNEAL-ROADMAP.md) and <https://anneal.run>.
 

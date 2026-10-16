@@ -113,19 +113,26 @@ def test_meter_refuses_a_call_past_the_budget_and_does_not_record_it(tmp_path: P
     )
     write_harness(manifest, runs, tmp_path)
     (tmp_path / "BUDGET.json").write_text(
-        '{"candidates": 1, "dollars": 1.0, "hours": 1.0}\n', encoding="utf-8"
+        '{"candidates": 1, "dollars": 0.001, "hours": 1.0}\n', encoding="utf-8"
     )
     spec = importlib.util.spec_from_file_location("metered_harness", tmp_path / "harness.py")
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     meter = module.meter()
-    meter.record(0.6, 10)
     try:
-        meter.record(0.5, 10)
+        meter.record(0.6, 10)
+    except RuntimeError:
+        pass
+    else:
+        raise AssertionError("a typed dollar amount was recorded")
+    assert not (tmp_path / "meter.jsonl").exists()
+    meter.record_usage("claude-haiku-5-5", 6_000, 0, 0, 10)
+    try:
+        meter.record_usage("claude-haiku-5-5", 5_000, 0, 0, 10)
     except module.BudgetExceeded:
         pass
     else:
         raise AssertionError("a call past the budget was recorded")
-    assert meter.total_usd == 0.6
+    assert meter.total_usd == 0.0006
     assert (tmp_path / "meter.jsonl").read_text(encoding="utf-8").count("\n") == 1

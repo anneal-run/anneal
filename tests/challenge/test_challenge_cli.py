@@ -3,10 +3,11 @@
 import json
 from pathlib import Path
 
+from anneal.challenge.power import n_required
 from anneal.cli import main
 
 
-def test_orchestrate_command_writes_the_harness_reading(tmp_path: Path) -> None:
+def test_orchestrate_refuses_a_holdout_that_cannot_support_the_margin(tmp_path: Path) -> None:
     budget = tmp_path / "budget.json"
     budget.write_text(json.dumps({"candidates": 2, "dollars": 5, "hours": 5}), encoding="utf-8")
     baseline = tmp_path / "baseline.jsonl"
@@ -105,7 +106,7 @@ def test_orchestrate_command_writes_the_harness_reading(tmp_path: Path) -> None:
             str(out),
         ]
     )
-    assert code == 0
+    assert code == 2
     text = out.read_text(encoding="utf-8")
-    assert "harness_is_the_product" in text
-    assert "Worth it: True" in text
+    assert text == f"cannot adjudicate; n required: {n_required()}\n"
+    assert "harness_is_the_product" not in text
