@@ -6,7 +6,7 @@ The pre-registration is [prereg.md](prereg.md). The first ranking, before the fi
 
 ## What the scanner got right
 
-On dateparser, `dateparser/parser.py` is rank 2 of 253 and the ladder is one structured call. The top file is `dateparser/date.py`, also one structured call. That is the file the one path ran.
+On dateparser, `dateparser/parser.py` is rank 2 of 253 and the candidate rung is one structured call. The top file is `dateparser/date.py`, also one structured call. That is the file the one path ran. A candidate rung is a hypothesis for the evaluator. `keep deterministic` is a terminal verdict and carries its reason.
 
 `tldextract/tldextract.py` is rank 1 of 9. `src/dateutil/parser/_parser.py` is rank 1 of 22. The pre-registered dateutil path omitted `src/`, so that exact string is not in the tree. Both files stay keep deterministic. dateutil's parser has 34 string switches and one regex operation, and the rule asks for three regex operations before it will replace a parser. tldextract has the churn and no regex operation.
 
@@ -46,3 +46,7 @@ Correctness on the holdout is −9.1 points, interval −16.8 to −1.4. The int
 The header in the verdict file still prints the default 2-point power line, which at 55 cases would be `cannot adjudicate` (n required 9812, minimum detectable effect 26.7). That line is not the gate for this run. The gate that ran is the one in the pre-registration: the interval above zero, and the $0.02 ceiling.
 
 Search cost is $0. The rung was the one named in the amendment, not a separate search. Scoring spent about $0.12, including a discarded first pass that treated a markdown fence as a schema violation. The recorded pass strips one fence and then uses the same timestamp check. The whole experiment stays under $10.
+
+## Scanner conclusion
+
+The ranking is a pass. dateparser's known file, and the two libraries named after the fix, came out where the rules said. dateutil and tldextract stay `keep deterministic`, with the reasons above. The dateparser candidate rung was a hypothesis. The one path tested it and the evaluator declined it: the interval is not above zero. That refusal is the result.

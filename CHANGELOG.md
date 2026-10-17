@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- note: Experiment D2 is the last experiment. Twenty-two dateparser issue cases are under the 60-case floor, so the power check prints `cannot adjudicate`. The next work is a partner workflow, and it starts when one exists.
 - change: a scanner file carries `candidate_rung`. `one structured call`, `bounded workflow`, and `agent` are hypotheses for the evaluator. `keep deterministic` is a terminal verdict and carries its reason.
 - change: a library or parser target in correctness-win mode requires `code_first`. The original implementation runs on every input. A model runs only when that implementation returns nothing, raises, or fails a validity check, and the model's answer is kept only when it passes the same check. The orchestrator refuses a suite regression and reports overall cost, failure-path cost, and the failure-path share.
 - change: a manual-review candidate needs a review branch and a measured queue. The word `queue` is not a route and not a queue size.

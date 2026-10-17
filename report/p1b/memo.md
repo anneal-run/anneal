@@ -40,4 +40,4 @@ The full report is [verdict.md](verdict.md). `direct_sql` is worth it on this ho
 
 The branch `anneal-direct-sql` is at `15b85b9` on https://github.com/anneal-run/tabletalk. `ANNEAL_TABLETALK` is off by default, the original agent stays on the path, and the optimization fixtures are the tests. The shadow runner is not in that change.
 
-The description to open from that fork is [pr/PR.md](pr/PR.md). The upstream pull request on SkanderGhariani/tabletalk is not open. There is no maintainer response yet.
+The description is [pr/PR.md](pr/PR.md). The upstream pull request is [SkanderGhariani/tabletalk#1](https://github.com/SkanderGhariani/tabletalk/pull/1). It is open, created 2026-10-17T13:48:35Z, from `anneal-run:anneal-direct-sql` at `15b85b9`. It is not a draft and it is not merged. It has no comments and no review comments. There is no maintainer response.
