@@ -27,6 +27,19 @@ At least three genuinely different architectures, not three prompts.
 The budget is the constraint. If three architectures do not fit, run fewer, and that result counts.
 """
 
+ENGINE = (
+    "Caching, a model swap, and a prompt edit are not architectures.\n"
+    "Submit at least three structurally different candidates.\n"
+    "Every structural candidate includes a confidence-routed fallback to the original "
+    "implementation. The fallback invokes that implementation, and those calls count in cost. "
+    "Confidence comes from the candidate's own output or from agreement with a second cheap pass, "
+    "never from labels. The fallback fires on a validity check of the result: "
+    "an empty result, a column mismatch, a row count outside the observed range, "
+    "a schema violation, or low confidence from the candidate's own output. "
+    "A candidate whose only trigger is an exception is refused. "
+    "Report fallback_triggers with the fallback rate beside the cost.\n"
+)
+
 _EXCLUDED_FILES = {"ANNEAL-V3-PLAYBOOK.md", "ANNEAL-ROADMAP.md", "SEAL.json"}
 _EXCLUDED_PREFIXES = ("baseline/", "report/", "docs/adr/")
 
@@ -57,6 +70,8 @@ def write_pack(
             "No architecture menu is provided. "
             "Discover the change from the workflow and the traces.\n"
         )
+    if arm == "C":
+        prompt += ENGINE
     (dest / "PROMPT.md").write_text(prompt, encoding="utf-8")
     if arm == "C" and not p0:
         (dest / "MENU.md").write_text(MENU, encoding="utf-8")

@@ -24,10 +24,26 @@ class Observation(_Model):
 
 
 class MeteredCall(_Model):
-    """One model call the harness meter recorded. The orchestrator sums these."""
+    """One model call the harness meter recorded. The orchestrator sums these.
+
+    A positive cost counts only when `model` and token counts are present.
+    The price table recomputes the dollars. A typed total is not a meter line.
+    """
 
     cost_usd: float
     latency_ms: float
+    model: str | None = None
+    tokens_in: int | None = None
+    tokens_out: int | None = None
+    tokens_cached: int = 0
+
+
+Change = Literal["architecture", "prompt", "cache", "model"]
+
+VALIDITY_TRIGGERS = frozenset(
+    {"empty_result", "column_mismatch", "row_count", "schema_violation", "low_confidence"}
+)
+FALLBACK_TRIGGERS = VALIDITY_TRIGGERS | {"exception"}
 
 
 class Candidate(_Model):
@@ -36,6 +52,7 @@ class Candidate(_Model):
     id: str
     arm: Literal["A", "B", "C", "control"]
     kind: Literal["structural", "prompt"]
+    change: Change | None = None
     search_cost_usd: float = 0.0
     human_hours: float = 0.0
     calls: list[MeteredCall] = Field(default_factory=list)
@@ -43,6 +60,10 @@ class Candidate(_Model):
     opt: list[Observation]
     new_side_effect_tools: list[str] = Field(default_factory=list)
     removed_approvals: list[str] = Field(default_factory=list)
+    fallback_rate: float | None = None
+    """Share of cases that invoked the original implementation. None means none was declared."""
+    fallback_triggers: list[str] = Field(default_factory=list)
+    """Why the fallback fires. An exception alone is not a validity check."""
 
     @model_validator(mode="after")
     def _positive_volume(self) -> "Candidate":
@@ -50,10 +71,23 @@ class Candidate(_Model):
             raise ValueError("monthly_runs must be at least 1")
         if "/" in self.id:
             raise ValueError("candidate id cannot contain '/'")
+        if self.fallback_rate is not None and not 0.0 <= self.fallback_rate <= 1.0:
+            raise ValueError("fallback_rate must be between 0 and 1")
+        unknown = [
+            trigger for trigger in self.fallback_triggers if trigger not in FALLBACK_TRIGGERS
+        ]
+        if unknown:
+            raise ValueError(f"unknown fallback trigger {unknown[0]!r}")
         return self
 
     def metered_usd(self) -> float:
         return sum(call.cost_usd for call in self.calls)
+
+    def effective_kind(self) -> Literal["structural", "prompt"]:
+        """Cache, prompt edits, and model swaps are not structural, whatever `kind` says."""
+        if self.change in {"prompt", "cache", "model"}:
+            return "prompt"
+        return self.kind
 
 
 class ToolBinding(_Model):

@@ -1,0 +1,13 @@
+[budget]
+candidates = 4
+dollars = 10
+hours = 6
+
+[workflows.github_triage]
+margin_points = 2.0
+
+[workflows.open_deep_research]
+margin_points = 2.0
+
+[workflows.tabletalk]
+margin_points = 10.0

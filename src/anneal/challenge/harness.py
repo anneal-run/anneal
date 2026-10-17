@@ -9,6 +9,7 @@ from anneal.challenge.models import HarnessManifest, ToolBinding
 from anneal.compile.compiler import ToolSpec
 from anneal.replay.split import chronological_split
 from anneal.schema import Run, ToolCall
+from anneal.schema.pricing import PriceTable
 
 _HARNESS_PY = '''\
 """Generated harness. Reads manifest.json beside this file. Do not add holdout traces here."""
@@ -60,6 +61,9 @@ def fixtures():
     return rows
 
 
+PRICES = json.loads("""__PRICES__""")
+
+
 class BudgetExceeded(Exception):
     """This model call would spend past the dollars in BUDGET.json. It is not recorded."""
 
@@ -71,10 +75,20 @@ class CostMeter:
         self.path = ROOT / "meter.jsonl"
 
     def record(self, cost_usd, latency_ms):
-        cost = float(cost_usd)
+        raise RuntimeError("cost is computed from provider usage, not a typed total")
+
+    def record_usage(self, model, tokens_in, tokens_out, tokens_cached, latency_ms):
+        cost = _price(model, int(tokens_in), int(tokens_out), int(tokens_cached))
         if self.budget_usd is not None and self.total_usd + cost > self.budget_usd:
             raise BudgetExceeded(self.total_usd + cost)
-        event = {"cost_usd": cost, "latency_ms": float(latency_ms)}
+        event = {
+            "cost_usd": cost,
+            "latency_ms": float(latency_ms),
+            "model": model,
+            "tokens_in": int(tokens_in),
+            "tokens_out": int(tokens_out),
+            "tokens_cached": int(tokens_cached),
+        }
         self.events.append(event)
         with self.path.open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(event) + "\\n")
@@ -82,6 +96,19 @@ class CostMeter:
     @property
     def total_usd(self):
         return sum(event["cost_usd"] for event in self.events)
+
+
+def _price(model, tokens_in, tokens_out, tokens_cached):
+    spec = PRICES[model]
+    long = spec.get("long_context")
+    over = long is not None and tokens_in > long["over_input_tokens"]
+    rates = long if over else spec
+    uncached = tokens_in - tokens_cached
+    return (
+        uncached * rates["input"]
+        + tokens_cached * rates["cached_input"]
+        + tokens_out * rates["output"]
+    ) / 1_000_000
 
 
 def meter():
@@ -225,7 +252,9 @@ def write_harness(manifest: HarnessManifest, runs: Sequence[Run], directory: Pat
     (directory / "recordings.jsonl").write_text(
         ("\n".join(recording_lines) + "\n") if recording_lines else "", encoding="utf-8"
     )
-    (directory / "harness.py").write_text(_HARNESS_PY, encoding="utf-8")
+    (directory / "harness.py").write_text(
+        _HARNESS_PY.replace("__PRICES__", _price_blob()), encoding="utf-8"
+    )
     (directory / "Makefile").write_text(_MAKEFILE, encoding="utf-8")
 
 
@@ -236,6 +265,25 @@ def load_manifest(directory: Path) -> HarnessManifest:
     seal = json.loads(seal_path.read_text(encoding="utf-8")) if seal_path.exists() else {}
     payload["holdout_run_ids"] = seal.get("holdout_run_ids", payload.get("holdout_run_ids", []))
     return HarnessManifest.model_validate(payload)
+
+
+def _price_blob() -> str:
+    blob: dict[str, dict[str, object]] = {}
+    for name, model in PriceTable.load().models.items():
+        entry: dict[str, object] = {
+            "input": model.input,
+            "cached_input": model.cached_input,
+            "output": model.output,
+        }
+        if model.long_context is not None:
+            entry["long_context"] = {
+                "over_input_tokens": model.long_context.over_input_tokens,
+                "input": model.long_context.input,
+                "cached_input": model.long_context.cached_input,
+                "output": model.long_context.output,
+            }
+        blob[name] = entry
+    return json.dumps(blob)
 
 
 def _recordings(runs: Sequence[Run]) -> dict[str, list[ToolCall]]:

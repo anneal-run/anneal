@@ -55,6 +55,10 @@ def test_p0_pack_hides_the_answer_and_the_menu(tmp_path: Path) -> None:
     assert "ANNEAL-V3-PLAYBOOK.md" not in copied
     prompt = (dest / "PROMPT.md").read_text(encoding="utf-8")
     assert "prefetch" not in prompt.lower()
+    assert "structurally different candidates" in prompt
+    assert "original implementation" in prompt
+    assert "validity check" in prompt
+    assert "only trigger is an exception" in prompt
     assert "Make this workflow cheaper or more correct" in prompt
     assert not (dest / "MENU.md").exists()
     assert "run-hold-0009" not in (dest / "manifest.json").read_text(encoding="utf-8")
@@ -73,6 +77,7 @@ def test_arm_a_does_not_receive_the_harness(tmp_path: Path) -> None:
         budget=SearchBudget(candidates=3, dollars=2.0, hours=4.0),
     )
     assert not (dest / "manifest.json").exists()
+    assert "structurally different" not in (dest / "PROMPT.md").read_text(encoding="utf-8")
 
 
 def test_later_experiments_give_arm_c_the_menu(tmp_path: Path) -> None:

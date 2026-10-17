@@ -2,14 +2,48 @@
 
 Anneal v3 tests whether a coding agent, given a harness and a holdout, can find a better architecture for an existing agent workflow than the same coding agent would find on its own. The spec is [ANNEAL-V3-PLAYBOOK.md](ANNEAL-V3-PLAYBOOK.md).
 
+## Partner quickstart
+
+The promise is a pull request in a working day from a repo that has a runnable entrypoint and some inputs, a verdict when the evidence exists, and never a verdict before that. The skill for the pairing session is [skills/anneal/SKILL.md](skills/anneal/SKILL.md) (Codex: [skills/anneal/CODEX.md](skills/anneal/CODEX.md)). Do the steps in this order. Nothing deploys.
+
+The correctness margin for each workflow is `margin_points` in [anneal.toml](anneal.toml). Every report prints that margin, the n it requires, the n reached, and the verdict. The pack budget in that file is 4 candidates, $10, and 6 hours.
+
+The harness, the engine session, and the shadow runner use the partner's provider keys from their environment. Anneal does not pay for the partner's workflow.
+
+1. Get traces, then build the harness. If there is no export, capture by running. LangSmith tracing and an export when `LANGSMITH_API_KEY` is set; a local recording in that same record shape otherwise. Import with `anneal import langsmith`. Holdout run ids are sealed in `SEAL.json` before any proposer starts. Log every manual edit and its duration in `report/harness-log.md`. Reading the repo before the harness is onboarding time, not harness time.
+
 ```sh
-anneal challenge harness .anneal/store --tools tools.yaml --out harness/
-anneal challenge pack --source . --harness harness --out pack-c --arm C --p0 --budget budget.json
-anneal challenge orchestrate --budget budget.json --baseline baseline.jsonl \
-    --submissions candidates/ --holdout holdout.json --out report/workflow.md
+anneal import langsmith export.jsonl --store .anneal/store
+anneal challenge harness .anneal/store --tools tools.yaml --workflow <id> --out harness/ --file <workflow>
 ```
 
-`challenge harness` writes fixtures and recordings from the optimization split only. Holdout run ids go in `SEAL.json` and are not copied into an arm's pack. `challenge orchestrate` ranks on the optimization set, opens the holdout once for the top three structural candidates per arm, and refuses anything past the shared search budget. A prompt-only win is reported and cannot be the structural winner.
+Read-only tools stay live. Side-effecting tools are replayed from recordings. A tool with no recording is marked mock.
+
+2. Pack an isolated proposer. `--p0` leaves out the architecture menu. The prompt requires three structurally different candidates, and each one falls back to the original implementation. Caching, a model swap, and a prompt edit are not architectures. Run the session in the pack directory only.
+
+```sh
+anneal challenge pack --source . --harness harness --out pack/ --arm C --p0 --budget budget.json
+```
+
+3. Score with the power check. `--require-fallback` refuses a structural candidate that does not report how often it called the original implementation, and one whose fallback trigger is only an exception. The fallback has to check the result. If the holdout cannot support the margin, the verdict is `cannot adjudicate` and the report still prints the n reached. A later shadow count can stop early when the paired difference is clearly outside the margin either way.
+
+```sh
+anneal challenge orchestrate --budget budget.json --baseline baseline.jsonl \
+    --submissions pack/submissions --holdout holdout.json --require-fallback \
+    --out report/verdict.md
+```
+
+4. Write the pull request the same day. The winner sits behind a feature flag, the original implementation stays on the path, `shadow_runner.py` records a pair on every case, the fixtures are the tests, and `rollback.md` says to unset the flag. The verdict on that pull request is whatever the evidence can support, including `cannot adjudicate`.
+
+```sh
+anneal challenge pr --workflow <id> --winner <candidate> \
+    --verdict report/verdict.md --fixtures harness/fixtures.jsonl --out pr/
+anneal challenge shadow --pairs shadow.jsonl --config anneal.toml --workflow <id>
+```
+
+The same path on `examples/github_triage` is timed in [report/product-dry-run.md](report/product-dry-run.md). That holdout is 42 cases, so the verdict is `cannot adjudicate` with n reached 42 and n required 9812. The harness log is [report/harness-log.md](report/harness-log.md). The first run on `open_deep_research` at the pinned commit is [report/p1/memo.md](report/p1/memo.md).
+
+`challenge harness` writes fixtures and recordings from the optimization split only. Holdout run ids are not copied into an arm's pack. `challenge orchestrate` ranks on the optimization set, opens the holdout once for the top three structural candidates per arm, and refuses anything past the shared search budget. A prompt-only win is reported and cannot be the structural winner. Search spend is the sum of metered model calls; a typed dollar total is refused.
 
 The Milestone 1 compiler is still in this tree (`anneal import`, `anneal analyze`, `anneal replay`). It records a workflow and tries to compile the observed path. On `examples/github_triage` that path did not survive the holdout; a separate coding agent wrote a cheaper script instead. The compiler is evidence and a trace library, not the v3 challenger. See [ANNEAL-ROADMAP.md](ANNEAL-ROADMAP.md) and <https://anneal.run>.
 
