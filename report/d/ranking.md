@@ -31,4 +31,4 @@ more-itertools fails the clean check. Both files contain the word `queue`, and t
 
 ## What this does not change
 
-The thresholds stay as written. The one path in the pre-registration, capture through a pull request on the top candidate, has not been run. On the brittle repository whose known spot is in the top five and whose top file is a model rung, that file is `dateparser/date.py`.
+This file is the ranking from before the manual-review fix. The rerun, after the amendment in [prereg.md](prereg.md), is in [memo.md](memo.md).
