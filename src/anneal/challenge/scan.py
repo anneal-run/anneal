@@ -14,7 +14,9 @@ from anneal.challenge.models import HarnessManifest
 
 _CASE = re.compile(r"case|edge|special|workaround|fallback|parse", re.IGNORECASE)
 _REGEX_OP = re.compile(r"\bre\.(?:compile|match|search|sub|findall)\b")
-_REVIEW = ("manual", "review", "queue", "human")
+_REVIEW = ("manual", "review", "human")
+_ROUTE_NAME = re.compile(r"manual|review|escalate|human", re.IGNORECASE)
+_QUEUE_NAME = re.compile(r"manual_queue|review_queue|human_queue", re.IGNORECASE)
 _SKIP_DIRS = {"test", "tests", "vendor", "vendored", "third_party", "generated", "build", "dist"}
 _AGENT = ("langgraph", "langchain", "autogen")
 
@@ -56,17 +58,21 @@ def scan(repo: Path) -> list[ScanCandidate]:
         lowered = source.lower()
         review_words = sum(lowered.count(word) for word in _REVIEW)
         template = _template_conditional(source)
-        queue = lowered.count("queue")
+        tree = _parse(source)
+        queue = _queue_size(tree)
+        routes = _routes(tree)
         score = churn + case_commits + regex_ops + switches + review_words + template
         ladder, reason = _ladder(
             relative,
-            source,
             case_commits=case_commits,
             regex_ops=regex_ops,
             churn=churn,
             switches=switches,
             review_words=review_words,
             template=template,
+            routes=routes,
+            queue_size=queue,
+            imports_agent=tree is not None and _imports_agent(tree),
         )
         found.append(
             ScanCandidate(
@@ -215,9 +221,84 @@ def _template_conditional(source: str) -> int:
     return 1 if formatted and ifs >= 5 else 0
 
 
+def _parse(source: str) -> ast.AST | None:
+    try:
+        return ast.parse(source)
+    except SyntaxError:
+        return None
+
+
+def _queue_size(tree: ast.AST | None) -> int | None:
+    """An integer bound to a review-queue name. The word queue is not a size."""
+    if tree is None:
+        return None
+    found: list[int] = []
+    for node in ast.walk(tree):
+        targets: list[ast.expr]
+        value: ast.expr | None
+        if isinstance(node, ast.Assign):
+            targets = list(node.targets)
+            value = node.value
+        elif isinstance(node, ast.AnnAssign):
+            targets = [node.target]
+            value = node.value
+        else:
+            continue
+        if value is None or not isinstance(value, ast.Constant) or not isinstance(value.value, int):
+            continue
+        for target in targets:
+            name = _expr_name(target)
+            if name and _QUEUE_NAME.search(name):
+                found.append(value.value)
+    return found[-1] if found else None
+
+
+def _routes(tree: ast.AST | None) -> bool:
+    """An if or elif body calls, returns, or assigns a review route.
+
+    `import queue`, `queue.Queue`, a comment, and the bare word queue are not a route.
+    """
+    if tree is None:
+        return False
+    return any(isinstance(node, ast.If) and _body_routes(node.body) for node in ast.walk(tree))
+
+
+def _body_routes(body: list[ast.stmt]) -> bool:
+    for stmt in body:
+        if isinstance(stmt, ast.If):
+            continue
+        for sub in ast.walk(stmt):
+            if isinstance(sub, ast.If):
+                continue
+            name = _routed_name(sub)
+            if name and _ROUTE_NAME.search(name):
+                return True
+    return False
+
+
+def _routed_name(node: ast.AST) -> str | None:
+    if isinstance(node, ast.Call):
+        return _expr_name(node.func)
+    if isinstance(node, ast.Return) and node.value is not None:
+        return _expr_name(node.value)
+    if isinstance(node, ast.Assign):
+        names = [_expr_name(target) for target in node.targets]
+        return " ".join(name for name in names if name)
+    return None
+
+
+def _expr_name(node: ast.AST) -> str | None:
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        return node.attr
+    if isinstance(node, ast.Call):
+        return _expr_name(node.func)
+    return None
+
+
 def _ladder(
     relative: str,
-    source: str,
     *,
     case_commits: int,
     regex_ops: int,
@@ -225,16 +306,19 @@ def _ladder(
     switches: int,
     review_words: int,
     template: int,
+    routes: bool,
+    queue_size: int | None,
+    imports_agent: bool,
 ) -> tuple[str, str]:
-    try:
-        tree = ast.parse(source)
-    except SyntaxError:
-        tree = None
-    if tree is not None and _imports_agent(tree):
+    if imports_agent:
         return "agent", "agent: the file imports an agent framework"
-    lowered = source.lower()
-    if any(word in lowered for word in _REVIEW) and "queue" in lowered:
-        return "bounded workflow", "bounded workflow: manual review and a queue"
+    if routes and queue_size is not None:
+        return "bounded workflow", "bounded workflow: a review branch with a measured queue"
+    if routes:
+        return (
+            "keep deterministic",
+            "keep deterministic: the review branch has no measured queue",
+        )
     if regex_ops >= 3 and _CASE_PATH(relative) and case_commits >= 1:
         return "one structured call", "one structured call: a regex parser with a case commit"
     signals = {

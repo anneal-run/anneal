@@ -54,10 +54,59 @@ def test_a_regex_parser_with_a_case_commit_is_one_structured_call(tmp_path: Path
     assert parser.regex_ops == 3
     assert parser.case_commits == 1
     assert by_path["pkg/add.py"].ladder == "keep deterministic"
-    assert by_path["pkg/route.py"].ladder == "bounded workflow"
-    assert by_path["pkg/route.py"].manual_queue == 1
+    assert by_path["pkg/route.py"].ladder == "keep deterministic"
+    assert by_path["pkg/route.py"].manual_queue is None
     assert parser.incidents is None
     assert parser.request_volume is None
+
+
+def test_a_queue_object_is_not_a_manual_review(tmp_path: Path) -> None:
+    subprocess.run(["git", "-C", str(tmp_path), "init"], check=True, env=_ENV)
+    path = tmp_path / "pkg" / "jobs.py"
+    path.parent.mkdir()
+    path.write_text(
+        "import queue\ndef consume(jobs: queue.Queue):\n    return jobs.get()\n",
+        encoding="utf-8",
+    )
+    _commit(tmp_path, "consume the queue")
+    ranked = scan(tmp_path)
+    assert ranked[0].ladder == "keep deterministic"
+    assert ranked[0].manual_queue is None
+
+
+def test_routing_without_a_measured_queue_stays_deterministic(tmp_path: Path) -> None:
+    subprocess.run(["git", "-C", str(tmp_path), "init"], check=True, env=_ENV)
+    path = tmp_path / "pkg" / "route.py"
+    path.parent.mkdir()
+    path.write_text(
+        "def route(item):\n"
+        "    if item.flagged:\n"
+        "        return manual_review(item)\n"
+        "    return item\n",
+        encoding="utf-8",
+    )
+    _commit(tmp_path, "send flagged items to review")
+    ranked = scan(tmp_path)
+    assert ranked[0].ladder == "keep deterministic"
+    assert ranked[0].manual_queue is None
+
+
+def test_a_review_branch_with_a_measured_queue_is_a_bounded_workflow(tmp_path: Path) -> None:
+    subprocess.run(["git", "-C", str(tmp_path), "init"], check=True, env=_ENV)
+    path = tmp_path / "pkg" / "route.py"
+    path.parent.mkdir()
+    path.write_text(
+        "REVIEW_QUEUE_SIZE = 12\n"
+        "def route(item):\n"
+        "    if item.flagged:\n"
+        "        return manual_review(item)\n"
+        "    return item\n",
+        encoding="utf-8",
+    )
+    _commit(tmp_path, "cap the review queue")
+    ranked = scan(tmp_path)
+    assert ranked[0].ladder == "bounded workflow"
+    assert ranked[0].manual_queue == 12
 
 
 def test_a_string_compare_is_scored(tmp_path: Path) -> None:

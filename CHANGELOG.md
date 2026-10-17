@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- change: a manual-review candidate needs a review branch and a measured queue. The word `queue` is not a route and not a queue size.
 - change: `anneal challenge scan` walks a repository for non-AI code losing to messy input and writes one harness manifest per file. The thresholds are the ones in `report/d/prereg.md`.
 - change: `anneal challenge orchestrate --mode correctness-win --cost-ceiling 0.02` treats a holdout interval above zero under that per-case ceiling as worth it. Latency is not a gate in that mode. The default stays the 30 percent cut.
 - change: `anneal challenge orchestrate --arms C` issues `single_arm` when the pre-registration named that one arm. A run that simply omitted the other arms stays `incomplete`.

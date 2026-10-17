@@ -65,4 +65,25 @@ The 30% cut, the 2-point correctness margin, and the 1.20× latency rule stay th
 
 ## What is not a result
 
-A ranking computed from a tree that was opened before this file was committed. A cost ceiling chosen after a score. A threshold moved after the five repositories are read.
+A ranking computed from a tree that was opened before this file was committed. A cost ceiling chosen after a score. A threshold moved after the five repositories are read, unless this file says the move was made after a named result.
+
+## Amendment, 2026-10-17, after more-itertools
+
+The first ranking is `report/d/ranking.md`. more-itertools was marked bounded workflow because `more.py` and `recipes.py` contain the word `queue`. Those are queue recipes, not a manual-review branch. The fix below was made after that result. Passing more-itertools again is not evidence that the fix works. The two repositories at the bottom of this section are the test, and they had not been cloned or read when this section was written.
+
+Manual review, replacing the bounded-workflow bullet above:
+
+- Routing semantics: an `if` or `elif` body calls, returns, or assigns to a name containing `manual`, `review`, `escalate`, or `human`. `import queue`, `queue.Queue`, a comment, and the bare word `queue` are not a route.
+- Evidence gate: `bounded workflow` only when that route is present and at least one of incidents, request volume, or manual-queue size is a real measurement. Manual-queue size is an integer bound to a name containing `manual_queue`, `review_queue`, or `human_queue`. A missing measurement stays missing. It is not zero, and it is not the number of times the word `queue` appears.
+- The word `queue` is no longer a manual-review word in the score. The score words are `manual`, `review`, and `human`.
+
+A review branch with no measurement stays `keep deterministic`. The reason says the queue was not measured.
+
+The one path is `dateparser/date.py` on scrapinghub/dateparser at the commit above. It is one structured call. The fallback is the original parser. Labels are the `test_dates_parsing` cases in `tests/test_date_parser.py`: each string and the datetime that test expects, with `RELATIVE_BASE` of 2012-11-13 and `NORMALIZE` false. The holdout is the last 30% of those cases in file order. It is sealed before any model call, and the engine does not see those cases. A string is strange when it contains a character outside ASCII or no four-digit year. That split is reported beside the verdict. It is not a gate. The cost ceiling stays $0.02 per case.
+
+Pinned before these two trees are opened:
+
+| repo | commit | role | known spot |
+|---|---|---|---|
+| grantjenks/python-sortedcontainers | `3ac358631f58c1347f1d6d2d92784117db0f38ed` | clean, the test | none |
+| pallets/markupsafe | `4e111271b1494995708a9e878a10829b5e10c7ba` | clean, the test | none |
