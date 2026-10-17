@@ -67,7 +67,11 @@ anneal challenge orchestrate \
   --out report/verdict.md
 ```
 
-The command prints the margin from `anneal.toml`, the n that margin requires, the n reached, and the verdict. If the pre-registration named one arm, pass it as `--arms C`. The verdict is then `single_arm` when that arm is worth it. A run that simply omitted the other arms, with no such declaration, stays `incomplete`. If the holdout cannot support the margin, the verdict is `cannot adjudicate`. Do not lower the margin. Keep scoring new pairs with `anneal challenge shadow`. That command stops early only when the paired difference is clearly outside the margin either way.
+The command prints the margin from `anneal.toml`, the n that margin requires, the n reached, and the verdict. If the pre-registration named one arm, pass it as `--arms C`. The verdict is then `single_arm` when that arm is worth it. A run that simply omitted the other arms, with no such declaration, stays `incomplete`. If the holdout cannot support the margin, the verdict is `cannot adjudicate`. Do not lower the margin.
+
+A library or parser target adds `--mode correctness-win --parser-target` and a regression suite. The candidate repair is `code_first`. The original implementation runs on every input. The model is called only when that implementation returns nothing, raises, or fails a validity check, and its answer is kept only when it passes the same check. The orchestrator refuses the candidate when the suite has a regression. It reports cost per input overall, cost per input on the failure path, and the failure-path share.
+
+`anneal challenge scan` is a separate walk. `candidate_rung` in the evidence beside each manifest is `one structured call`, `bounded workflow`, or `agent`, and it is a hypothesis for this evaluator. `keep deterministic` is a terminal verdict and carries its reason. Keep scoring new pairs with `anneal challenge shadow`. That command stops early only when the paired difference is clearly outside the margin either way.
 
 A scored candidate has three verdicts: compatible, correct, worth it. The split is chronological. Overfit and mock-only candidates are disqualified. A prompt, cache, or model change is reported and is never the structural winner. Use a downstream signal as the label when the workflow has one. Otherwise label a set by hand and log the hours in the harness log and as `--labeling-hours`.
 

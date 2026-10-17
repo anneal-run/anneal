@@ -1,5 +1,7 @@
 # Experiment D
 
+Experiment D reads as a pass on ranking quality and a correct refusal on dateparser: the evaluator declined the scanner's own rung with evidence.
+
 The pre-registration is [prereg.md](prereg.md). The first ranking, before the fix, is [ranking.md](ranking.md). The one-path verdict is [verdict.md](verdict.md).
 
 ## What the scanner got right

@@ -36,7 +36,7 @@ class ScanCandidate:
     incidents: None
     request_volume: None
     manual_queue: int | None
-    ladder: str
+    candidate_rung: str
     reason: str
 
 
@@ -62,7 +62,7 @@ def scan(repo: Path) -> list[ScanCandidate]:
         queue = _queue_size(tree)
         routes = _routes(tree)
         score = churn + case_commits + regex_ops + switches + review_words + template
-        ladder, reason = _ladder(
+        candidate_rung, reason = _ladder(
             relative,
             case_commits=case_commits,
             regex_ops=regex_ops,
@@ -87,7 +87,7 @@ def scan(repo: Path) -> list[ScanCandidate]:
                 incidents=None,
                 request_volume=None,
                 manual_queue=queue or None,
-                ladder=ladder,
+                candidate_rung=candidate_rung,
                 reason=reason,
             )
         )
@@ -125,7 +125,7 @@ def write_manifests(repo: Path, candidates: list[ScanCandidate], directory: Path
             "incidents": candidate.incidents,
             "request_volume": candidate.request_volume,
             "manual_queue": candidate.manual_queue,
-            "ladder": candidate.ladder,
+            "candidate_rung": candidate.candidate_rung,
             "reason": candidate.reason,
         }
         (folder / "evidence.json").write_text(

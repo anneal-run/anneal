@@ -38,7 +38,7 @@ def _scan(args: argparse.Namespace) -> int:
     candidates = scan(repo)
     write_manifests(repo, candidates, Path(args.out))
     for item in candidates:
-        print(f"{item.score}\t{item.ladder}\t{item.path}")
+        print(f"{item.score}\t{item.candidate_rung}\t{item.path}")
     return 0
 
 
@@ -138,6 +138,9 @@ def _orchestrate(args: argparse.Namespace) -> int:
         else None,
         mode="correctness_win" if args.mode == "correctness-win" else "cost",
         cost_ceiling=args.cost_ceiling,
+        parser_target=args.parser_target,
+        regression_baseline=_regression_baseline(args.regression_baseline),
+        regression=_regression(args.regression),
     )
     text = render_markdown(report)
     if args.out:
@@ -154,6 +157,23 @@ def _shadow(args: argparse.Namespace) -> int:
         Path(args.out).write_text(text, encoding="utf-8")
     print(text, end="")
     return 0 if report.stopped else 2
+
+
+def _regression_baseline(path: str | None) -> list[Observation] | None:
+    if not path:
+        return None
+    rows: list[Observation] = []
+    for line in Path(path).read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            rows.append(_observation(json.loads(line)))
+    return rows
+
+
+def _regression(path: str | None) -> dict[str, list[Observation]] | None:
+    if not path:
+        return None
+    raw = json.loads(Path(path).read_text(encoding="utf-8"))
+    return {key: [Observation.model_validate(row) for row in rows] for key, rows in raw.items()}
 
 
 def _margin(args: argparse.Namespace) -> float:
@@ -248,6 +268,13 @@ def add_parser(commands: Any) -> None:
         action="append",
         help="operator change for one candidate, as arm/id=cache|prompt|model|architecture",
     )
+    board.add_argument(
+        "--parser-target",
+        action="store_true",
+        help="library or parser target; correctness-win requires code first, model on failure",
+    )
+    board.add_argument("--regression-baseline", help="JSONL of the original suite")
+    board.add_argument("--regression", help="JSON of arm/id to the candidate's suite observations")
     board.add_argument(
         "--mode",
         choices=("cost", "correctness-win"),

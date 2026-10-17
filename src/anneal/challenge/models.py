@@ -21,6 +21,8 @@ class Observation(_Model):
     tools: list[str] = Field(default_factory=list)
     mocked: bool = False
     safety_ok: bool = True
+    failure_path: bool = False
+    """True when the model ran because the original implementation failed its validity check."""
 
 
 class MeteredCall(_Model):
@@ -64,6 +66,8 @@ class Candidate(_Model):
     """Share of cases that invoked the original implementation. None means none was declared."""
     fallback_triggers: list[str] = Field(default_factory=list)
     """Why the fallback fires. An exception alone is not a validity check."""
+    repair: Literal["code_first"] | None = None
+    """Library targets run the original code first and call a model only when that code fails."""
 
     @model_validator(mode="after")
     def _positive_volume(self) -> "Candidate":

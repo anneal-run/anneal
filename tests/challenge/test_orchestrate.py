@@ -12,7 +12,9 @@ Arm = Literal["A", "B", "C", "control"]
 Kind = Literal["structural", "prompt"]
 
 
-def obs(case_id: str, *, cost: float, correct: bool = True) -> Observation:
+def obs(
+    case_id: str, *, cost: float, correct: bool = True, failure_path: bool = False
+) -> Observation:
     return Observation(
         case_id=case_id,
         correct=correct,
@@ -21,6 +23,7 @@ def obs(case_id: str, *, cost: float, correct: bool = True) -> Observation:
         tools=["get_issue"],
         mocked=False,
         safety_ok=True,
+        failure_path=failure_path,
     )
 
 
@@ -335,6 +338,76 @@ def test_one_arm_without_a_declaration_stays_incomplete() -> None:
     )
     assert report.reading == "incomplete"
     assert report.structural_winner == "C/direct"
+
+
+def test_a_library_target_without_code_first_is_refused() -> None:
+    report = orchestrate(
+        budget=SearchBudget(candidates=4, dollars=20, hours=6),
+        baseline_opt=rows("opt", 20, 0.0),
+        baseline_holdout=[obs(f"hold-{i:04d}", cost=0.0, correct=False) for i in range(40)],
+        candidates=[candidate("repair", "C", "structural", 0.001)],
+        holdout={"C/repair": [obs(f"hold-{i:04d}", cost=0.001, correct=True) for i in range(40)]},
+        mode="correctness_win",
+        cost_ceiling=0.02,
+        parser_target=True,
+        declared_arms=frozenset({"C"}),
+    )
+    assert report.scored == []
+    assert report.rejected[0].reason == "library target requires code first, model on failure"
+
+
+def test_a_suite_regression_blocks_a_correctness_win() -> None:
+    repair = candidate("repair", "C", "structural", 0.001).model_copy(
+        update={"repair": "code_first"}
+    )
+    suite = [obs(f"suite-{i:04d}", cost=0.0) for i in range(8)]
+    broken = [obs(f"suite-{i:04d}", cost=0.0, correct=i != 0) for i in range(8)]
+    report = orchestrate(
+        budget=SearchBudget(candidates=4, dollars=20, hours=6),
+        baseline_opt=rows("opt", 20, 0.0),
+        baseline_holdout=[obs(f"hold-{i:04d}", cost=0.0, correct=False) for i in range(40)],
+        candidates=[repair],
+        holdout={"C/repair": [obs(f"hold-{i:04d}", cost=0.001, correct=True) for i in range(40)]},
+        mode="correctness_win",
+        cost_ceiling=0.02,
+        parser_target=True,
+        declared_arms=frozenset({"C"}),
+        regression_baseline=suite,
+        regression={"C/repair": broken},
+    )
+    assert report.reading == "stop_no_win"
+    assert report.scored[0].suite_regressions == 1
+    assert "suite regression" in report.scored[0].verdict.disqualified
+    assert report.scored[0].verdict.worth_it is False
+
+
+def test_code_first_reports_the_failure_path_when_the_suite_holds() -> None:
+    repair = candidate("repair", "C", "structural", 0.001).model_copy(
+        update={"repair": "code_first"}
+    )
+    holdout = [
+        obs(f"hold-{i:04d}", cost=0.001, correct=True, failure_path=i < 10) for i in range(40)
+    ]
+    report = orchestrate(
+        budget=SearchBudget(candidates=4, dollars=20, hours=6),
+        baseline_opt=[obs(f"opt-{i:04d}", cost=0.0, correct=False) for i in range(20)],
+        baseline_holdout=[obs(f"hold-{i:04d}", cost=0.0, correct=False) for i in range(40)],
+        candidates=[repair],
+        holdout={"C/repair": holdout},
+        mode="correctness_win",
+        cost_ceiling=0.02,
+        parser_target=True,
+        declared_arms=frozenset({"C"}),
+        regression_baseline=[obs(f"suite-{i:04d}", cost=0.0) for i in range(8)],
+        regression={"C/repair": [obs(f"suite-{i:04d}", cost=0.0) for i in range(8)]},
+    )
+    scored = report.scored[0]
+    assert report.reading == "single_arm"
+    assert scored.suite_regressions == 0
+    assert scored.verdict.worth_it is True
+    assert scored.cost_per_input == pytest.approx(0.001)
+    assert scored.failure_cost_per_input == pytest.approx(0.001)
+    assert scored.failure_share == pytest.approx(0.25)
 
 
 def test_an_exception_only_fallback_is_refused() -> None:

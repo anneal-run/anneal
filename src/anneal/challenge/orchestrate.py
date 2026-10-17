@@ -9,7 +9,7 @@ from anneal.challenge.budget import BudgetLedger, SearchBudget, Spend
 from anneal.challenge.models import VALIDITY_TRIGGERS, Candidate, MeteredCall, Observation, Verdict
 from anneal.challenge.power import n_required
 from anneal.challenge.shadow import evidence_header
-from anneal.challenge.verdict import CORRECTNESS_MARGIN_POINTS, Mode, judge
+from anneal.challenge.verdict import CORRECTNESS_MARGIN_POINTS, Mode, align, judge
 from anneal.schema.pricing import PriceTable
 
 Reading = Literal[
@@ -45,6 +45,10 @@ class Scored(_Model):
     verdict: Verdict
     holdout_scored: bool
     fallback_rate: float | None = None
+    suite_regressions: int | None = None
+    cost_per_input: float | None = None
+    failure_cost_per_input: float | None = None
+    failure_share: float | None = None
 
 
 class ChallengeReport(_Model):
@@ -99,6 +103,9 @@ def orchestrate(
     declared_arms: Collection[str] | None = None,
     mode: Mode = "cost",
     cost_ceiling: float | None = None,
+    parser_target: bool = False,
+    regression_baseline: list[Observation] | None = None,
+    regression: dict[str, list[Observation]] | None = None,
 ) -> ChallengeReport:
     """Score submissions in order until each arm's budget is spent, then reveal the holdout."""
     ledger = BudgetLedger(budget)
@@ -150,6 +157,26 @@ def orchestrate(
                 )
             )
             continue
+        if parser_target and candidate.repair != "code_first":
+            rejected.append(
+                Rejected(
+                    candidate_id=candidate.id,
+                    arm=candidate.arm,
+                    reason="library target requires code first, model on failure",
+                )
+            )
+            continue
+        if parser_target and (
+            regression_baseline is None or regression is None or _key(candidate) not in regression
+        ):
+            rejected.append(
+                Rejected(
+                    candidate_id=candidate.id,
+                    arm=candidate.arm,
+                    reason="library target has no regression suite",
+                )
+            )
+            continue
         try:
             ledger.charge(candidate.arm, dollars=metered, hours=candidate.human_hours)
         except BudgetLedger.Exceeded:
@@ -175,9 +202,15 @@ def orchestrate(
         if key not in selected:
             scored.append(_scored(candidate, preview, holdout_scored=False))
             continue
+        revealed = sealed.open(key)
+        suite_regressions = (
+            _suite_regressions(regression_baseline or [], regression[key])
+            if parser_target and regression_baseline is not None and regression is not None
+            else None
+        )
         verdict = judge(
             baseline_holdout,
-            sealed.open(key),
+            revealed,
             search_cost_usd=candidate.metered_usd(),
             monthly_runs=candidate.monthly_runs,
             new_side_effect_tools=candidate.new_side_effect_tools,
@@ -185,8 +218,23 @@ def orchestrate(
             optimization=(baseline_opt, candidate.opt),
             mode=mode,
             cost_ceiling=cost_ceiling,
+            suite_regressions=suite_regressions,
         )
-        scored.append(_scored(candidate, verdict, holdout_scored=True))
+        if parser_target:
+            overall, failure_cost, share = _failure_path(revealed)
+        else:
+            overall, failure_cost, share = None, None, None
+        scored.append(
+            _scored(
+                candidate,
+                verdict,
+                holdout_scored=True,
+                suite_regressions=suite_regressions,
+                cost_per_input=overall,
+                failure_cost_per_input=failure_cost,
+                failure_share=share,
+            )
+        )
 
     reading, winner = _reading(
         scored,
@@ -249,6 +297,17 @@ def render_markdown(report: ChallengeReport) -> str:
                 f"- Compatible: {verdict.compatible}. Correct: {verdict.correct}. "
                 f"Worth it: {verdict.worth_it}.",
                 f"- Cost reduction after one month of amortization: {verdict.cost_reduction:.1%}.",
+                *(
+                    [f"- Cost per input: ${scored.cost_per_input:.4f}."]
+                    if scored.cost_per_input is not None
+                    else []
+                ),
+                *_failure_lines(scored),
+                *(
+                    [f"- Suite regressions: {scored.suite_regressions}."]
+                    if scored.suite_regressions is not None
+                    else []
+                ),
                 *(
                     [f"- Fallback rate: {scored.fallback_rate:.1%}."]
                     if scored.fallback_rate is not None
@@ -316,7 +375,38 @@ def _select(previews: list[tuple[Candidate, Verdict]]) -> set[str]:
     return selected
 
 
-def _scored(candidate: Candidate, verdict: Verdict, *, holdout_scored: bool) -> Scored:
+def _failure_lines(scored: Scored) -> list[str]:
+    if scored.failure_share is None:
+        return []
+    if scored.failure_cost_per_input is None:
+        cost = "- Failure-path cost per input: none."
+    else:
+        cost = f"- Failure-path cost per input: ${scored.failure_cost_per_input:.4f}."
+    return [cost, f"- Failure-path share: {scored.failure_share:.1%}."]
+
+
+def _suite_regressions(baseline: list[Observation], candidate: list[Observation]) -> int:
+    return sum(1 for base, cand in align(baseline, candidate) if base.correct and not cand.correct)
+
+
+def _failure_path(rows: list[Observation]) -> tuple[float, float | None, float]:
+    overall = sum(row.cost_usd for row in rows) / len(rows)
+    failed = [row for row in rows if row.failure_path]
+    share = len(failed) / len(rows)
+    failure = sum(row.cost_usd for row in failed) / len(failed) if failed else None
+    return overall, failure, share
+
+
+def _scored(
+    candidate: Candidate,
+    verdict: Verdict,
+    *,
+    holdout_scored: bool,
+    suite_regressions: int | None = None,
+    cost_per_input: float | None = None,
+    failure_cost_per_input: float | None = None,
+    failure_share: float | None = None,
+) -> Scored:
     return Scored(
         key=_key(candidate),
         candidate_id=candidate.id,
@@ -326,6 +416,10 @@ def _scored(candidate: Candidate, verdict: Verdict, *, holdout_scored: bool) -> 
         verdict=verdict,
         holdout_scored=holdout_scored,
         fallback_rate=candidate.fallback_rate,
+        suite_regressions=suite_regressions,
+        cost_per_input=cost_per_input,
+        failure_cost_per_input=failure_cost_per_input,
+        failure_share=failure_share,
     )
 
 

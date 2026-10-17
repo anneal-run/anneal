@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- change: a scanner file carries `candidate_rung`. `one structured call`, `bounded workflow`, and `agent` are hypotheses for the evaluator. `keep deterministic` is a terminal verdict and carries its reason.
+- change: a library or parser target in correctness-win mode requires `code_first`. The original implementation runs on every input. A model runs only when that implementation returns nothing, raises, or fails a validity check, and the model's answer is kept only when it passes the same check. The orchestrator refuses a suite regression and reports overall cost, failure-path cost, and the failure-path share.
 - change: a manual-review candidate needs a review branch and a measured queue. The word `queue` is not a route and not a queue size.
 - change: `anneal challenge scan` walks a repository for non-AI code losing to messy input and writes one harness manifest per file. The thresholds are the ones in `report/d/prereg.md`.
 - change: `anneal challenge orchestrate --mode correctness-win --cost-ceiling 0.02` treats a holdout interval above zero under that per-case ceiling as worth it. Latency is not a gate in that mode. The default stays the 30 percent cut.

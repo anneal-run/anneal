@@ -175,6 +175,7 @@ def judge(
     optimization: tuple[Sequence[Observation], Sequence[Observation]] | None = None,
     mode: Mode = "cost",
     cost_ceiling: float | None = None,
+    suite_regressions: int | None = None,
 ) -> Verdict:
     """Score `candidate` against `baseline` on the same cases.
 
@@ -203,6 +204,8 @@ def judge(
         disqualified.append("mock")
     if optimization is not None and _overfit(optimization, (baseline, candidate)):
         disqualified.append("overfit")
+    if suite_regressions is not None and suite_regressions > 0:
+        disqualified.append("suite regression")
     clean = not disqualified
     cost_win = (
         clean

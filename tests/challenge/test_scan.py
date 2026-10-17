@@ -50,11 +50,11 @@ def test_a_regex_parser_with_a_case_commit_is_one_structured_call(tmp_path: Path
     ranked = scan(_repo(tmp_path))
     by_path = {item.path: item for item in ranked}
     parser = by_path["pkg/parse_dates.py"]
-    assert parser.ladder == "one structured call"
+    assert parser.candidate_rung == "one structured call"
     assert parser.regex_ops == 3
     assert parser.case_commits == 1
-    assert by_path["pkg/add.py"].ladder == "keep deterministic"
-    assert by_path["pkg/route.py"].ladder == "keep deterministic"
+    assert by_path["pkg/add.py"].candidate_rung == "keep deterministic"
+    assert by_path["pkg/route.py"].candidate_rung == "keep deterministic"
     assert by_path["pkg/route.py"].manual_queue is None
     assert parser.incidents is None
     assert parser.request_volume is None
@@ -70,7 +70,7 @@ def test_a_queue_object_is_not_a_manual_review(tmp_path: Path) -> None:
     )
     _commit(tmp_path, "consume the queue")
     ranked = scan(tmp_path)
-    assert ranked[0].ladder == "keep deterministic"
+    assert ranked[0].candidate_rung == "keep deterministic"
     assert ranked[0].manual_queue is None
 
 
@@ -87,7 +87,7 @@ def test_routing_without_a_measured_queue_stays_deterministic(tmp_path: Path) ->
     )
     _commit(tmp_path, "send flagged items to review")
     ranked = scan(tmp_path)
-    assert ranked[0].ladder == "keep deterministic"
+    assert ranked[0].candidate_rung == "keep deterministic"
     assert ranked[0].manual_queue is None
 
 
@@ -105,7 +105,7 @@ def test_a_review_branch_with_a_measured_queue_is_a_bounded_workflow(tmp_path: P
     )
     _commit(tmp_path, "cap the review queue")
     ranked = scan(tmp_path)
-    assert ranked[0].ladder == "bounded workflow"
+    assert ranked[0].candidate_rung == "bounded workflow"
     assert ranked[0].manual_queue == 12
 
 
@@ -120,7 +120,7 @@ def test_a_string_compare_is_scored(tmp_path: Path) -> None:
     _commit(tmp_path, "choose a kind")
     ranked = scan(tmp_path)
     assert ranked[0].string_switches == 2
-    assert ranked[0].ladder == "keep deterministic"
+    assert ranked[0].candidate_rung == "keep deterministic"
 
 
 def test_each_candidate_gets_a_harness_manifest_without_the_holdout(tmp_path: Path) -> None:
@@ -131,4 +131,4 @@ def test_each_candidate_gets_a_harness_manifest_without_the_holdout(tmp_path: Pa
     assert manifest["workflow_files"] == ["pkg/parse_dates.py"]
     assert "holdout_run_ids" not in manifest
     evidence = json.loads((out / "pkg__parse_dates" / "evidence.json").read_text())
-    assert evidence["ladder"] == "one structured call"
+    assert evidence["candidate_rung"] == "one structured call"
