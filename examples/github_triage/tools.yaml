@@ -1,0 +1,4 @@
+get_issue: {side_effect: false, severity: S0, idempotent: true}
+list_labels: {side_effect: false, severity: S0, idempotent: true}
+search_similar_issues: {side_effect: false, severity: S0, idempotent: true}
+draft_comment: {side_effect: false, severity: S0, idempotent: true}

@@ -5,8 +5,11 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from anneal.challenge.budget import BudgetLedger, SearchBudget, Spend
-from anneal.challenge.models import Candidate, Observation, Verdict
-from anneal.challenge.verdict import judge
+from anneal.challenge.models import Candidate, MeteredCall, Observation, Verdict
+from anneal.challenge.power import n_required
+from anneal.challenge.shadow import evidence_header
+from anneal.challenge.verdict import CORRECTNESS_MARGIN_POINTS, judge
+from anneal.schema.pricing import PriceTable
 
 Reading = Literal[
     "strong_positive",
@@ -39,6 +42,7 @@ class Scored(_Model):
     human_hours: float
     verdict: Verdict
     holdout_scored: bool
+    fallback_rate: float | None = None
 
 
 class ChallengeReport(_Model):
@@ -51,6 +55,9 @@ class ChallengeReport(_Model):
     paid_commitment: bool = False
     paid_price: str | None = None
     spent: dict[str, Spend] = Field(default_factory=dict)
+    margin_points: float = 2.0
+    n_reached: int = 0
+    n_required: int = 0
 
 
 class SealedHoldout:
@@ -85,12 +92,27 @@ def orchestrate(
     external_merge: bool = False,
     paid_commitment: bool = False,
     paid_price: str | None = None,
+    require_fallback: bool = False,
+    margin_points: float = CORRECTNESS_MARGIN_POINTS,
 ) -> ChallengeReport:
     """Score submissions in order until each arm's budget is spent, then reveal the holdout."""
     ledger = BudgetLedger(budget)
     accepted: list[Candidate] = []
     rejected: list[Rejected] = []
     for candidate in candidates:
+        if (
+            require_fallback
+            and candidate.effective_kind() == "structural"
+            and candidate.fallback_rate is None
+        ):
+            rejected.append(
+                Rejected(
+                    candidate_id=candidate.id,
+                    arm=candidate.arm,
+                    reason="structural candidate has no confidence fallback",
+                )
+            )
+            continue
         metered = candidate.metered_usd()
         if abs(metered - candidate.search_cost_usd) > 1e-6:
             rejected.append(
@@ -98,6 +120,15 @@ def orchestrate(
                     candidate_id=candidate.id,
                     arm=candidate.arm,
                     reason="reported spend does not match the meter",
+                )
+            )
+            continue
+        if _unmetered(candidate.calls):
+            rejected.append(
+                Rejected(
+                    candidate_id=candidate.id,
+                    arm=candidate.arm,
+                    reason="spend was not metered at the model call",
                 )
             )
             continue
@@ -147,12 +178,21 @@ def orchestrate(
         paid_commitment=paid_commitment,
         paid_price=paid_price,
         spent={arm: ledger.spent(arm) for arm in sorted({item.arm for item in candidates})},
+        margin_points=margin_points,
+        n_reached=len(baseline_holdout),
+        n_required=n_required(margin_points),
     )
 
 
 def render_markdown(report: ChallengeReport) -> str:
     """Verdict report. These headings are the v3 hypotheses, not the Milestone 1 register."""
     lines = [
+        evidence_header(
+            n=report.n_reached,
+            margin_points=report.margin_points,
+            verdict=report.reading,
+        ).rstrip("\n"),
+        "",
         "# Anneal v3 challenge",
         "",
         f"Reading: `{report.reading}`.",
@@ -183,6 +223,11 @@ def render_markdown(report: ChallengeReport) -> str:
                 f"- Compatible: {verdict.compatible}. Correct: {verdict.correct}. "
                 f"Worth it: {verdict.worth_it}.",
                 f"- Cost reduction after one month of amortization: {verdict.cost_reduction:.1%}.",
+                *(
+                    [f"- Fallback rate: {scored.fallback_rate:.1%}."]
+                    if scored.fallback_rate is not None
+                    else []
+                ),
                 f"- Correctness: {verdict.correctness_points:.1f} points "
                 f"(interval {verdict.correctness_low:.1f} to {verdict.correctness_high:.1f}, "
                 f"minimum detectable effect {verdict.mde_points:.1f} points).",
@@ -218,7 +263,7 @@ def _select(previews: list[tuple[Candidate, Verdict]]) -> set[str]:
     selected: set[str] = set()
     by_arm: dict[str, list[tuple[Candidate, Verdict]]] = {}
     for candidate, verdict in previews:
-        if candidate.kind == "prompt":
+        if candidate.effective_kind() == "prompt":
             selected.add(_key(candidate))
             continue
         by_arm.setdefault(candidate.arm, []).append((candidate, verdict))
@@ -242,10 +287,11 @@ def _scored(candidate: Candidate, verdict: Verdict, *, holdout_scored: bool) -> 
         key=_key(candidate),
         candidate_id=candidate.id,
         arm=candidate.arm,
-        kind=candidate.kind,
+        kind=candidate.effective_kind(),
         human_hours=candidate.human_hours,
         verdict=verdict,
         holdout_scored=holdout_scored,
+        fallback_rate=candidate.fallback_rate,
     )
 
 
@@ -298,15 +344,26 @@ def _reading(
     if not {"A", "B", "C"} <= ran:
         return "incomplete", winner.key
     arm_a, arm_b, arm_c = _best(scored, "A"), _best(scored, "B"), _best(scored, "C")
-    if (
-        arm_c is not None
-        and arm_c.verdict.worth_it
-        and not _beats(arm_c, arm_a)
-        and not _beats(arm_a, arm_c)
-    ):
-        return "nothing_is_a_product", winner.key
     if _beats(arm_c, arm_b) and _beats(arm_c, arm_a):
         if external_merge and paid_commitment:
             return "strong_positive", winner.key
         return "engine_needs_a_buyer", winner.key
-    return "harness_is_the_product", winner.key
+    # Harness is the product only when B actually beat A and C did not beat B.
+    # C losing while A ties B is not that result.
+    if _beats(arm_b, arm_a) and not _beats(arm_c, arm_b):
+        return "harness_is_the_product", winner.key
+    return "nothing_is_a_product", winner.key
+
+
+def _unmetered(calls: list[MeteredCall]) -> bool:
+    """A positive dollar amount with no provider usage is a typed total."""
+    prices = PriceTable.load()
+    for call in calls:
+        if call.cost_usd <= 0 and call.model is None:
+            continue
+        if call.model is None or call.tokens_in is None or call.tokens_out is None:
+            return True
+        priced = prices.cost(call.model, call.tokens_in, call.tokens_out, call.tokens_cached)
+        if priced is None or abs(priced - call.cost_usd) > 1e-6:
+            return True
+    return False

@@ -42,6 +42,42 @@ def candidate(name: str, arm: Arm, kind: Kind, cost: float, *, hours: float = 0.
     )
 
 
+def test_a_tying_b_is_not_a_harness_win() -> None:
+    report = orchestrate(
+        budget=SearchBudget(candidates=3, dollars=5, hours=5),
+        baseline_opt=rows("opt", 20, 0.0035),
+        baseline_holdout=rows("hold", 20, 0.0035),
+        candidates=[
+            candidate("cache-a", "A", "structural", 0.0020),
+            candidate("cache-b", "B", "structural", 0.0020),
+            candidate("untouched", "C", "structural", 0.0035),
+        ],
+        holdout={
+            "A/cache-a": rows("hold", 20, 0.0020),
+            "B/cache-b": rows("hold", 20, 0.0020),
+            "C/untouched": rows("hold", 20, 0.0035),
+        },
+    )
+    assert report.reading == "nothing_is_a_product"
+
+
+def test_a_cache_edit_labeled_structural_is_not_a_structural_win() -> None:
+    cached = candidate("cache", "A", "structural", 0.0010).model_copy(update={"change": "cache"})
+    report = orchestrate(
+        budget=SearchBudget(candidates=2, dollars=5, hours=5),
+        baseline_opt=rows("opt", 20, 0.0035),
+        baseline_holdout=rows("hold", 20, 0.0035),
+        candidates=[cached, candidate("same", "B", "structural", 0.0035)],
+        holdout={
+            "A/cache": rows("hold", 20, 0.0010),
+            "B/same": rows("hold", 20, 0.0035),
+        },
+    )
+    assert report.reading == "stop_prompt_only"
+    assert report.structural_winner is None
+    assert report.scored[0].kind == "prompt"
+
+
 def test_b_matching_c_is_the_harness_decision() -> None:
     baseline_opt = rows("opt", 20, 0.0035)
     baseline_hold = rows("hold", 20, 0.0035)
@@ -197,15 +233,45 @@ def test_reported_spend_that_is_below_the_meter_is_refused() -> None:
     assert all(item.candidate_id != "liar" for item in report.scored)
 
 
-def test_the_meter_sum_trips_the_dollar_cap() -> None:
-    first = candidate("first", "C", "structural", 0.0005).model_copy(
-        update={"search_cost_usd": 0.6, "calls": [MeteredCall(cost_usd=0.6, latency_ms=1)]}
+def _priced(usd_via_input_tokens: int) -> MeteredCall:
+    cost = usd_via_input_tokens * 0.10 / 1_000_000
+    return MeteredCall(
+        cost_usd=cost,
+        latency_ms=1,
+        model="claude-haiku-5-5",
+        tokens_in=usd_via_input_tokens,
+        tokens_out=0,
+        tokens_cached=0,
     )
-    second = candidate("second", "C", "structural", 0.0005).model_copy(
-        update={"search_cost_usd": 0.5, "calls": [MeteredCall(cost_usd=0.5, latency_ms=1)]}
+
+
+def test_a_typed_dollar_amount_is_not_a_metered_call() -> None:
+    invented = candidate("invented", "C", "structural", 0.0005).model_copy(
+        update={
+            "search_cost_usd": 0.0006,
+            "calls": [MeteredCall(cost_usd=0.0006, latency_ms=1)],
+        }
     )
     report = orchestrate(
-        budget=SearchBudget(candidates=4, dollars=1.0, hours=5),
+        budget=SearchBudget(candidates=1, dollars=5, hours=5),
+        baseline_opt=rows("opt", 20, 0.0035),
+        baseline_holdout=rows("hold", 20, 0.0035),
+        candidates=[invented],
+        holdout={"C/invented": rows("hold", 20, 0.0005)},
+    )
+    assert report.rejected[0].reason == "spend was not metered at the model call"
+    assert report.scored == []
+
+
+def test_the_meter_sum_trips_the_dollar_cap() -> None:
+    first = candidate("first", "C", "structural", 0.0005).model_copy(
+        update={"search_cost_usd": 0.0006, "calls": [_priced(6_000)]}
+    )
+    second = candidate("second", "C", "structural", 0.0005).model_copy(
+        update={"search_cost_usd": 0.0005, "calls": [_priced(5_000)]}
+    )
+    report = orchestrate(
+        budget=SearchBudget(candidates=4, dollars=0.001, hours=5),
         baseline_opt=rows("opt", 20, 0.0035),
         baseline_holdout=rows("hold", 20, 0.0035),
         candidates=[first, second],
@@ -217,7 +283,40 @@ def test_the_meter_sum_trips_the_dollar_cap() -> None:
     assert [item.candidate_id for item in report.scored] == ["first"]
     assert report.rejected[0].candidate_id == "second"
     assert report.rejected[0].reason == "search budget exceeded"
-    assert report.spent["C"].dollars == 0.6
+    assert report.spent["C"].dollars == 0.0006
+
+
+def test_structural_candidate_without_a_fallback_is_refused() -> None:
+    report = orchestrate(
+        budget=SearchBudget(candidates=4, dollars=20, hours=6),
+        baseline_opt=rows("opt", 20, 0.0035),
+        baseline_holdout=rows("hold", 20, 0.0035),
+        candidates=[candidate("plain", "C", "structural", 0.0010)],
+        holdout={"C/plain": rows("hold", 20, 0.0010)},
+        require_fallback=True,
+    )
+    assert report.scored == []
+    assert report.rejected[0].reason == "structural candidate has no confidence fallback"
+
+
+def test_a_prompt_candidate_does_not_need_a_fallback() -> None:
+    report = orchestrate(
+        budget=SearchBudget(candidates=4, dollars=20, hours=6),
+        baseline_opt=rows("opt", 20, 0.0035),
+        baseline_holdout=rows("hold", 20, 0.0035),
+        candidates=[candidate("edit", "C", "prompt", 0.0010)],
+        holdout={"C/edit": rows("hold", 20, 0.0010)},
+        require_fallback=True,
+    )
+    assert report.rejected == []
+    assert report.scored[0].candidate_id == "edit"
+
+
+def test_fallback_rate_must_be_a_share() -> None:
+    raw = candidate("hybrid", "C", "structural", 0.0010).model_dump()
+    raw["fallback_rate"] = 1.2
+    with pytest.raises(ValueError, match="fallback_rate"):
+        Candidate.model_validate(raw)
 
 
 def test_submission_that_already_contains_holdout_scores_is_rejected() -> None:

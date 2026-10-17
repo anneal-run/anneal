@@ -9,9 +9,19 @@ import yaml
 
 from anneal.challenge.budget import SearchBudget
 from anneal.challenge.harness import build_harness, load_manifest, write_harness
-from anneal.challenge.models import Candidate, Observation
+from anneal.challenge.models import Candidate, Change, Observation
 from anneal.challenge.orchestrate import orchestrate, render_markdown
 from anneal.challenge.pack import write_pack
+from anneal.challenge.power import adjudication, minimum_detectable_effect
+from anneal.challenge.pr import write_pull_request
+from anneal.challenge.shadow import (
+    evaluate_pairs,
+    evidence_header,
+    load_pairs,
+    margin_points,
+    render_shadow,
+)
+from anneal.challenge.verdict import CORRECTNESS_MARGIN_POINTS
 from anneal.compile.compiler import ToolSpec
 from anneal.schema.pricing import PriceTable, fill_costs
 from anneal.schema.store import Store
@@ -80,8 +90,21 @@ def _orchestrate(args: argparse.Namespace) -> int:
             baseline_holdout.append(row)
         else:
             raise ValueError(f"unknown split {raw['split']!r}")
+    n = len(baseline_holdout)
+    margin = _margin(args)
+    if n < 1:
+        detectable = "minimum detectable effect: unavailable\n"
+    else:
+        detectable = f"minimum detectable effect: {minimum_detectable_effect(n):.1f} points\n"
+    refusal = adjudication(n, margin_points=margin)
+    if refusal is not None:
+        text = evidence_header(n=n, margin_points=margin, verdict="cannot adjudicate") + detectable
+        if args.out:
+            Path(args.out).write_text(text, encoding="utf-8")
+        print(text, end="")
+        return 2
     candidates = [
-        Candidate.model_validate_json(path.read_text(encoding="utf-8"))
+        _classify(Candidate.model_validate_json(path.read_text(encoding="utf-8")), args.classify)
         for path in sorted(Path(args.submissions).glob("*.json"))
     ]
     holdout_raw = json.loads(Path(args.holdout).read_text(encoding="utf-8"))
@@ -98,12 +121,67 @@ def _orchestrate(args: argparse.Namespace) -> int:
         external_merge=args.merge,
         paid_commitment=args.paid is not None,
         paid_price=args.paid,
+        require_fallback=args.require_fallback,
+        margin_points=margin,
     )
     text = render_markdown(report)
     if args.out:
         Path(args.out).write_text(text, encoding="utf-8")
     print(text, end="")
     return 0
+
+
+def _shadow(args: argparse.Namespace) -> int:
+    margin = margin_points(Path(args.config), args.workflow)
+    report = evaluate_pairs(load_pairs(Path(args.pairs)), margin_points=margin)
+    text = render_shadow(report)
+    if args.out:
+        Path(args.out).write_text(text, encoding="utf-8")
+    print(text, end="")
+    return 0 if report.stopped else 2
+
+
+def _margin(args: argparse.Namespace) -> float:
+    if args.config is None:
+        return CORRECTNESS_MARGIN_POINTS
+    if not args.workflow:
+        raise ValueError("--workflow is required with --config")
+    return margin_points(Path(args.config), args.workflow)
+
+
+def _pr(args: argparse.Namespace) -> int:
+    write_pull_request(
+        Path(args.out),
+        workflow=args.workflow,
+        winner=args.winner,
+        verdict=Path(args.verdict),
+        fixtures=Path(args.fixtures),
+    )
+    print(f"wrote a pull request description to {args.out}")
+    return 0
+
+
+def _classify(candidate: Candidate, rules: list[str] | None) -> Candidate:
+    """Operator classification. Cache, prompt, and model do not stay structural."""
+    if not rules:
+        return candidate
+    applied: Change | None = None
+    for rule in rules:
+        key, _, change = rule.partition("=")
+        if key in {candidate.id, f"{candidate.arm}/{candidate.id}"}:
+            if change == "architecture":
+                applied = "architecture"
+            elif change == "prompt":
+                applied = "prompt"
+            elif change == "cache":
+                applied = "cache"
+            elif change == "model":
+                applied = "model"
+            else:
+                raise ValueError(f"unknown change {change!r}")
+    if applied is None:
+        return candidate
+    return candidate.model_copy(update={"change": applied})
 
 
 def add_parser(commands: Any) -> None:
@@ -143,4 +221,31 @@ def add_parser(commands: Any) -> None:
     board.add_argument("--labeling-hours", type=float, default=0.0, dest="labeling_hours")
     board.add_argument("--merge", action="store_true", help="external team merged or will trial it")
     board.add_argument("--paid", help="named price committed for a second workflow")
+    board.add_argument("--config", help="anneal.toml with a margin per workflow")
+    board.add_argument("--workflow", help="workflow id, required with --config")
+    board.add_argument(
+        "--classify",
+        action="append",
+        help="operator change for one candidate, as arm/id=cache|prompt|model|architecture",
+    )
+    board.add_argument(
+        "--require-fallback",
+        action="store_true",
+        help="refuse a structural candidate that does not declare a fallback rate",
+    )
     board.set_defaults(func=_orchestrate)
+
+    pull = sub.add_parser("pr", help="write a pull request description; nothing is pushed")
+    pull.add_argument("--workflow", required=True)
+    pull.add_argument("--winner", required=True, help="candidate id that cleared the gates")
+    pull.add_argument("--verdict", required=True, help="verdict report to link")
+    pull.add_argument("--fixtures", required=True, help="harness fixtures.jsonl")
+    pull.add_argument("--out", required=True, help="new directory for the description")
+    pull.set_defaults(func=_pr)
+
+    shadow = sub.add_parser("shadow", help="paired count against the workflow margin")
+    shadow.add_argument("--pairs", required=True, help="JSONL of paired correct flags")
+    shadow.add_argument("--config", required=True, help="anneal.toml")
+    shadow.add_argument("--workflow", required=True)
+    shadow.add_argument("--out", help="also write the report here")
+    shadow.set_defaults(func=_shadow)
