@@ -1,0 +1,1288 @@
+{
+  "source": "dateparser tests/test_date_parser.py test_dates_parsing",
+  "commit": "07b40b2f01773d830321538ac9d2d6219edbe10e",
+  "settings": {
+    "NORMALIZE": false,
+    "RELATIVE_BASE": "2012-11-13T00:00:00"
+  },
+  "n": 182,
+  "optimization": 127,
+  "holdout": 55,
+  "strange_rule": "a character outside ASCII, or no four-digit year",
+  "cases": [
+    {
+      "case_id": "d-0001",
+      "text": "[Sept] 04, 2014.",
+      "expected": "2014-09-04T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0002",
+      "text": "Tuesday Jul 22, 2014",
+      "expected": "2014-07-22T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0003",
+      "text": "Tues 9th Aug, 2015",
+      "expected": "2015-08-09T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0004",
+      "text": "the 1st day of March 2015",
+      "expected": "2015-03-01T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0005",
+      "text": "10:04am",
+      "expected": "2012-11-13T10:04:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0006",
+      "text": "Friday",
+      "expected": "2012-11-09T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0007",
+      "text": "November 19, 2014 at noon",
+      "expected": "2014-11-19T12:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0008",
+      "text": "December 13, 2014 at midnight",
+      "expected": "2014-12-13T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0009",
+      "text": "Nov 25 2014 10:17 pm",
+      "expected": "2014-11-25T22:17:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0010",
+      "text": "Wed Aug 05 12:00:00 2015",
+      "expected": "2015-08-05T12:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0011",
+      "text": "April 9, 2013 at 6:11 a.m.",
+      "expected": "2013-04-09T06:11:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0012",
+      "text": "Aug. 9, 2012 at 2:57 p.m.",
+      "expected": "2012-08-09T14:57:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0013",
+      "text": "December 10, 2014, 11:02:21 pm",
+      "expected": "2014-12-10T23:02:21",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0014",
+      "text": "8:25 a.m. Dec. 12, 2014",
+      "expected": "2014-12-12T08:25:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0015",
+      "text": "2:21 p.m., December 11, 2014",
+      "expected": "2014-12-11T14:21:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0016",
+      "text": "Fri, 12 Dec 2014 10:55:50",
+      "expected": "2014-12-12T10:55:50",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0017",
+      "text": "20 Mar 2013 10h11",
+      "expected": "2013-03-20T10:11:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0018",
+      "text": "10:06am Dec 11, 2014",
+      "expected": "2014-12-11T10:06:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0019",
+      "text": "19 February 2013 year 09:10",
+      "expected": "2013-02-19T09:10:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0020",
+      "text": "21 January 2012 13:11:23.678",
+      "expected": "2012-01-21T13:11:23.678000",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0021",
+      "text": "1/1/16 9:02:43.1",
+      "expected": "2016-01-01T09:02:43.100000",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0022",
+      "text": "29.02.2020 13.12",
+      "expected": "2020-02-29T13:12:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0023",
+      "text": "26. 10.21",
+      "expected": "2021-10-26T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0024",
+      "text": "26. 10.21 14.12",
+      "expected": "2021-10-26T14:12:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0025",
+      "text": "26 . 10.21",
+      "expected": "2021-10-26T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0026",
+      "text": "30 . 09 . 22 12.12",
+      "expected": "2022-09-30T12:12:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0027",
+      "text": "1 a.m 20.07.2021",
+      "expected": "2021-07-20T01:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0028",
+      "text": "Wednesday, 22nd June, 2016, 12.16 pm.",
+      "expected": "2016-06-22T12:16:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0029",
+      "text": "2020/10/9 PM 2:26",
+      "expected": "2020-10-09T14:26:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0030",
+      "text": "11 Mai 2014",
+      "expected": "2014-05-11T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0031",
+      "text": "11 sept. 2014",
+      "expected": "2014-09-11T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0032",
+      "text": "dimanche, 11 Mai 2014",
+      "expected": "2014-05-11T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0033",
+      "text": "22 janvier 2015 \u00e0 14h40",
+      "expected": "2015-01-22T14:40:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0034",
+      "text": "Dimanche 1er F\u00e9vrier \u00e0 21:24",
+      "expected": "2012-02-01T21:24:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0035",
+      "text": "vendredi, d\u00e9cembre 5 2014.",
+      "expected": "2014-12-05T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0036",
+      "text": "le 08 D\u00e9c 2014 15:11",
+      "expected": "2014-12-08T15:11:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0037",
+      "text": "Le 11 D\u00e9cembre 2014 \u00e0 09:00",
+      "expected": "2014-12-11T09:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0038",
+      "text": "f\u00e9v 15, 2013",
+      "expected": "2013-02-15T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0039",
+      "text": "Jeu 15:12",
+      "expected": "2012-11-08T15:12:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0040",
+      "text": "Martes 21 de Octubre de 2014",
+      "expected": "2014-10-21T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0041",
+      "text": "Mi\u00e9rcoles 20 de Noviembre de 2013",
+      "expected": "2013-11-20T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0042",
+      "text": "12 de junio del 2012",
+      "expected": "2012-06-12T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0043",
+      "text": "13 Ago, 2014",
+      "expected": "2014-08-13T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0044",
+      "text": "13 Septiembre, 2014",
+      "expected": "2014-09-13T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0045",
+      "text": "11 Marzo, 2014",
+      "expected": "2014-03-11T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0046",
+      "text": "julio 5, 2015 en 1:04 pm",
+      "expected": "2015-07-05T13:04:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0047",
+      "text": "Vi 17:15",
+      "expected": "2012-11-09T17:15:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0048",
+      "text": "11 augustus 2014",
+      "expected": "2014-08-11T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0049",
+      "text": "14 januari 2014",
+      "expected": "2014-01-14T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0050",
+      "text": "vr jan 24, 2014 12:49",
+      "expected": "2014-01-24T12:49:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0051",
+      "text": "16 giu 2014",
+      "expected": "2014-06-16T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0052",
+      "text": "26 gennaio 2014",
+      "expected": "2014-01-26T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0053",
+      "text": "Ven 18:23",
+      "expected": "2012-11-09T18:23:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0054",
+      "text": "sexta-feira, 10 de junho de 2014 14:52",
+      "expected": "2014-06-10T14:52:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0055",
+      "text": "13 Setembro, 2014",
+      "expected": "2014-09-13T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0056",
+      "text": "Sab 3:03",
+      "expected": "2012-11-10T03:03:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0057",
+      "text": "10 \u043c\u0430\u044f",
+      "expected": "2012-05-10T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0058",
+      "text": "26 \u0430\u043f\u0440\u0435\u043b\u044f",
+      "expected": "2012-04-26T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0059",
+      "text": "20 \u043d\u043e\u044f\u0431\u0440\u044f 2013",
+      "expected": "2013-11-20T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0060",
+      "text": "28 \u043e\u043a\u0442\u044f\u0431\u0440\u044f 2014 \u0432 07:54",
+      "expected": "2014-10-28T07:54:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0061",
+      "text": "13 \u044f\u043d\u0432\u0430\u0440\u044f 2015 \u0433. \u0432 13:34",
+      "expected": "2015-01-13T13:34:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0062",
+      "text": "09 \u0430\u0432\u0433\u0443\u0441\u0442\u0430 2012",
+      "expected": "2012-08-09T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0063",
+      "text": "\u0410\u0432\u0433 26, 2015 15:12",
+      "expected": "2015-08-26T15:12:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0064",
+      "text": "2 \u0414\u0435\u043a\u0430\u0431\u0440\u044c 95 11:15",
+      "expected": "1995-12-02T11:15:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0065",
+      "text": "13 \u044f\u043d\u0432. 2005 19:13",
+      "expected": "2005-01-13T19:13:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0066",
+      "text": "13 \u0430\u0432\u0433. 2005 19:13",
+      "expected": "2005-08-13T19:13:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0067",
+      "text": "13 \u0430\u0432\u0433. 2005\u0433. 19:13",
+      "expected": "2005-08-13T19:13:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0068",
+      "text": "13 \u0430\u0432\u0433. 2005 \u0433. 19:13",
+      "expected": "2005-08-13T19:13:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0069",
+      "text": "21 \u0441\u0435\u043d\u0442\u044f\u0431\u0440\u044f 2021\u0433., \u0432\u0442\u043e\u0440\u043d\u0438\u043a",
+      "expected": "2021-09-21T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0070",
+      "text": "\u041f\u043d\u0434, 07 \u044f\u043d\u0432. 2019 \u0433. 12:15",
+      "expected": "2019-01-07T12:15:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0071",
+      "text": "\u0421\u0440\u0434, 09 \u044f\u043d\u0432. 2019 \u0433. 12:15",
+      "expected": "2019-01-09T12:15:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0072",
+      "text": "\u0447\u0442\u0432, 1 \u0441\u0435\u043d\u0442\u044f\u0431\u0440\u044f 2022 \u0433. 09:00",
+      "expected": "2022-09-01T09:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0073",
+      "text": "\u041f\u0442\u043d, 11 \u044f\u043d\u0432. 2019 \u0433. 12:15",
+      "expected": "2019-01-11T12:15:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0074",
+      "text": "\u0441\u0431\u0442, 1 \u043e\u043a\u0442. 2022 \u0433. 10:22",
+      "expected": "2022-10-01T10:22:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0075",
+      "text": "\u0432\u0441\u043a, 2 \u043e\u043a\u0442. 2022 \u0433. 11:17",
+      "expected": "2022-10-02T11:17:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0076",
+      "text": "11 A\u011fustos, 2014",
+      "expected": "2014-08-11T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0077",
+      "text": "08.Haziran.2014, 11:07",
+      "expected": "2014-06-08T11:07:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0078",
+      "text": "17.\u015eubat.2014, 17:51",
+      "expected": "2014-02-17T17:51:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0079",
+      "text": "14-Aral\u0131k-2012, 20:56",
+      "expected": "2012-12-14T20:56:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0080",
+      "text": "13 iunie 2013",
+      "expected": "2013-06-13T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0081",
+      "text": "14 aprilie 2014",
+      "expected": "2014-04-14T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0082",
+      "text": "18 martie 2012",
+      "expected": "2012-03-18T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0083",
+      "text": "12-Iun-2013",
+      "expected": "2013-06-12T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0084",
+      "text": "21. Dezember 2013",
+      "expected": "2013-12-21T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0085",
+      "text": "19. Februar 2012",
+      "expected": "2012-02-19T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0086",
+      "text": "26. Juli 2014",
+      "expected": "2014-07-26T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0087",
+      "text": "1. Sept 2000",
+      "expected": "2000-09-01T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0088",
+      "text": "18.10.14 um 22:56 Uhr",
+      "expected": "2014-10-18T22:56:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0089",
+      "text": "12-M\u00e4r-2014",
+      "expected": "2014-03-12T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0090",
+      "text": "Mit 13:14",
+      "expected": "2012-11-07T13:14:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0091",
+      "text": "23. M\u00e4rz 18.37 Uhr",
+      "expected": "2012-03-23T18:37:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0092",
+      "text": "pon 16. \u010der 2014 10:07:43",
+      "expected": "2014-06-16T10:07:43",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0093",
+      "text": "13 Srpen, 2014",
+      "expected": "2014-08-13T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0094",
+      "text": "\u010dtv 14. lis 2013 12:38:43",
+      "expected": "2013-11-14T12:38:43",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0095",
+      "text": "\u0e18\u0e31\u0e19\u0e27\u0e32\u0e04\u0e21 11, 2014, 08:55:08 PM",
+      "expected": "2014-12-11T20:55:08",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0096",
+      "text": "22 \u0e1e\u0e24\u0e29\u0e20\u0e32\u0e04\u0e21 2012, 22:12",
+      "expected": "2012-05-22T22:12:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0097",
+      "text": "11 \u0e01\u0e38\u0e21\u0e20\u0e32 2020, 8:13 AM",
+      "expected": "2020-02-11T08:13:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0098",
+      "text": "1 \u0e40\u0e14\u0e37\u0e2d\u0e19\u0e15\u0e38\u0e25\u0e32\u0e04\u0e21 2005, 1:00 AM",
+      "expected": "2005-10-01T01:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0099",
+      "text": "11 \u0e01.\u0e1e. 2020, 1:13 pm",
+      "expected": "2020-02-11T13:13:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0100",
+      "text": "Th\u1ee9 n\u0103m",
+      "expected": "2012-11-08T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0101",
+      "text": "Th\u1ee9 s\u00e1u",
+      "expected": "2012-11-09T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0102",
+      "text": "Th\u00e1ng M\u01b0\u1eddi Hai 29, 2013, 14:14",
+      "expected": "2013-12-29T14:14:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0103",
+      "text": "05 Th\u00e1ng m\u1ed9t 2015 - 03:54 AM",
+      "expected": "2015-01-05T03:54:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0104",
+      "text": "11 \u0442\u0440\u0430\u045e\u043d\u044f",
+      "expected": "2012-05-11T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0105",
+      "text": "4 \u043c\u0430\u044f",
+      "expected": "2012-05-04T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0106",
+      "text": "\u0427\u0430\u0446\u0432\u0435\u0440 06 \u0436\u043d\u0456\u045e\u043d\u044f 2015",
+      "expected": "2015-08-06T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0107",
+      "text": "\u041d\u0434 14 \u0441\u0430\u043a\u0430\u0432\u0456\u043a\u0430 2015 \u0443 7 \u0433\u0430\u0434\u0437\u0456\u043d 10 \u0445\u0432\u0456\u043b\u0456\u043d",
+      "expected": "2015-03-14T07:10:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0108",
+      "text": "5 \u0436\u043d\u0456\u045e\u043d\u044f 2015 \u0433\u043e\u0434\u0430 \u0443 13:34",
+      "expected": "2015-08-05T13:34:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0109",
+      "text": "2015-\u043a\u0432\u0456-12",
+      "expected": "2015-04-12T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0110",
+      "text": "2020-\u0431\u0435\u0440\u0435\u0437-11",
+      "expected": "2020-03-11T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0111",
+      "text": "21 \u0447\u0435\u0440 2013 3:13",
+      "expected": "2013-06-21T03:13:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0112",
+      "text": "17 \u0432\u0435\u0440\u0435\u0441 2015 6:17",
+      "expected": "2015-09-17T06:17:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0113",
+      "text": "12 \u043b\u044e\u0442\u043e\u0433\u043e 2012, 13:12:23",
+      "expected": "2012-02-12T13:12:23",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0114",
+      "text": "10 \u043b\u0438\u0441\u0442\u043e\u043f 2017, 10:00:00",
+      "expected": "2017-11-10T10:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0115",
+      "text": "\u0432\u0456\u0432 \u043e 14:04",
+      "expected": "2012-11-13T14:04:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0116",
+      "text": "12 Hulyo 2003 13:01",
+      "expected": "2003-07-12T13:01:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0117",
+      "text": "1978, 1 Peb, 7:05 PM",
+      "expected": "1978-02-01T19:05:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0118",
+      "text": "2 hun",
+      "expected": "2012-06-02T00:00:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0119",
+      "text": "Lin 16:16",
+      "expected": "2012-11-11T16:16:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0120",
+      "text": "2016\u5e743\u670820\u65e5(\u65e5) 21\u664240\u5206",
+      "expected": "2016-03-20T21:40:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0121",
+      "text": "2016\u5e743\u670820\u65e5 21\u664240\u5206",
+      "expected": "2016-03-20T21:40:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0122",
+      "text": "2016 \u5e74 3 \u6708 20 \u65e5 21 \u6642 40 \u5206",
+      "expected": "2016-03-20T21:40:00",
+      "strange": true,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0123",
+      "text": "06-17-2014",
+      "expected": "2014-06-17T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0124",
+      "text": "13/03/2014",
+      "expected": "2014-03-13T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0125",
+      "text": "11. 12. 2014, 08:45:39",
+      "expected": "2014-11-12T08:45:39",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0126",
+      "text": "1 Ni 2015",
+      "expected": "2015-04-01T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0127",
+      "text": "1 Mar 2015",
+      "expected": "2015-03-01T00:00:00",
+      "strange": false,
+      "split": "optimization"
+    },
+    {
+      "case_id": "d-0128",
+      "text": "1 \u0441\u0435\u0440 2015",
+      "expected": "2015-08-01T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0129",
+      "text": "2015\u5e7404\u670808\u65e510:05",
+      "expected": "2015-04-08T10:05:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0130",
+      "text": "2012\u5e7412\u670820\u65e510:35",
+      "expected": "2012-12-20T10:35:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0131",
+      "text": "2016\u5e7406\u670830\u65e509\u65f630\u5206",
+      "expected": "2016-06-30T09:30:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0132",
+      "text": "2016\u5e746\u67082911:30",
+      "expected": "2016-06-29T11:30:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0133",
+      "text": "2016\u5e746\u670829",
+      "expected": "2016-06-29T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0134",
+      "text": "2016\u5e74 2\u6708 5\u65e5",
+      "expected": "2016-02-05T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0135",
+      "text": "2019 \u5e74 10 \u6708 30 \u65e5",
+      "expected": "2019-10-30T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0136",
+      "text": "2016 \u5e74 6 \u6708 30 \u65e5 9 \u65f6 30 \u5206",
+      "expected": "2016-06-30T09:30:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0137",
+      "text": "2016\u5e749\u670814\u65e5\u665a8:00",
+      "expected": "2016-09-14T20:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0138",
+      "text": "2020/10/9 \u4e0b\u5348 02:26:26",
+      "expected": "2020-10-09T14:26:26",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0139",
+      "text": "2020/10/9 \u4e0a\u5348 02:26:26",
+      "expected": "2020-10-09T02:26:26",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0140",
+      "text": "2020/10/9 \uc624\ud6c4 2:26",
+      "expected": "2020-10-09T14:26:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0141",
+      "text": "25 \u044f\u043d 2016",
+      "expected": "2016-01-25T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0142",
+      "text": "23 \u0434\u0435\u043a\u0435\u043c\u0432\u0440\u0438 2013 15:10:01",
+      "expected": "2013-12-23T15:10:01",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0143",
+      "text": "[\u09b8\u09c7\u09aa\u09cd\u099f\u09c7\u09ae\u09cd\u09ac\u09b0] 04, 2014.",
+      "expected": "2014-09-04T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0144",
+      "text": "\u09ae\u0999\u09cd\u0997\u09b2\u09ac\u09be\u09b0 \u099c\u09c1\u09b2\u09be\u0987 22, 2014",
+      "expected": "2014-07-22T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0145",
+      "text": "\u09b6\u09c1\u0995\u09cd\u09b0\u09ac\u09be\u09b0",
+      "expected": "2012-11-09T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0146",
+      "text": "\u09b6\u09c1\u0995\u09cd\u09b0, 12 \u09a1\u09bf\u09b8\u09c7\u09ae\u09cd\u09ac\u09b0 2014 10:55:50",
+      "expected": "2014-12-12T10:55:50",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0147",
+      "text": "1\u09b2\u09be \u099c\u09be\u09a8\u09c1\u09af\u09bc\u09be\u09b0\u09c0 2015",
+      "expected": "2015-01-01T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0148",
+      "text": "25\u09b6\u09c7 \u09ae\u09be\u09b0\u09cd\u099a 1971",
+      "expected": "1971-03-25T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0149",
+      "text": "8\u0987 \u09ae\u09c7 2002",
+      "expected": "2002-05-08T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0150",
+      "text": "10:06am \u09a1\u09bf\u09b8\u09c7\u09ae\u09cd\u09ac\u09b0 11, 2014",
+      "expected": "2014-12-11T10:06:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0151",
+      "text": "19 \u09ab\u09c7\u09ac\u09cd\u09b0\u09c1\u09af\u09bc\u09be\u09b0\u09c0 2013 \u09b8\u09be\u09b2 09:10",
+      "expected": "2013-02-19T09:10:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0152",
+      "text": "11 \u091c\u0941\u0932\u093e\u0908 1994, 11:12",
+      "expected": "1994-07-11T11:12:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0153",
+      "text": "\u0967\u096d \u0905\u0915\u094d\u091f\u0942\u092c\u0930 \u0968\u0966\u0967\u096e",
+      "expected": "2018-10-17T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0154",
+      "text": "12 \u091c\u0928\u0935\u0930\u0940  1997 11:08 \u0905\u092a\u0930\u093e\u0939\u094d\u0928",
+      "expected": "1997-01-12T23:08:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0155",
+      "text": "2011 \u10ec\u10da\u10d8\u10e1 17 \u10db\u10d0\u10e0\u10e2\u10d8, \u10dd\u10d7\u10ee\u10e8\u10d0\u10d1\u10d0\u10d7\u10d8",
+      "expected": "2011-03-17T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0156",
+      "text": "2015 \u10ec. 12 \u10d8\u10d5\u10dc, 15:34",
+      "expected": "2015-06-12T15:34:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0157",
+      "text": "5.7.2018 5.45 ip.",
+      "expected": "2018-07-05T17:45:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0158",
+      "text": "5 .7 .2018 5.45 ip.",
+      "expected": "2018-07-05T17:45:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0159",
+      "text": "28 maalis klo 9:37",
+      "expected": "2012-03-28T09:37:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0160",
+      "text": "28 maalis 9:37",
+      "expected": "2012-03-28T09:37:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0161",
+      "text": "15 tammi klo 14:30",
+      "expected": "2012-01-15T14:30:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0162",
+      "text": "5 kes\u00e4 klo 18:00",
+      "expected": "2012-06-05T18:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0163",
+      "text": "12.5.2020 klo 16:45",
+      "expected": "2020-05-12T16:45:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0164",
+      "text": "06. travnja 2021.",
+      "expected": "2021-04-06T00:00:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0165",
+      "text": "13. svibanj 2022.",
+      "expected": "2022-05-13T00:00:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0166",
+      "text": "24.03.2019. u 22:22",
+      "expected": "2019-03-24T22:22:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0167",
+      "text": "20. studenoga 2010. @ 07:28",
+      "expected": "2010-11-20T07:28:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0168",
+      "text": "13. studenog 1989.",
+      "expected": "1989-11-13T00:00:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0169",
+      "text": "29.01.2008. 00:00",
+      "expected": "2008-01-29T00:00:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0170",
+      "text": "27. 05. 2022. u 14:34",
+      "expected": "2022-05-27T14:34:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0171",
+      "text": "28. u studenom 2017.",
+      "expected": "2017-11-28T00:00:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0172",
+      "text": "13. velja\u010de 1999. u podne",
+      "expected": "1999-02-13T12:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0173",
+      "text": "27. sije\u010dnja 1994. u pono\u0107",
+      "expected": "1994-01-27T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0174",
+      "text": "June 12-14, 2021",
+      "expected": "2021-06-12T00:00:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0175",
+      "text": "Jun 12\u201314 2021",
+      "expected": "2021-06-12T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0176",
+      "text": "12-14 June 2021",
+      "expected": "2021-06-12T00:00:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0177",
+      "text": "12.-14. Juni 2021",
+      "expected": "2021-06-12T00:00:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0178",
+      "text": "12.-14.06.2021",
+      "expected": "2021-06-12T00:00:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0179",
+      "text": "12-14 \u0438\u044e\u043d\u044f 2021",
+      "expected": "2021-06-12T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0180",
+      "text": "12-12 \u0438\u044e\u043d\u044f 2021",
+      "expected": "2021-06-12T00:00:00",
+      "strange": true,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0181",
+      "text": "5-5 juin 2021",
+      "expected": "2021-06-05T00:00:00",
+      "strange": false,
+      "split": "holdout"
+    },
+    {
+      "case_id": "d-0182",
+      "text": "12 - 14 czerwca 2021",
+      "expected": "2021-06-12T00:00:00",
+      "strange": false,
+      "split": "holdout"
+    }
+  ]
+}
