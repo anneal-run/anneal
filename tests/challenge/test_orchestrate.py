@@ -312,6 +312,40 @@ def test_a_prompt_candidate_does_not_need_a_fallback() -> None:
     assert report.scored[0].candidate_id == "edit"
 
 
+def test_an_exception_only_fallback_is_refused() -> None:
+    raw = candidate("hybrid", "C", "structural", 0.0010).model_dump()
+    raw["fallback_rate"] = 0.2
+    raw["fallback_triggers"] = ["exception"]
+    hybrid = Candidate.model_validate(raw)
+    report = orchestrate(
+        budget=SearchBudget(candidates=4, dollars=20, hours=6),
+        baseline_opt=rows("opt", 20, 0.0035),
+        baseline_holdout=rows("hold", 20, 0.0035),
+        candidates=[hybrid],
+        holdout={"C/hybrid": rows("hold", 20, 0.0010)},
+        require_fallback=True,
+    )
+    assert report.scored == []
+    assert report.rejected[0].reason == "structural candidate fallback has no validity check"
+
+
+def test_a_validity_check_keeps_the_fallback() -> None:
+    raw = candidate("hybrid", "C", "structural", 0.0010).model_dump()
+    raw["fallback_rate"] = 0.2
+    raw["fallback_triggers"] = ["exception", "empty_result"]
+    hybrid = Candidate.model_validate(raw)
+    report = orchestrate(
+        budget=SearchBudget(candidates=4, dollars=20, hours=6),
+        baseline_opt=rows("opt", 20, 0.0035),
+        baseline_holdout=rows("hold", 20, 0.0035),
+        candidates=[hybrid],
+        holdout={"C/hybrid": rows("hold", 20, 0.0010)},
+        require_fallback=True,
+    )
+    assert report.rejected == []
+    assert report.scored[0].candidate_id == "hybrid"
+
+
 def test_fallback_rate_must_be_a_share() -> None:
     raw = candidate("hybrid", "C", "structural", 0.0010).model_dump()
     raw["fallback_rate"] = 1.2

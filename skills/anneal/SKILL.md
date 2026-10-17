@@ -6,7 +6,7 @@ The harness, the engine session, and the shadow runner use the partner's provide
 
 ## Before any session
 
-1. If the partner already has a LangSmith export, import it: `anneal import langsmith <export.jsonl> --store .anneal/store`. If they do not, capture by running. Turn LangSmith tracing on with their environment variables, run the entrypoint on the inputs in the repo, export the project, and import that file. Log the capture's wall clock and its model cost on their own, apart from the harness clock. The harness clock starts at the next step.
+1. If the partner already has a LangSmith export, import it: `anneal import langsmith <export.jsonl> --store .anneal/store`. If they do not, capture by running. When `LANGSMITH_API_KEY` is set, turn tracing on through the environment, run the entrypoint on the inputs in the repo, and export that project. When it is not set, record the runs locally in the LangSmith record shape and import that file with the same command. Log the capture's wall clock and its model cost on their own, apart from the harness clock. The harness clock starts at the next step.
 2. Declare tools in `tools.yaml`. A read-only tool is `side_effect: false`. A tool that posts, writes, or deletes is `side_effect: true`.
 3. Build the harness, and stop if this command fails. The holdout is sealed here, before any proposer runs:
 
@@ -48,7 +48,7 @@ anneal challenge pack \
   --budget budget.json
 ```
 
-`--p0` omits the architecture menu. The pack's `PROMPT.md` is the whole instruction: caching, a model swap, and a prompt edit are not architectures; at least three structurally different candidates; each structural candidate falls back to the original implementation. The fallback must call that implementation, and those calls count in cost. Confidence comes from the candidate's own output or from agreement with a second cheap pass, never from labels. The submission reports `fallback_rate` beside cost.
+`--p0` omits the architecture menu. The pack's `PROMPT.md` is the whole instruction: caching, a model swap, and a prompt edit are not architectures; at least three structurally different candidates; each structural candidate falls back to the original implementation. The fallback must call that implementation, and those calls count in cost. It fires on a validity check of the result: an empty result, a column mismatch, a row count outside the observed range, a schema violation, or low confidence from the candidate's own output. A fallback whose only trigger is an exception is refused. Confidence comes from the candidate's own output or from agreement with a second cheap pass, never from labels. The submission reports `fallback_triggers` and `fallback_rate` beside cost.
 
 Run the proposer in `pack/` only. A session that has read the rest of the repository is void. The pack does not contain `SEAL.json`, `report/`, or `baseline/`.
 

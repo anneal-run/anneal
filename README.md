@@ -10,7 +10,7 @@ The correctness margin for each workflow is `margin_points` in [anneal.toml](ann
 
 The harness, the engine session, and the shadow runner use the partner's provider keys from their environment. Anneal does not pay for the partner's workflow.
 
-1. Get traces, then build the harness. If there is no export, turn LangSmith tracing on with the partner's environment variables, run the entrypoint on the inputs in the repo, and export that project. Import with `anneal import langsmith`. Holdout run ids are sealed in `SEAL.json` before any proposer starts. Log every manual edit and its duration in `report/harness-log.md`. Reading the repo before the harness is onboarding time, not harness time.
+1. Get traces, then build the harness. If there is no export, capture by running. LangSmith tracing and an export when `LANGSMITH_API_KEY` is set; a local recording in that same record shape otherwise. Import with `anneal import langsmith`. Holdout run ids are sealed in `SEAL.json` before any proposer starts. Log every manual edit and its duration in `report/harness-log.md`. Reading the repo before the harness is onboarding time, not harness time.
 
 ```sh
 anneal import langsmith export.jsonl --store .anneal/store
@@ -25,7 +25,7 @@ Read-only tools stay live. Side-effecting tools are replayed from recordings. A 
 anneal challenge pack --source . --harness harness --out pack/ --arm C --p0 --budget budget.json
 ```
 
-3. Score with the power check. `--require-fallback` refuses a structural candidate that does not report how often it called the original implementation. If the holdout cannot support the margin, the verdict is `cannot adjudicate` and the report still prints the n reached. A later shadow count can stop early when the paired difference is clearly outside the margin either way.
+3. Score with the power check. `--require-fallback` refuses a structural candidate that does not report how often it called the original implementation, and one whose fallback trigger is only an exception. The fallback has to check the result. If the holdout cannot support the margin, the verdict is `cannot adjudicate` and the report still prints the n reached. A later shadow count can stop early when the paired difference is clearly outside the margin either way.
 
 ```sh
 anneal challenge orchestrate --budget budget.json --baseline baseline.jsonl \

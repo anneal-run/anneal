@@ -5,7 +5,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from anneal.challenge.budget import BudgetLedger, SearchBudget, Spend
-from anneal.challenge.models import Candidate, MeteredCall, Observation, Verdict
+from anneal.challenge.models import VALIDITY_TRIGGERS, Candidate, MeteredCall, Observation, Verdict
 from anneal.challenge.power import n_required
 from anneal.challenge.shadow import evidence_header
 from anneal.challenge.verdict import CORRECTNESS_MARGIN_POINTS, judge
@@ -110,6 +110,19 @@ def orchestrate(
                     candidate_id=candidate.id,
                     arm=candidate.arm,
                     reason="structural candidate has no confidence fallback",
+                )
+            )
+            continue
+        if (
+            require_fallback
+            and candidate.effective_kind() == "structural"
+            and not VALIDITY_TRIGGERS.intersection(candidate.fallback_triggers)
+        ):
+            rejected.append(
+                Rejected(
+                    candidate_id=candidate.id,
+                    arm=candidate.arm,
+                    reason="structural candidate fallback has no validity check",
                 )
             )
             continue

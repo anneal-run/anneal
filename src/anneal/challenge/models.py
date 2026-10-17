@@ -40,6 +40,11 @@ class MeteredCall(_Model):
 
 Change = Literal["architecture", "prompt", "cache", "model"]
 
+VALIDITY_TRIGGERS = frozenset(
+    {"empty_result", "column_mismatch", "row_count", "schema_violation", "low_confidence"}
+)
+FALLBACK_TRIGGERS = VALIDITY_TRIGGERS | {"exception"}
+
 
 class Candidate(_Model):
     """A submission the orchestrator may score. Optimization cases only."""
@@ -57,6 +62,8 @@ class Candidate(_Model):
     removed_approvals: list[str] = Field(default_factory=list)
     fallback_rate: float | None = None
     """Share of cases that invoked the original implementation. None means none was declared."""
+    fallback_triggers: list[str] = Field(default_factory=list)
+    """Why the fallback fires. An exception alone is not a validity check."""
 
     @model_validator(mode="after")
     def _positive_volume(self) -> "Candidate":
@@ -66,6 +73,11 @@ class Candidate(_Model):
             raise ValueError("candidate id cannot contain '/'")
         if self.fallback_rate is not None and not 0.0 <= self.fallback_rate <= 1.0:
             raise ValueError("fallback_rate must be between 0 and 1")
+        unknown = [
+            trigger for trigger in self.fallback_triggers if trigger not in FALLBACK_TRIGGERS
+        ]
+        if unknown:
+            raise ValueError(f"unknown fallback trigger {unknown[0]!r}")
         return self
 
     def metered_usd(self) -> float:

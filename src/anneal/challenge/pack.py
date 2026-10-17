@@ -33,7 +33,11 @@ ENGINE = (
     "Every structural candidate includes a confidence-routed fallback to the original "
     "implementation. The fallback invokes that implementation, and those calls count in cost. "
     "Confidence comes from the candidate's own output or from agreement with a second cheap pass, "
-    "never from labels. Report the fallback rate beside the cost.\n"
+    "never from labels. The fallback fires on a validity check of the result: "
+    "an empty result, a column mismatch, a row count outside the observed range, "
+    "a schema violation, or low confidence from the candidate's own output. "
+    "A candidate whose only trigger is an exception is refused. "
+    "Report fallback_triggers with the fallback rate beside the cost.\n"
 )
 
 _EXCLUDED_FILES = {"ANNEAL-V3-PLAYBOOK.md", "ANNEAL-ROADMAP.md", "SEAL.json"}

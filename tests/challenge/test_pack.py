@@ -57,6 +57,8 @@ def test_p0_pack_hides_the_answer_and_the_menu(tmp_path: Path) -> None:
     assert "prefetch" not in prompt.lower()
     assert "structurally different candidates" in prompt
     assert "original implementation" in prompt
+    assert "validity check" in prompt
+    assert "only trigger is an exception" in prompt
     assert "Make this workflow cheaper or more correct" in prompt
     assert not (dest / "MENU.md").exists()
     assert "run-hold-0009" not in (dest / "manifest.json").read_text(encoding="utf-8")
