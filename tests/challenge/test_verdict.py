@@ -164,3 +164,45 @@ def test_latency_regression_blocks_a_cost_win() -> None:
     )
     assert not verdict.noninferior_latency
     assert not verdict.worth_it
+
+
+def test_correctness_win_uses_the_ceiling_and_ignores_latency() -> None:
+    baseline = paired(MARGIN_CASES, cost=0.0, correct=False, latency=1.0)
+    candidate = paired(MARGIN_CASES, cost=0.01, correct=True, latency=1000.0)
+    default = judge(
+        baseline,
+        candidate,
+        search_cost_usd=0.0,
+        monthly_runs=1,
+        new_side_effect_tools=[],
+        removed_approvals=[],
+    )
+    won = judge(
+        baseline,
+        candidate,
+        search_cost_usd=0.0,
+        monthly_runs=1,
+        new_side_effect_tools=[],
+        removed_approvals=[],
+        mode="correctness_win",
+        cost_ceiling=0.02,
+    )
+    assert default.worth_it is False
+    assert won.correct is True
+    assert won.worth_it is True
+    assert won.noninferior_latency is False
+
+
+def test_correctness_win_refuses_a_case_over_the_ceiling() -> None:
+    verdict = judge(
+        paired(MARGIN_CASES, cost=0.0, correct=False, latency=1.0),
+        paired(MARGIN_CASES, cost=0.05, correct=True, latency=1000.0),
+        search_cost_usd=0.0,
+        monthly_runs=1,
+        new_side_effect_tools=[],
+        removed_approvals=[],
+        mode="correctness_win",
+        cost_ceiling=0.02,
+    )
+    assert verdict.correct is True
+    assert verdict.worth_it is False

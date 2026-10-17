@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- change: `anneal challenge scan` walks a repository for non-AI code losing to messy input and writes one harness manifest per file. The thresholds are the ones in `report/d/prereg.md`.
+- change: `anneal challenge orchestrate --mode correctness-win --cost-ceiling 0.02` treats a holdout interval above zero under that per-case ceiling as worth it. Latency is not a gate in that mode. The default stays the 30 percent cut.
 - change: `anneal challenge orchestrate --arms C` issues `single_arm` when the pre-registration named that one arm. A run that simply omitted the other arms stays `incomplete`.
 - change: a structural fallback has to check the result. An empty result, a column mismatch, a row count outside the observed range, a schema violation, or low confidence counts. An exception by itself is refused.
 - change: capture by running uses LangSmith when `LANGSMITH_API_KEY` is set, and a local recording in that record shape otherwise.

@@ -3,6 +3,7 @@
 import math
 from collections.abc import Sequence
 from dataclasses import dataclass
+from typing import Literal
 
 from anneal.challenge.models import Observation, Verdict
 from anneal.challenge.stats import CORRECTNESS_NULL_VARIANCE, interval
@@ -10,6 +11,7 @@ from anneal.challenge.stats import CORRECTNESS_NULL_VARIANCE, interval
 COST_WIN = 0.30
 CORRECTNESS_MARGIN_POINTS = 2.0
 LATENCY_MARGIN = 1.20
+Mode = Literal["cost", "correctness_win"]
 
 
 def align(
@@ -38,6 +40,7 @@ class _Measured:
     correctness_half_width_points: float
     mde_points: float
     cost_reduction: float
+    cost_per_case: float
     raw_savings: float
     savings_half_width: float
     noninferior_latency: bool
@@ -78,6 +81,7 @@ def _measure(
         correctness_half_width_points=correctness.half_width * 100,
         mde_points=mde,
         cost_reduction=reduction,
+        cost_per_case=net_cost,
         raw_savings=saving.estimate,
         savings_half_width=saving.half_width,
         noninferior_latency=cand_p95 <= base_p95 * LATENCY_MARGIN,
@@ -169,6 +173,8 @@ def judge(
     new_side_effect_tools: Sequence[str],
     removed_approvals: Sequence[str],
     optimization: tuple[Sequence[Observation], Sequence[Observation]] | None = None,
+    mode: Mode = "cost",
+    cost_ceiling: float | None = None,
 ) -> Verdict:
     """Score `candidate` against `baseline` on the same cases.
 
@@ -205,11 +211,16 @@ def judge(
         and measured.noninferior_latency
     )
     correct = clean and measured.correctness_low > 0
-    worth_it = (
-        clean
-        and measured.noninferior_latency
-        and (cost_win or (correct and measured.cost_reduction >= 0))
-    )
+    if mode == "correctness_win":
+        if cost_ceiling is None:
+            raise ValueError("correctness_win requires a cost ceiling")
+        worth_it = clean and correct and measured.cost_per_case <= cost_ceiling
+    else:
+        worth_it = (
+            clean
+            and measured.noninferior_latency
+            and (cost_win or (correct and measured.cost_reduction >= 0))
+        )
     return Verdict(
         compatible=measured.compatible,
         correct=correct,

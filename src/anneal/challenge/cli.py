@@ -14,6 +14,7 @@ from anneal.challenge.orchestrate import orchestrate, render_markdown
 from anneal.challenge.pack import write_pack
 from anneal.challenge.power import adjudication, minimum_detectable_effect
 from anneal.challenge.pr import write_pull_request
+from anneal.challenge.scan import scan, write_manifests
 from anneal.challenge.shadow import (
     evaluate_pairs,
     evidence_header,
@@ -30,6 +31,15 @@ from anneal.schema.store import Store
 def _observation(raw: dict[str, Any]) -> Observation:
     body = {key: value for key, value in raw.items() if key != "split"}
     return Observation.model_validate(body)
+
+
+def _scan(args: argparse.Namespace) -> int:
+    repo = Path(args.repo)
+    candidates = scan(repo)
+    write_manifests(repo, candidates, Path(args.out))
+    for item in candidates:
+        print(f"{item.score}\t{item.ladder}\t{item.path}")
+    return 0
 
 
 def _harness(args: argparse.Namespace) -> int:
@@ -126,6 +136,8 @@ def _orchestrate(args: argparse.Namespace) -> int:
         declared_arms={part.strip() for part in args.arms.split(",") if part.strip()}
         if args.arms
         else None,
+        mode="correctness_win" if args.mode == "correctness-win" else "cost",
+        cost_ceiling=args.cost_ceiling,
     )
     text = render_markdown(report)
     if args.out:
@@ -195,6 +207,11 @@ def add_parser(commands: Any) -> None:
     )
     sub = challenge.add_subparsers(dest="challenge_command", required=True)
 
+    walker = sub.add_parser("scan", help="rank non-AI code that is losing to messy input")
+    walker.add_argument("--repo", required=True)
+    walker.add_argument("--out", required=True, help="one manifest directory per candidate")
+    walker.set_defaults(func=_scan)
+
     harness = sub.add_parser("harness", help="write a proposer harness from a trace store")
     harness.add_argument("store", help="store directory")
     harness.add_argument("--out", required=True, help="directory to write")
@@ -230,6 +247,18 @@ def add_parser(commands: Any) -> None:
         "--classify",
         action="append",
         help="operator change for one candidate, as arm/id=cache|prompt|model|architecture",
+    )
+    board.add_argument(
+        "--mode",
+        choices=("cost", "correctness-win"),
+        default="cost",
+        help="cost is the 30 percent cut; correctness-win uses a per-case ceiling",
+    )
+    board.add_argument(
+        "--cost-ceiling",
+        type=float,
+        dest="cost_ceiling",
+        help="dollars per case, required for --mode correctness-win",
     )
     board.add_argument(
         "--arms",

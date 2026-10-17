@@ -9,7 +9,7 @@ from anneal.challenge.budget import BudgetLedger, SearchBudget, Spend
 from anneal.challenge.models import VALIDITY_TRIGGERS, Candidate, MeteredCall, Observation, Verdict
 from anneal.challenge.power import n_required
 from anneal.challenge.shadow import evidence_header
-from anneal.challenge.verdict import CORRECTNESS_MARGIN_POINTS, judge
+from anneal.challenge.verdict import CORRECTNESS_MARGIN_POINTS, Mode, judge
 from anneal.schema.pricing import PriceTable
 
 Reading = Literal[
@@ -97,6 +97,8 @@ def orchestrate(
     require_fallback: bool = False,
     margin_points: float = CORRECTNESS_MARGIN_POINTS,
     declared_arms: Collection[str] | None = None,
+    mode: Mode = "cost",
+    cost_ceiling: float | None = None,
 ) -> ChallengeReport:
     """Score submissions in order until each arm's budget is spent, then reveal the holdout."""
     ledger = BudgetLedger(budget)
@@ -161,7 +163,10 @@ def orchestrate(
             continue
         accepted.append(candidate)
 
-    previews = [(candidate, _preview(candidate, baseline_opt)) for candidate in accepted]
+    previews = [
+        (candidate, _preview(candidate, baseline_opt, mode=mode, cost_ceiling=cost_ceiling))
+        for candidate in accepted
+    ]
     selected = _select(previews)
     sealed = SealedHoldout(holdout)
     scored: list[Scored] = []
@@ -178,6 +183,8 @@ def orchestrate(
             new_side_effect_tools=candidate.new_side_effect_tools,
             removed_approvals=candidate.removed_approvals,
             optimization=(baseline_opt, candidate.opt),
+            mode=mode,
+            cost_ceiling=cost_ceiling,
         )
         scored.append(_scored(candidate, verdict, holdout_scored=True))
 
@@ -267,7 +274,13 @@ def _key(candidate: Candidate) -> str:
     return f"{candidate.arm}/{candidate.id}"
 
 
-def _preview(candidate: Candidate, baseline_opt: list[Observation]) -> Verdict:
+def _preview(
+    candidate: Candidate,
+    baseline_opt: list[Observation],
+    *,
+    mode: Mode,
+    cost_ceiling: float | None,
+) -> Verdict:
     return judge(
         baseline_opt,
         candidate.opt,
@@ -275,6 +288,8 @@ def _preview(candidate: Candidate, baseline_opt: list[Observation]) -> Verdict:
         monthly_runs=candidate.monthly_runs,
         new_side_effect_tools=candidate.new_side_effect_tools,
         removed_approvals=candidate.removed_approvals,
+        mode=mode,
+        cost_ceiling=cost_ceiling,
     )
 
 
