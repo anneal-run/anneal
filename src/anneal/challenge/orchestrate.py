@@ -1,5 +1,6 @@
 """Rank on the optimization set. Open the holdout once, for three candidates per arm."""
 
+from collections.abc import Collection
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -18,6 +19,7 @@ Reading = Literal[
     "nothing_is_a_product",
     "stop_prompt_only",
     "stop_no_win",
+    "single_arm",
     "incomplete",
 ]
 _COST_TIE = 0.05
@@ -94,6 +96,7 @@ def orchestrate(
     paid_price: str | None = None,
     require_fallback: bool = False,
     margin_points: float = CORRECTNESS_MARGIN_POINTS,
+    declared_arms: Collection[str] | None = None,
 ) -> ChallengeReport:
     """Score submissions in order until each arm's budget is spent, then reveal the holdout."""
     ledger = BudgetLedger(budget)
@@ -179,7 +182,10 @@ def orchestrate(
         scored.append(_scored(candidate, verdict, holdout_scored=True))
 
     reading, winner = _reading(
-        scored, external_merge=external_merge, paid_commitment=paid_commitment
+        scored,
+        external_merge=external_merge,
+        paid_commitment=paid_commitment,
+        declared_arms=None if declared_arms is None else frozenset(declared_arms),
     )
     return ChallengeReport(
         reading=reading,
@@ -336,7 +342,11 @@ def _beats(left: Scored | None, right: Scored | None) -> bool:
 
 
 def _reading(
-    scored: list[Scored], *, external_merge: bool, paid_commitment: bool
+    scored: list[Scored],
+    *,
+    external_merge: bool,
+    paid_commitment: bool,
+    declared_arms: frozenset[str] | None = None,
 ) -> tuple[Reading, str | None]:
     structural = [
         item
@@ -354,6 +364,8 @@ def _reading(
         return "stop_no_win", None
     winner = max(structural, key=lambda item: (item.verdict.cost_reduction, -item.human_hours))
     ran = {item.arm for item in scored}
+    if declared_arms is not None and len(declared_arms) == 1 and ran == declared_arms:
+        return "single_arm", winner.key
     if not {"A", "B", "C"} <= ran:
         return "incomplete", winner.key
     arm_a, arm_b, arm_c = _best(scored, "A"), _best(scored, "B"), _best(scored, "C")

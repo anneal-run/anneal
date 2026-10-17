@@ -1,10 +1,10 @@
 margin: 10.0 points; n required: 393
 n reached: 400
-verdict: incomplete
+verdict: single_arm
 
 # Anneal v3 challenge
 
-Reading: `incomplete`.
+Reading: `single_arm`.
 
 This is the v3 decision, not the Milestone 1 hypothesis register.
 

@@ -67,7 +67,7 @@ anneal challenge orchestrate \
   --out report/verdict.md
 ```
 
-The command prints the margin from `anneal.toml`, the n that margin requires, the n reached, and the verdict. If the holdout cannot support the margin, the verdict is `cannot adjudicate`. Do not lower the margin. Keep scoring new pairs with `anneal challenge shadow`. That command stops early only when the paired difference is clearly outside the margin either way.
+The command prints the margin from `anneal.toml`, the n that margin requires, the n reached, and the verdict. If the pre-registration named one arm, pass it as `--arms C`. The verdict is then `single_arm` when that arm is worth it. A run that simply omitted the other arms, with no such declaration, stays `incomplete`. If the holdout cannot support the margin, the verdict is `cannot adjudicate`. Do not lower the margin. Keep scoring new pairs with `anneal challenge shadow`. That command stops early only when the paired difference is clearly outside the margin either way.
 
 A scored candidate has three verdicts: compatible, correct, worth it. The split is chronological. Overfit and mock-only candidates are disqualified. A prompt, cache, or model change is reported and is never the structural winner. Use a downstream signal as the label when the workflow has one. Otherwise label a set by hand and log the hours in the harness log and as `--labeling-hours`.
 

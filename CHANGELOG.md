@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- change: `anneal challenge orchestrate --arms C` issues `single_arm` when the pre-registration named that one arm. A run that simply omitted the other arms stays `incomplete`.
 - change: a structural fallback has to check the result. An empty result, a column mismatch, a row count outside the observed range, a schema violation, or low confidence counts. An exception by itself is refused.
 - change: capture by running uses LangSmith when `LANGSMITH_API_KEY` is set, and a local recording in that record shape otherwise.
 - change: when a repository has no LangSmith export, the skill's first step is to capture by running. Tracing goes on through the environment, the entrypoint runs on the inputs in the repo, and that export is imported. A verdict still waits until the evidence exists.

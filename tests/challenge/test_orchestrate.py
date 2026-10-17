@@ -312,6 +312,31 @@ def test_a_prompt_candidate_does_not_need_a_fallback() -> None:
     assert report.scored[0].candidate_id == "edit"
 
 
+def test_one_declared_arm_gets_a_single_arm_verdict() -> None:
+    report = orchestrate(
+        budget=SearchBudget(candidates=4, dollars=20, hours=6),
+        baseline_opt=rows("opt", 20, 0.0035),
+        baseline_holdout=rows("hold", 20, 0.0035),
+        candidates=[candidate("direct", "C", "structural", 0.0010)],
+        holdout={"C/direct": rows("hold", 20, 0.0010)},
+        declared_arms=frozenset({"C"}),
+    )
+    assert report.reading == "single_arm"
+    assert report.structural_winner == "C/direct"
+
+
+def test_one_arm_without_a_declaration_stays_incomplete() -> None:
+    report = orchestrate(
+        budget=SearchBudget(candidates=4, dollars=20, hours=6),
+        baseline_opt=rows("opt", 20, 0.0035),
+        baseline_holdout=rows("hold", 20, 0.0035),
+        candidates=[candidate("direct", "C", "structural", 0.0010)],
+        holdout={"C/direct": rows("hold", 20, 0.0010)},
+    )
+    assert report.reading == "incomplete"
+    assert report.structural_winner == "C/direct"
+
+
 def test_an_exception_only_fallback_is_refused() -> None:
     raw = candidate("hybrid", "C", "structural", 0.0010).model_dump()
     raw["fallback_rate"] = 0.2

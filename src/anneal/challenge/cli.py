@@ -123,6 +123,9 @@ def _orchestrate(args: argparse.Namespace) -> int:
         paid_price=args.paid,
         require_fallback=args.require_fallback,
         margin_points=margin,
+        declared_arms={part.strip() for part in args.arms.split(",") if part.strip()}
+        if args.arms
+        else None,
     )
     text = render_markdown(report)
     if args.out:
@@ -227,6 +230,10 @@ def add_parser(commands: Any) -> None:
         "--classify",
         action="append",
         help="operator change for one candidate, as arm/id=cache|prompt|model|architecture",
+    )
+    board.add_argument(
+        "--arms",
+        help="arms named in the pre-registration, comma-separated. One arm is a single-arm verdict",
     )
     board.add_argument(
         "--require-fallback",

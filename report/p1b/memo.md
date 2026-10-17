@@ -31,13 +31,13 @@ The wrong answers get more common as the question gets harder: 11 of 85 easy, 51
 ```
 margin: 10.0 points; n required: 393
 n reached: 400
-verdict: incomplete
+verdict: single_arm
 ```
 
-The full report is [verdict.md](verdict.md). `direct_sql` is worth it on this holdout: compatible, correct, 66.1% cheaper, correctness +25.0 points, interval 20.5 to 29.5. The reading is `incomplete` because arms A and B were not run. That is the pre-registered shape of this run.
+The full report is [verdict.md](verdict.md). `direct_sql` is worth it on this holdout: compatible, correct, 66.1% cheaper, correctness +25.0 points, interval 20.5 to 29.5. The first time the orchestrator scored these files it printed `incomplete`, because arms A and B were absent. The pre-registration named one arm. The same scores, passed with `--arms C`, now print `single_arm`. The holdout numbers did not change.
 
 ## Pull request
 
-The branch `anneal-direct-sql` is committed locally at `15b85b9` on the tabletalk checkout. `ANNEAL_TABLETALK` is off by default, the original agent stays on the path, and the optimization fixtures are the tests. The shadow runner is not in that change.
+The branch `anneal-direct-sql` is at `15b85b9` on https://github.com/anneal-run/tabletalk. `ANNEAL_TABLETALK` is off by default, the original agent stays on the path, and the optimization fixtures are the tests. The shadow runner is not in that change.
 
-GitHub rejected the push, so the pull request is not open and there is no maintainer response. The stored GitHub credential was cleared by that rejection.
+The description to open from that fork is [pr/PR.md](pr/PR.md). The upstream pull request on SkanderGhariani/tabletalk is not open. There is no maintainer response yet.
